@@ -22,20 +22,20 @@ Zhiwei Li (李志伟), born in 1997 in Zhengzhou, Henan, China, is a prominent P
 
 Prior to this, Zhiwei honed his skills at ShanghaiTech University, earning a Master's degree in Computer Science and Technology in 2023 under [Prof. Lu Sun](https://faculty.sist.shanghaitech.edu.cn/sunlu/), with a focus on Multi-View Multi-Label Learning.
 
-His academic journey commenced with a Bachelor's degree from Zhengzhou University in 2020, where he was an integral part of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) team in the Bipedal Robot Laboratory of Zhengzhou University. There, he gained extensive experience in Python programming and robot control from 06/2017 to 07/2020, setting a robust foundation for his future endeavors in computer science.
+His academic journey commenced with a Bachelor's degree from Zhengzhou University in 2020, where he was an integral part of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) team in the Bipedal Robot Laboratory of Zhengzhou University. There, he gained extensive experience in Python programming and robot control from 2017.06 to 2020.07, setting a robust foundation for his future endeavors in computer science.
 
 <a href='https://scholar.google.com/citations?user=b3glA2AAAAAJ'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a> 
 Zhiwei's research interests include:
-- [2023 ~ NOW] Federated Recommendation Systems;
-- [2020 ~ 2023] Multi-View Multi-Label Learning. 
+- *2023 ~ NOW*: Federated Recommendation Systems;
+- *2020 ~ 2023*: Multi-View Multi-Label Learning. 
 
 
 # 🔥 News
 
-- [01/2024]: I have one paper accepted by [ICLR 2024](https://openreview.net/forum?id=xkXdE81mOK)!
-- [11/2023]: I am honored to be a member of [UTS AAII](https://www.uts.edu.au/research/australian-artificial-intelligence-institute)!
-- [08/2023]: I have one paper accepted by [PRICAI 2023](https://link.springer.com/chapter/10.1007/978-981-99-7022-3_12)!
-- [06/2023]: I have obtained my Master degree from ShanghaiTech University!
+- *2024.01*: I have one paper accepted by [ICLR 2024](https://openreview.net/forum?id=xkXdE81mOK)!
+- *2023.11*: I am honored to be a member of [UTS AAII](https://www.uts.edu.au/research/australian-artificial-intelligence-institute)!
+- *2023.08*: I have one paper accepted by [PRICAI 2023](https://link.springer.com/chapter/10.1007/978-981-99-7022-3_12)!
+- *2023.06*: I have obtained my Master degree from ShanghaiTech University!
 
 
 # 📝 Publications 
