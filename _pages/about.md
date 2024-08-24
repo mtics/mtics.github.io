@@ -40,16 +40,16 @@ Zhiwei's research interests include:
 
 # 📝 Publications 
 
-## 2024
+#### 2024
 
-- **<u>Zhiwei Li</u>**, Guodong Long, Tianyi Zhou, Jing Jiang and Chengqi Zhang, "[Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach](https://arxiv.org/abs/2408.08931)" in Arxiv. 2024. **[Preprint]**
-- **<u>Zhiwei Li</u>**, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024. **[Preprint]**
-- **<u>Zhiwei Li</u>**, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
+- `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, Tianyi Zhou, Jing Jiang and Chengqi Zhang, "[Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach](https://arxiv.org/abs/2408.08931)" in Arxiv. 2024. **[Preprint]**
+- `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024. **[Preprint]**
+- `` ICLR 2024 `` **<u>Zhiwei Li</u>**, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
 
-## 2023
+#### 2023
 
-- **<u>Zhiwei Li</u>**, Zijian Yang, Lu Sun, Mineichi Kudo and Kego Kimura, "[Incomplete Multi-View Weak-Label Learning with Noisy Features and Imbalanced Labels.](https://arxiv.org/abs/2201.01079)" in PRICAI. 2023. [[code & supplementary]](https://github.com/mtics/NAIL)
-- Zijian Yang, **<u>Zhiwei Li</u>** and Lu Sun, "[Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.](https://www.ijcai.org/proceedings/2023/0499.pdf)" in IJCAI. 2023. [[code]](https://github.com/Gabrielx0098/GD2NMF)
+- `` PRICAI 2023 `` **<u>Zhiwei Li</u>**, Zijian Yang, Lu Sun, Mineichi Kudo and Kego Kimura, "[Incomplete Multi-View Weak-Label Learning with Noisy Features and Imbalanced Labels.](https://arxiv.org/abs/2201.01079)" in PRICAI. 2023. [[code & supplementary]](https://github.com/mtics/NAIL)
+- `` IJCAI 2023 `` Zijian Yang, **<u>Zhiwei Li</u>** and Lu Sun, "[Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.](https://www.ijcai.org/proceedings/2023/0499.pdf)" in IJCAI. 2023. [[code]](https://github.com/Gabrielx0098/GD2NMF)
 
 
 <!-- <div class='paper-box'><div class='paper-box-image'><div><div class="badge">CVPR 2016</div><img src='images/500x300.png' alt="sym" width="100%"></div></div>
