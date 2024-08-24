@@ -42,14 +42,13 @@ Zhiwei's research interests include:
 
 ## 2024
 
-- **<u>Zhiwei Li</u>**, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024. [**Preprint**]
+- <div class="badge">Preprint</div> **<u>Zhiwei Li</u>**, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024.
+- <div class="badge">ICLR 2024</div> **<u>Zhiwei Li</u>**, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
 
 ## 2023
 
-- **<u>Zhiwei Li</u>**, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
-- **<u>Zhiwei Li</u>**, Zijian Yang, Lu Sun, Mineichi Kudo and Kego Kimura, "[Incomplete Multi-View Weak-Label Learning with Noisy Features and Imbalanced Labels.](https://arxiv.org/abs/2201.01079)" in PRICAI. 2023. [[code & supplementary]](https://github.com/mtics/NAIL)
-- Zijian Yang, **<u>Zhiwei Li</u>** and Lu Sun, "[Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.](https://www.ijcai.org/proceedings/2023/0499.pdf)" in IJCAI. 2023. [[code]](https://github.com/Gabrielx0098/GD2NMF)
-
+- <div class="badge">PRICAI 2023</div> **<u>Zhiwei Li</u>**, Zijian Yang, Lu Sun, Mineichi Kudo and Kego Kimura, "[Incomplete Multi-View Weak-Label Learning with Noisy Features and Imbalanced Labels.](https://arxiv.org/abs/2201.01079)" in PRICAI. 2023. [[code & supplementary]](https://github.com/mtics/NAIL)
+- <div class="badge">IJCAI 2023</div> Zijian Yang, **<u>Zhiwei Li</u>** and Lu Sun, "[Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.](https://www.ijcai.org/proceedings/2023/0499.pdf)" in IJCAI. 2023. [[code]](https://github.com/Gabrielx0098/GD2NMF)
 
 
 <!-- <div class='paper-box'><div class='paper-box-image'><div><div class="badge">CVPR 2016</div><img src='images/500x300.png' alt="sym" width="100%"></div></div>
