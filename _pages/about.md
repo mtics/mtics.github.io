@@ -32,22 +32,23 @@ Zhiwei's research interests include:
 
 # 🔥 News
 
-- [01/2024]: &nbsp;🎉🎉 I have one paper accepted by [ICLR 2024](https://openreview.net/forum?id=xkXdE81mOK)!
-- [11/2023]: &nbsp;🎉🎉 I am honored to be a member of [UTS AAII](https://www.uts.edu.au/research/australian-artificial-intelligence-institute)!
-- [08/2023]: &nbsp;🎉🎉 I have one paper accepted by [PRICAI 2023](https://link.springer.com/chapter/10.1007/978-981-99-7022-3_12)!
-- [06/2023]: &nbsp;🎉🎉 I have obtained my Master degree from ShanghaiTech University!
+- [01/2024]: I have one paper accepted by [ICLR 2024](https://openreview.net/forum?id=xkXdE81mOK)!
+- [11/2023]: I am honored to be a member of [UTS AAII](https://www.uts.edu.au/research/australian-artificial-intelligence-institute)!
+- [08/2023]: I have one paper accepted by [PRICAI 2023](https://link.springer.com/chapter/10.1007/978-981-99-7022-3_12)!
+- [06/2023]: I have obtained my Master degree from ShanghaiTech University!
+
 
 # 📝 Publications 
 
 ## 2024
 
-- <u>**Zhiwei Li**</u>, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024. [**Preprint**]
+- **<u>Zhiwei Li</u>**, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024. [**Preprint**]
 
 ## 2023
 
-- <u>**Zhiwei Li**</u>, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
-- <u>**Zhiwei Li**</u>, Zijian Yang, Lu Sun, Mineichi Kudo and Kego Kimura, "[Incomplete Multi-View Weak-Label Learning with Noisy Features and Imbalanced Labels.](https://arxiv.org/abs/2201.01079)" in PRICAI. 2023. [[code & supplementary]](https://github.com/mtics/NAIL)
-- Zijian Yang, <u>**Zhiwei Li**</u> and Lu Sun, "[Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.](https://www.ijcai.org/proceedings/2023/0499.pdf)" in IJCAI. 2023. [[code]](https://github.com/Gabrielx0098/GD2NMF)
+- **<u>Zhiwei Li</u>**, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
+- **<u>Zhiwei Li</u>**, Zijian Yang, Lu Sun, Mineichi Kudo and Kego Kimura, "[Incomplete Multi-View Weak-Label Learning with Noisy Features and Imbalanced Labels.](https://arxiv.org/abs/2201.01079)" in PRICAI. 2023. [[code & supplementary]](https://github.com/mtics/NAIL)
+- Zijian Yang, **<u>Zhiwei Li</u>** and Lu Sun, "[Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.](https://www.ijcai.org/proceedings/2023/0499.pdf)" in IJCAI. 2023. [[code]](https://github.com/Gabrielx0098/GD2NMF)
 
 
 
