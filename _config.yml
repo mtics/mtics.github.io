@@ -23,12 +23,12 @@ baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.ba
 author:
   name             : "Zhiwei Li"
   avatar           : "images/photo_1_square.jpg"
-  bio              : "PhD Student @ UTS"
+  bio              : "PhD student @ UTS AAII, specializing in Federated Recommendation systems."
   location         : "Sydney, Australia"
   employer         :
   pubmed           : 
   googlescholar    : "https://scholar.google.com/citations?user=b3glA2AAAAAJ"
-  email            : "zhw.li@outlook.com"
+  email            : "lizhw.cs@outlook.com"
   researchgate     :  # e.g., "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
@@ -37,13 +37,13 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           : # e.g., "github username"
+  github           : mtics # e.g., "github username"
   google_plus      :
   keybase          :
   instagram        :
   impactstory      : # e.g., "https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
-  linkedin         : # e.g., "linkedin username"
+  linkedin         : lizhiwi # e.g., "linkedin username"
   dblp             : # e.g., "https://dblp.org/pid/xx/xxxx.html"
   orcid            : https://orcid.org/0000-0002-8897-8905 # e.g., "https://orcid.org/xxxx"
   pinterest        :
