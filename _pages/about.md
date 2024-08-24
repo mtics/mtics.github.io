@@ -31,8 +31,11 @@ Zhiwei's research interests include:
 
 
 # 🔥 News
-- *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2022.02*: &nbsp;🎉🎉 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
+
+- **[01/2024]**: &nbsp;🎉🎉 I have one paper accepted by [ICLR 2024](https://openreview.net/forum?id=xkXdE81mOK)!
+- **[11/2023]**: &nbsp;🎉🎉 I am honored to be a member of [UTS AAII](https://www.uts.edu.au/research/australian-artificial-intelligence-institute)!
+- **[08/2023]**: &nbsp;🎉🎉 I have one paper accepted by [PRICAI 2023](https://link.springer.com/chapter/10.1007/978-981-99-7022-3_12)!
+- **[06/2023]**: &nbsp;🎉🎉 I have obtained my Master degree from ShanghaiTech University!
 
 # 📝 Publications 
 
@@ -55,12 +58,25 @@ Zhiwei's research interests include:
 - *2021.09* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 
 # 📖 Educations
-- *2019.06 - 2022.04 (now)*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2015.09 - 2019.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
 
-# 💬 Invited Talks
+- **PhD**: Analytics, [University of Technology Sydney](https://www.uts.edu.au/), *2023.11 ~ NOW*
+- **M.S.**: Computer Science and Technology, [Shanghaitech University](https://www.shanghaitech.edu.cn/), *2020.09 ~ 2023.06*
+- **B.E.**: Computer Science and Technology, [Zhengzhou University](http://www.zzu.edu.cn/), *2016.09 ~ 2020.06*
+
+# 💻 Work
+- *Research Assistant*, Supervised by [Prof. Lu Sun](https://faculty.sist.shanghaitech.edu.cn/sunlu/), Shanghaitech University, 2023.07 ~ 2023.11
+
+# Teach
+- *Teaching Assistant*, Machine Learning, Shanghaitech University, Fall 2022 (Instructor: [Prof. Sibei yang](https://faculty.sist.shanghaitech.edu.cn/yangsibei/))
+- *Teaching Assistant*, Machine Learning, Shanghaitech University, Spring 2022 (Instructor: [Prof. Hao Wang](https://faculty.sist.shanghaitech.edu.cn/faculty/wanghao/))
+
+# Service
+
+- Conference Reviewer: NeuRIPS (2024)
+
+<!-- # 💬 Invited Talks
 - *2021.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/)
-
+- *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/) -->
+<!-- 
 # 💻 Internships
-- *2019.05 - 2020.02*, [Lorem](https://github.com/), China.
+- *2019.05 - 2020.02*, [Lorem](https://github.com/), China. -->
