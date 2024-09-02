@@ -6,17 +6,17 @@ main:
   - title: "News"
     url: "/#-news"
 
-  - title: "Educations"
-    url: "/#-educations"
+  - title: "Publications"
+    url: "/#-publications"
 
   - title: "Selected Honors and Awards"
     url: "/#-honors-and-awards"
+
+  - title: "Educations"
+    url: "/#-educations"
 
   - title: "Professional Experience"
     url: "/#-prof-expe"
 
   - title: "Academic Service"
     url: "/#-service"
-
-  - title: "Publications"
-    url: "/#-publications"

@@ -1,4 +1,4 @@
-# 🎖 Selected Honors and Awards
+# 🎉 Selected Honors and Awards
 
 - *2022.12*: The Merit Student of ShanghaiTech University
 - *2018.12*: The School Outstanding Student Cadre
