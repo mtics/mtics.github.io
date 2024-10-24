@@ -11,7 +11,7 @@
 
 # 📖 Academic Service
 
-- Conference Reviewer: NeuRIPS (2024), ICLR (2025)
+- Conference Reviewer: NeurIPS (2024), ICLR (2025), AISTATS (2025)
 
 <!-- # 💬 Invited Talks
 - *2021.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 

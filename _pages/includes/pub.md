@@ -2,6 +2,7 @@
 
 #### 2024
 
+- `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, Jing Jiang and Chengqi Zhang, "[Personalized Item Representations in Federated Multimodal Recommendation](https://arxiv.org/abs/2410.08478)" in Arxiv. 2024. **[Preprint]**
 - `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, Tianyi Zhou, Jing Jiang and Chengqi Zhang, "[Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach](https://arxiv.org/abs/2408.08931)" in Arxiv. 2024. **[Preprint]**
 - `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024. **[Preprint]**
 - `` ICLR 2024 `` **<u>Zhiwei Li</u>**, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
