@@ -1,5 +1,6 @@
 # 🎉 Selected Honors and Awards
 
+- *2024.11*: AAII Student Best Paper Award 2024
 - *2022.12*: The Merit Student of ShanghaiTech University
 - *2018.12*: The School Outstanding Student Cadre
 - *2018.11*: The Third Prize Scholarship of Zhengzhou University
