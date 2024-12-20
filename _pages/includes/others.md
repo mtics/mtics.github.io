@@ -11,11 +11,10 @@
 
 # 📖 Academic Service
 
-- Conference Reviewer: NeurIPS (2024), ICLR (2025), AISTATS (2025)
+- Reviewer / Program Committee Member: NeurIPS (2024), ICLR (2025), AISTATS (2025), WWW(2025).
 
-<!-- # 💬 Invited Talks
-- *2021.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/) -->
+# 💬 Invited Talks
+- Federated Recommendation: FL@FM-AJCAI'24. 
 <!-- 
 # 💻 Internships
 - *2019.05 - 2020.02*, [Lorem](https://github.com/), China. -->
