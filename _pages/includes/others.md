@@ -11,7 +11,7 @@
 
 # 📖 Academic Service
 
-- Reviewer / Program Committee Member: NeurIPS (2024), ICLR (2025), AISTATS (2025), WWW(2025).
+- Reviewer / Program Committee Member: AISTATS, ICLR, IJCAI, NeurIPS, WWW.
 
 # 💬 Invited Talks
 - Federated Recommendation: FL@FM-AJCAI'24. 
