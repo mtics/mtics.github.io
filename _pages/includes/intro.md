@@ -17,8 +17,7 @@ His academic journey commenced with a Bachelor's degree from Zhengzhou Universit
 
 For the PDF resume, please click the following link: [Zhiwei's Resume](images/cv.pdf)
 
-<a href='https://scholar.google.com/citations?user=b3glA2AAAAAJ'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a> 
-Currently, Zhiwei's research interests include:
+Currently, Zhiwei is just beginning to emerge in academia <a href='https://scholar.google.com/citations?user=b3glA2AAAAAJ'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a>, and his research interests include:
 - *2023 ~ NOW*: Federated Recommendation Systems;
 - *2020 ~ 2023*: Multi-View Multi-Label Learning. 
 
