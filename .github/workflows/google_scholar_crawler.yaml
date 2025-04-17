@@ -12,7 +12,7 @@ jobs:
 
     steps:
       # 检出仓库并自动配置推送凭证（使用 GITHUB_TOKEN）
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       # 安装 Python 及 pip
       - name: Install dependencies
