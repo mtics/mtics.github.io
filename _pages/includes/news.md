@@ -1,5 +1,6 @@
 # 🔥 News
 
+- *2025.04*: I am honored to have been selected as one of the Best Reviewers for [AISTATS 2025](https://aistats.org/aistats2025/awards.html)!
 - *2024.12*: We have a [tutorial](https://arxiv.org/abs/2412.08071) about Personalized Federated Recommendation Systems accepted by [WWW 2025](https://www2025.thewebconf.org/accepted-tutorials).
 - *2024.12*：I have one paper accepted by [AAAI 2025](https://openreview.net/forum?id=Z91eH3ajOr)!
 - *2024.11*: I am invited to give a talk on federated recommendation systems at [FL@FM-AJCAI'24](https://federated-learning.org/fl@fm-ajcai-2024/) and also serve as the workshop host.
