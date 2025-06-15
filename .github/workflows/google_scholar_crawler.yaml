@@ -28,3 +28,4 @@ jobs:
         git push "${remote_repo}" HEAD:google-scholar-stats --force
       env: 
         GOOGLE_SCHOLAR_ID: ${{ secrets.GOOGLE_SCHOLAR_ID }}
+        SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
