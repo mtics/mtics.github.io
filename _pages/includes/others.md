@@ -11,7 +11,7 @@
 
 # 📖 Academic Service
 
-- Reviewer / Program Committee Member: AISTATS, ICLR, IJCAI, NeurIPS, WWW.
+- Reviewer / Program Committee Member: ICLR, IJCAI, NeurIPS, WWW, ECAI, AISTATS.
 
 # 💬 Invited Talks
 - Federated Recommendation: FL@FM-AJCAI'24. 
