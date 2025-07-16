@@ -2,9 +2,8 @@
 
 #### Preprint
 
-- `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, Jing Jiang and Chengqi Zhang, "[Personalized Item Representations in Federated Multimodal Recommendation](https://arxiv.org/abs/2410.08478)" in Arxiv. 2024. **[Preprint]** (<span style="color:red;"> Extended the multimodal recommendation framework MMRec to a federated setting. </span>)
-- `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, "[Navigating the Future of Federated Recommendation Systems with Foundation Models.](https://arxiv.org/abs/2406.00004)" in Arxiv. 2024. **[Preprint]**
-
+- `` Arxiv 2025 `` **<u>Zhiwei Li</u>**, Guodong Long, Chunxu Zhang, Honglei Zhang, Jing Jiang and Chengqi Zhang, "[Learn to Preserve Personality: Federated Foundation Models in Recommendations.](https://arxiv.org/abs/2506.11563)" in Arxiv. 2025. **[Preprint]**
+- `` Arxiv 2024 `` **<u>Zhiwei Li</u>**, Guodong Long, Jing Jiang and Chengqi Zhang"[Personalized item representations in federated multimodal recommendation.](https://arxiv.org/abs/2410.08478)" in Arxiv. 2024. **[Preprint]** (<span style="color:red;"> Extended the multimodal recommendation framework MMRec to a federated setting. </span>)
 
 #### Conference
 
