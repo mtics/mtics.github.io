@@ -14,7 +14,7 @@
 - Reviewer / Program Committee Member: ICLR, IJCAI, NeurIPS, WWW, ECAI, AISTATS.
 
 # 💬 Invited Talks
-- Federated Recommendation: FL@FM-AJCAI'24. 
+- Federated Recommendation: Tutoiral@WWW'25, FL@FM-AJCAI'24. 
 
 <!-- 
 # 💻 Internships
