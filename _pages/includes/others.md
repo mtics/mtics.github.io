@@ -11,10 +11,12 @@
 
 # 📖 Academic Service
 
-- Reviewer / Program Committee Member: ICLR, IJCAI, NeurIPS, WWW, ECAI, AISTATS.
+- Reviewer / Program Committee Member: 
+  - Conferences: ICLR, NeurIPS, AAAI, IJCAI, WWW, ECAI, AISTATS.
+  - Journals: IEEE TNNLS, IEEE TKDE, IEEE TAI.
 
 # 💬 Invited Talks
-- Federated Recommendation: Tutoiral@WWW'25, FL@FM-AJCAI'24. 
+- Federated Recommendation: Tutorial@WWW'25, FL@FM-AJCAI'24. 
 
 <!-- 
 # 💻 Internships
