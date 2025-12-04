@@ -6,7 +6,7 @@
 
 #### Conference
 
-- `` AAAI 2026 `` **<u>Zhiwei Li</u>**, Guodong Long, Jing Jiang, Chengqi Zhang and Qiang Yang, "[Personalized item representatioFederated Vision-Language-Recommendation with Personalized Fusion.](https://arxiv.org/abs/2410.08478)" in AAAI. 2026. [[code]](https://github.com/mtics/FedVLR)
+- `` AAAI 2026 `` **<u>Zhiwei Li</u>**, Guodong Long, Jing Jiang, Chengqi Zhang and Qiang Yang, "[Federated Vision-Language-Recommendation with Personalized Fusion.](https://arxiv.org/abs/2410.08478)" in AAAI. 2026. [[code]](https://github.com/mtics/FedVLR)
 - `` AAAI 2025 `` **<u>Zhiwei Li</u>**, Guodong Long, Tianyi Zhou, Jing Jiang and Chengqi Zhang, "[Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach](https://arxiv.org/abs/2408.08931)" in AAAI. 2025. [[code & supplementary]](https://github.com/mtics/FedDAE)
 - `` ICLR 2024 `` **<u>Zhiwei Li</u>**, Guodong Long and Tianyi Zhou, "[Federated Recommendation with Additive Personalization.](https://openreview.net/forum?id=xkXdE81mOK)" in ICLR. 2024. [[code]](https://github.com/mtics/FedRAP)
 - `` PRICAI 2023 `` **<u>Zhiwei Li</u>**, Zijian Yang, Lu Sun, Mineichi Kudo and Kego Kimura, "[Incomplete Multi-View Weak-Label Learning with Noisy Features and Imbalanced Labels.](https://arxiv.org/abs/2201.01079)" in PRICAI. 2023. [[code & supplementary]](https://github.com/mtics/NAIL)
