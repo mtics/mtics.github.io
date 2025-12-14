@@ -13,7 +13,7 @@
 
 - Reviewer / Program Committee Member: 
   - Conferences: ICLR, NeurIPS, AAAI, IJCAI, WWW, ECAI, AISTATS.
-  - Journals: IEEE TNNLS, IEEE TKDE, IEEE TAI.
+  - Journals: IEEE TPAMI, IEEE TNNLS, IEEE TKDE, IEEE TAFFC, IEEE TAI.
 
 # 💬 Invited Talks
 - Federated Recommendation: Tutorial@WWW'25, FL@FM-AJCAI'24. 
