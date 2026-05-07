@@ -27,38 +27,11 @@ author:
   avatar           : "/images/1inch_1x1.jpg"
   bio              : "Patiently hoping for a Degree..."
   location         : "Sydney, Australia"
-  employer         :
-  pubmed           : 
   googlescholar    : "https://scholar.google.com/citations?user=b3glA2AAAAAJ"
   email            : "lizhw.cs@outlook.com"
-  researchgate     :  # e.g., "https://www.researchgate.net/profile/yourprofile"
-  uri              :
-  bitbucket        :
-  codepen          :
-  dribbble         :
-  flickr           :
-  facebook         :
-  foursquare       :
-  github           : mtics # e.g., "github username"
-  google_plus      :
-  keybase          :
-  instagram        :
-  impactstory      : # e.g., "https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
-  lastfm           :
-  linkedin         : lizhiwi # e.g., "linkedin username"
-  dblp             : # e.g., "https://dblp.org/pid/xx/xxxx.html"
-  orcid            : https://orcid.org/0000-0002-8897-8905 # e.g., "https://orcid.org/xxxx"
-  pinterest        :
-  soundcloud       :
-  stackoverflow    : # http://stackoverflow.com/users/123456/username
-  steam            :
-  tumblr           :
-  twitter          : 
-  vine             :
-  weibo            :
-  xing             :
-  youtube          :
-  wikipedia        :
+  github           : mtics
+  linkedin         : lizhiwi
+  orcid            : https://orcid.org/0000-0002-8897-8905
 
 
 # Reading Files
@@ -155,11 +128,3 @@ whitelist:
   - jekyll-gist
   - jekyll-feed
   - jemoji
-
-
-# HTML Compression
-# - http://jch.penibelst.de/
-compress_html:
-  clippings: all
-  ignore:
-    envs: development

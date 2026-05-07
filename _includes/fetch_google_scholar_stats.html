@@ -14,8 +14,9 @@
             Array.prototype.forEach.call(citationEles, function (element) {
                 var paperId = element.getAttribute('data');
                 var pub = data['publications'] && data['publications'][paperId];
-                if (pub && pub['num_citations'] !== undefined) {
-                    element.innerHTML = '| Citations: ' + pub['num_citations'];
+                var n = pub && pub['cited_by'] && pub['cited_by']['value'];
+                if (n !== undefined) {
+                    element.innerHTML = '| Citations: ' + n;
                 }
             });
         });
