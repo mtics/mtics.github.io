@@ -181,8 +181,8 @@ ul.task-list input[type="checkbox"] {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    font-size: 1.8rem;
+    gap: 0.25rem;
+    font-size: 2.2rem;
 
     a {
       display: inline-flex;
@@ -191,17 +191,17 @@ ul.task-list input[type="checkbox"] {
       line-height: 1;
 
       img {
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 2rem;
+        height: 2rem;
       }
 
       svg {
-        width: 1.6rem;
-        height: 1.8rem;
+        width: 2rem;
+        height: 2.2rem;
 
         image {
-          width: 1.6rem;
-          height: 1.6rem;
+          width: 2rem;
+          height: 2rem;
         }
       }
 
