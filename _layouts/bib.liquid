@@ -258,6 +258,35 @@
       {% if entry.website %}
         <a href="{{ entry.website }}" class="btn btn-sm z-depth-0" role="button">Website</a>
       {% endif %}
+      {% if site.enable_publication_badges.google_scholar and entry.google_scholar_id %}
+        {% assign citation_count = 0 %}
+        {% assign scholar_id_key = site.scholar_userid | append: ':' | append: entry.google_scholar_id %}
+        {% assign publication_key = entry.google_scholar_id %}
+        {% if site.data.citations.papers[scholar_id_key] %}
+          {% assign citation_count = site.data.citations.papers[scholar_id_key].citations %}
+        {% elsif site.data.citations.papers[publication_key] %}
+          {% assign citation_count = site.data.citations.papers[publication_key].citations %}
+        {% else %}
+          {% for paper in site.data.citations.papers %}
+            {% assign paper_key = paper[0] %}
+            {% if paper_key contains entry.google_scholar_id %}
+              {% assign citation_count = paper[1].citations %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        <a
+          href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user={{ site.data.socials.scholar_userid }}&citation_for_view={{ site.data.socials.scholar_userid }}:{{ entry.google_scholar_id }}"
+          class="scholar-citations btn btn-sm z-depth-0"
+          role="button"
+          aria-label="{{ citation_count }} Google Scholar citations"
+          target="_blank"
+          rel="external nofollow noopener"
+        >
+          <i class="ai ai-google-scholar"></i>
+          <span class="scholar-citation-count">{{ citation_count }}</span>
+        </a>
+      {% endif %}
     </div>
     {% if site.enable_publication_badges %}
       {% assign entry_has_altmetric_badge = false %}
@@ -316,37 +345,12 @@
               style="margin-bottom: 3px;"
             ></span>
           {% endif %}
-          {% if site.enable_publication_badges.google_scholar and entry_has_google_scholar_badge %}
-            {% assign citation_count = 0 %}
-            {% assign scholar_id_key = site.scholar_userid | append: ':' | append: entry.google_scholar_id %}
-            {% assign publication_key = entry.google_scholar_id %}
-
-            {% if site.data.citations.papers[scholar_id_key] %}
-              {% assign citation_count = site.data.citations.papers[scholar_id_key].citations %}
-            {% elsif site.data.citations.papers[publication_key] %}
-              {% assign citation_count = site.data.citations.papers[publication_key].citations %}
-            {% else %}
-              {% for paper in site.data.citations.papers %}
-                {% assign paper_key = paper[0] %}
-                {% if paper_key contains entry.google_scholar_id %}
-                  {% assign citation_count = paper[1].citations %}
-                  {% break %}
-                {% endif %}
-              {% endfor %}
-            {% endif %}
-
-            <a
-              href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user={{ site.data.socials.scholar_userid }}&citation_for_view={{ site.data.socials.scholar_userid }}:{{ entry.google_scholar_id }}"
-              class="scholar-citations btn btn-sm z-depth-0"
-              role="button"
-              aria-label="{{ citation_count }} Google Scholar citations"
-              target="_blank"
-              rel="external nofollow noopener"
-            >
-              <i class="ai ai-google-scholar"></i>
-              <span class="scholar-citation-count">{{ citation_count }}</span>
-            </a>
-          {% endif %}
+          {% comment %}
+            Google Scholar citation badge has been moved into .links above so
+            it sits inline with the action buttons (Abs / arXiv / Bib / Code).
+            This .badges block now only carries altmetric / dimensions /
+            inspirehep — external embeds that have their own visual register.
+          {% endcomment %}
           {% if site.enable_publication_badges.inspirehep and entry_has_inspirehep_badge %}
             <a
               href="https://inspirehep.net/literature/{{ entry.inspirehep_id }}"
