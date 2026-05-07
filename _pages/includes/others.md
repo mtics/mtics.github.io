@@ -2,7 +2,7 @@
 
 - **PhD**: Analytics, [University of Technology Sydney](https://www.uts.edu.au/), *2023.11 ~ NOW*
 - **M.S.**: Computer Science and Technology, [Shanghaitech University](https://www.shanghaitech.edu.cn/), *2020.09 ~ 2023.06*
-- **B.E.**: Computer Science and Technology, [Zhengzhou University](http://www.zzu.edu.cn/), *2016.09 ~ 2020.06*
+- **B.E.**: Computer Science and Technology, [Zhengzhou University](https://en.wikipedia.org/wiki/Zhengzhou_University), *2016.09 ~ 2020.06*
 
 # 💻 Professional Experience
 - **Research Assistant**, Supervised by [Prof. Lu Sun](https://faculty.sist.shanghaitech.edu.cn/sunlu/), Shanghaitech University, *2023.07 ~ 2023.11*

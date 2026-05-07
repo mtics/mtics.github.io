@@ -13,7 +13,7 @@ Zhiwei Li (李志伟), born in Zhengzhou, Henan, China, in 1997, is a PhD candid
 
 He received his M.S. in Computer Science from [ShanghaiTech University](https://www.shanghaitech.edu.cn/) in 2023, advised by [Prof. Lu Sun](https://lusun912.github.io/), with research on multi-view multi-label learning.
 
-He completed his B.E. at [Zhengzhou University](http://www.zzu.edu.cn/) in 2020, where he was a member of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) team at the Bipedal Robot Laboratory (2017.06–2020.06), competing in RoboCup events.
+He completed his B.E. at [Zhengzhou University](https://en.wikipedia.org/wiki/Zhengzhou_University) in 2020, where he was a member of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) team at the Bipedal Robot Laboratory (2017.06–2020.06), competing in RoboCup events.
 
 His full CV is available as a [PDF](/images/cv.pdf).
 
