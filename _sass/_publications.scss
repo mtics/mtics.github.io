@@ -48,22 +48,34 @@
         margin-top: 0.5rem;
       }
 
-      // Google Scholar citation count rendered as a normal al-folio button
-      // (matches Abs / arXiv / Bib / Code visual register; unlike the
-      // upstream shields.io badge that ships with Google Blue + beige).
-      a.scholar-citations {
+      // Google Scholar citation count: burgundy-filled prominent button
+      // sitting at the end of the action-button row. Filled (vs. outlined
+      // for ABS/ARXIV/BIB/CODE) so the citation count visually stands out
+      // as the one quantitative signal in the row.
+      a.scholar-citations,
+      a.scholar-citations:visited {
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-        margin-right: 0.25rem;
+        background-color: var(--global-theme-color);
+        border-color: var(--global-theme-color);
+        color: #fff !important;
+        font-weight: 600;
 
         i.ai-google-scholar {
-          font-size: 1rem;
+          font-size: 1.05rem;
           line-height: 1;
+          color: inherit;
         }
 
         .scholar-citation-count {
           font-variant-numeric: tabular-nums;
+        }
+
+        &:hover {
+          background-color: transparent;
+          color: var(--global-theme-color) !important;
+          border-color: var(--global-theme-color);
         }
       }
 
