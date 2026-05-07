@@ -1,13 +1,13 @@
 {% capture footer_contents %}
-  &copy; Copyright {{ site.time | date: '%Y' }}
+  &copy; {{ site.time | date: '%Y' }}
   {{ site.first_name }}
   {{ site.middle_name }}
-  {{ site.last_name }}. {{ site.footer_text }}
-  {% if site.impressum_path %}
-    <a href="{{ site.url }}{{ site.baseurl }}{{ site.impressum_path }}">Impressum</a>.
-  {% endif %}
+  {{ site.last_name }} &middot; Sydney, Australia
   {% if site.last_updated %}
-    Last updated: {{ 'now' | date: '%B %d, %Y' }}.
+    &middot; Last updated {{ 'now' | date: '%B %d, %Y' }}
+  {% endif %}
+  {% if site.impressum_path %}
+    &middot; <a href="{{ site.url }}{{ site.baseurl }}{{ site.impressum_path }}">Impressum</a>
   {% endif %}
 {% endcapture %}
 
