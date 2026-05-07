@@ -23,10 +23,12 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install scholarly pyyaml
+        run: pip install google-search-results pyyaml
 
       - name: Run scholar citations update
         run: python bin/update_scholar_citations.py
+        env:
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
 
       - name: Commit and push citations.yml if changed
         run: |
