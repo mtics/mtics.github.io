@@ -25,4 +25,4 @@ Zhiwei Li (李志伟) is a PhD candidate at the [Australian Artificial Intellige
 
 Previously, he received his M.S. in Computer Science from [ShanghaiTech University](https://www.shanghaitech.edu.cn/) in 2023, advised by [Prof. Lu Sun](https://lusun912.github.io/), and earned his B.E. from [Zhengzhou University](https://en.wikipedia.org/wiki/Zhengzhou_University) in 2020 as a member of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) bipedal-robot team.
 
-He welcomes collaborations on **Privacy-Preserving Recommendation**, **Federated Learning**, and **Foundation-Model Integration**.
+> <span style="color:red">*Remark*</span>: He welcomes collaborations on **Privacy-Preserving Recommendation**, **Federated Learning**, and **Foundation-Model Integration**.
