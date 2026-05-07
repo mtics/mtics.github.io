@@ -48,6 +48,25 @@
         margin-top: 0.5rem;
       }
 
+      // Google Scholar citation count rendered as a normal al-folio button
+      // (matches Abs / arXiv / Bib / Code visual register; unlike the
+      // upstream shields.io badge that ships with Google Blue + beige).
+      a.scholar-citations {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-right: 0.25rem;
+
+        i.ai-google-scholar {
+          font-size: 1rem;
+          line-height: 1;
+        }
+
+        .scholar-citation-count {
+          font-variant-numeric: tabular-nums;
+        }
+      }
+
       .abbr {
         margin-bottom: 0.5rem;
 
