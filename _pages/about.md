@@ -21,8 +21,8 @@ latest_posts:
   enabled: false
 ---
 
-I am a PhD candidate at the [Australian Artificial Intelligence Institute (AAII)](https://www.uts.edu.au/research/australian-artificial-intelligence-institute), University of Technology Sydney, advised by [Prof. Guodong Long](https://guodonglong.github.io/). My research focuses on **privacy-preserving personalized recommender systems**, especially under federated, multimodal, and foundation-model settings. My work has appeared at top venues including ICLR, AAAI, IJCAI, and IEEE TKDE. I was named a Best Reviewer at AISTATS 2025.
+Zhiwei Li (李志伟) is a PhD candidate at the [Australian Artificial Intelligence Institute (AAII)](https://www.uts.edu.au/research/australian-artificial-intelligence-institute), University of Technology Sydney, advised by [Prof. Guodong Long](https://guodonglong.github.io/). His research focuses on **privacy-preserving personalized recommender systems**, especially under federated, multimodal, and foundation-model settings. His work has appeared at top venues including ICLR, AAAI, IJCAI, and IEEE TKDE. He was named a Best Reviewer at AISTATS 2025.
 
-Previously, I received my M.S. in Computer Science from [ShanghaiTech University](https://www.shanghaitech.edu.cn/) in 2023, advised by [Prof. Lu Sun](https://lusun912.github.io/), and earned my B.E. from [Zhengzhou University](https://en.wikipedia.org/wiki/Zhengzhou_University) in 2020 as a member of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) bipedal-robot team.
+Previously, he received his M.S. in Computer Science from [ShanghaiTech University](https://www.shanghaitech.edu.cn/) in 2023, advised by [Prof. Lu Sun](https://lusun912.github.io/), and earned his B.E. from [Zhengzhou University](https://en.wikipedia.org/wiki/Zhengzhou_University) in 2020 as a member of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) bipedal-robot team.
 
-I am open to collaborations on privacy-preserving recommendation, federated learning, and foundation-model integration. Feel free to reach out.
+He is open to collaborations on privacy-preserving recommendation, federated learning, and foundation-model integration.

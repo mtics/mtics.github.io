@@ -105,7 +105,7 @@ cv:
         awarder: Softbank Robot Cup — 2017 China Robot Skills Competition
         summary: With the ZZU-DROID bipedal-robot team.
 
-    Service:
+    Skills:
       - name: Conference Reviewer / PC Member
         keywords: "ICLR, NeurIPS, AAAI, IJCAI, WWW, ECAI, AISTATS"
         icon: fa-solid fa-pen-to-square
