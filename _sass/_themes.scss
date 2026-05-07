@@ -80,8 +80,8 @@ html[data-theme="dark"] {
   --global-code-bg-color: #{v.$code-bg-color-dark};
   --global-text-color: #{v.$grey-color-light};
   --global-text-color-light: #{v.$grey-color};
-  --global-theme-color: #{v.$burgundy-color};
-  --global-hover-color: #{v.$burgundy-color};
+  --global-theme-color: #{v.$burgundy-color-bright};
+  --global-hover-color: #{v.$burgundy-color-bright};
   --global-hover-text-color: #{v.$white-color};
   --global-footer-bg-color: #{v.$grey-color-light};
   --global-footer-text-color: #{v.$grey-color-dark};

@@ -77,7 +77,7 @@
 
         &:hover {
           background-color: var(--global-theme-color);
-          color: #fff !important;
+          color: var(--global-card-bg-color) !important;
           border-color: var(--global-theme-color);
         }
       }
