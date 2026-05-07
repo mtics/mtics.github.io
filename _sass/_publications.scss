@@ -41,6 +41,11 @@
 
       .preview {
         display: inline-block;
+        max-width: 100%;
+        max-height: 110px;
+        height: auto;
+        object-fit: cover;
+        margin-top: 0.5rem;
       }
 
       .abbr {
