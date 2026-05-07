@@ -173,28 +173,35 @@ ul.task-list input[type="checkbox"] {
 
 // Social icons under the profile photo (sidebar)
 .profile-social {
+  margin-top: 1rem;
   text-align: center;
-  margin-top: 0.75rem;
 
   .contact-icons {
-    font-size: 1.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    font-size: 1.8rem;
 
     a {
-      display: inline-block;
-      margin: 0 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
 
       img {
-        width: 1.2rem;
-        height: 1.2rem;
+        width: 1.6rem;
+        height: 1.6rem;
       }
 
       svg {
-        width: 1.2rem;
-        height: 1.3rem;
+        width: 1.6rem;
+        height: 1.8rem;
 
         image {
-          width: 1.2rem;
-          height: 1.2rem;
+          width: 1.6rem;
+          height: 1.6rem;
         }
       }
 
@@ -214,8 +221,8 @@ ul.task-list input[type="checkbox"] {
   }
 
   .contact-note {
-    font-size: 0.8rem;
-    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    margin-top: 0.6rem;
     color: var(--global-text-color-light);
   }
 }
