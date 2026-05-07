@@ -57,11 +57,12 @@ table.table a {
 }
 
 blockquote {
-  background: var(--global-bg-color);
-  border-left: 5px solid var(--global-theme-color);
-  margin: 1.5em 0;
-  padding: 1em;
-  font-size: 1.2rem;
+  background: transparent;
+  border-left: 3px solid var(--global-divider-color);
+  margin: 1em 0;
+  padding: 0.4em 1em;
+  font-size: inherit;
+  color: var(--global-text-color);
 
   p {
     margin-bottom: 0;
