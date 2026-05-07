@@ -8,6 +8,8 @@
 # Site Settings
 title                    : "Zhiwei Li"
 description              : PhD Candidate @ UTS AAII, specializing in Federated Recommendation systems.
+url                      : "https://zhw.li"
+baseurl                  : ""
 repository               : "mtics/mtics.github.io"
 google_scholar_stats_use_cdn : true
 
@@ -22,8 +24,8 @@ baidu_site_verification  :  codeva-h5rzl291pW # get baidu_site_verification from
 # Site Author
 author:
   name             : "Zhiwei Li"
-  avatar           : "images/1inch_1x1.jpg"
-  bio              : "PhD Candidate @ UTS AAII"
+  avatar           : "/images/1inch_1x1.jpg"
+  bio              : "Patiently hoping for a Degree..."
   location         : "Sydney, Australia"
   employer         :
   pubmed           : 

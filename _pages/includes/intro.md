@@ -15,7 +15,7 @@ He received his M.S. in Computer Science from [ShanghaiTech University](https://
 
 He completed his B.E. at [Zhengzhou University](http://www.zzu.edu.cn/) in 2020, where he was a member of the [ZZU-DROID](https://baike.baidu.com/item/ZZU-DROID/23540312?fromModule=search-result_lemma-recommend) team at the Bipedal Robot Laboratory (2017.06–2020.06), competing in RoboCup events.
 
-His full CV is available as a [PDF](images/cv.pdf).
+His full CV is available as a [PDF](/images/cv.pdf).
 
 Research interests:
 - *2023 ~ NOW*: Privacy-preserving personalized recommender systems, especially under federated, multimodal, and foundation-model settings.
