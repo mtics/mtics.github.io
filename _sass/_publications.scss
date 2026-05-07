@@ -48,18 +48,20 @@
         margin-top: 0.5rem;
       }
 
-      // Google Scholar citation count: burgundy-filled prominent button
-      // sitting at the end of the action-button row. Filled (vs. outlined
-      // for ABS/ARXIV/BIB/CODE) so the citation count visually stands out
-      // as the one quantitative signal in the row.
+      // Google Scholar citation count: theme-color outlined button.
+      // Same outline geometry as ABS/ARXIV/BIB/CODE peers, but the
+      // border + icon + number all use the burgundy theme color
+      // (instead of default text color) so the citation reads as
+      // a distinct, themed signal in the row. Hover inverts to a
+      // filled state.
       a.scholar-citations,
       a.scholar-citations:visited {
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-        background-color: var(--global-theme-color);
+        background-color: transparent;
         border-color: var(--global-theme-color);
-        color: #fff !important;
+        color: var(--global-theme-color) !important;
         font-weight: 600;
 
         i.ai-google-scholar {
@@ -73,8 +75,8 @@
         }
 
         &:hover {
-          background-color: transparent;
-          color: var(--global-theme-color) !important;
+          background-color: var(--global-theme-color);
+          color: #fff !important;
           border-color: var(--global-theme-color);
         }
       }
