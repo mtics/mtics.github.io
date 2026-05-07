@@ -1,4 +1,4 @@
-# 🎓 Educations
+# 🎓 Education
 
 - **PhD**: Analytics, [University of Technology Sydney](https://www.uts.edu.au/), *2023.11 ~ NOW*
 - **M.S.**: Computer Science and Technology, [Shanghaitech University](https://www.shanghaitech.edu.cn/), *2020.09 ~ 2023.06*
