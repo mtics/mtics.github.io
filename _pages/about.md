@@ -1,6 +1,6 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
 subtitle: PhD Candidate, <a href="https://www.uts.edu.au/research/australian-artificial-intelligence-institute">UTS AAII</a>. Sydney, Australia.
 
