@@ -32,4 +32,7 @@ Previously, he received his M.S. in Computer Science from [ShanghaiTech Universi
 - **2020 – 2023** · Multi-View / Multi-Label Learning — learning under partial labels and incomplete views
 
 
-> <em style="color:#E53935">Remark</em>: He welcomes collaborations on **Federated Recommendation**, **Personal AI Agents**, **On-Device Foundation Models**, and **Privacy-Preserving Personalization**.
+<div style="border-left: 4px solid var(--global-theme-color); background: rgba(165, 28, 48, 0.05); padding: 1.25em 1.5em; margin: 2em 0; border-radius: 0 6px 6px 0;">
+  <p style="margin: 0 0 0.6em 0; font-size: 1.05em; letter-spacing: 0.02em;"><strong style="color: var(--global-theme-color);">On the Academic Job Market — 2026/27</strong></p>
+  <p style="margin: 0; line-height: 1.65;">Zhiwei is graduating from UTS AAII in mid-2027 and is actively seeking <strong>postdoctoral research fellow</strong> and <strong>tenure-track / faculty</strong> positions across <strong>Australia, Hong Kong, and mainland China</strong>, with a focus on on-device personal AI agents, federated recommendation, privacy-preserving foundation models, and user-centric intelligent systems. Conversations and collaborations are very welcome — please feel free to reach out.</p>
+</div>
