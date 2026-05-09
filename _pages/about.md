@@ -27,9 +27,9 @@ Previously, he received his M.S. in Computer Science from [ShanghaiTech Universi
 
 ## Research Interests
 
-- **2026 – present** · User-Centric Personal Intelligent Systems — On-device personal agents under user control
-- **2023 – present** · Federated Recommendation Systems — privacy-preserving personalization
-- **2020 – 2023** · Multi-View / Multi-Label Learning — learning under partial labels and incomplete views
+- **2026 – present**: *User-Centric Personal Intelligent Systems* — on-device personal agentic AI under user control
+- **2023 – present**: *Federated Recommendation Systems* — privacy-preserving personalization
+- **2020 – 2023**: *Multi-View / Multi-Label Learning* — learning under partial labels and incomplete views
 
 
 <div style="border-left: 4px solid var(--global-theme-color); background: rgba(165, 28, 48, 0.05); padding: 1.25em 1.5em; margin: 2em 0; border-radius: 0 6px 6px 0;">
