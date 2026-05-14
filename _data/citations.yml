@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-05-07'
+  last_updated: '2026-05-14'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -42,7 +42,7 @@ papers:
     title: Navigating the Future of Federated Recommendation Systems with Foundation Models
     year: '2024'
   b3glA2AAAAAJ:u-x6o8ySG0sC:
-    citations: 88
+    citations: 89
     title: Federated recommendation with additive personalization
     year: '2024'
   b3glA2AAAAAJ:ufrVoPGSRksC:
