@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-05-14'
+  last_updated: '2026-05-15'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -14,7 +14,7 @@ papers:
     title: 'Learning to Collaborate via Structures: Cluster-Guided Item Alignment for Federated Recommendation'
     year: '2026'
   b3glA2AAAAAJ:UeHWp8X0CEIC:
-    citations: 31
+    citations: 32
     title: 'Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach'
     year: '2024'
   b3glA2AAAAAJ:WF5omc3nYNoC:
