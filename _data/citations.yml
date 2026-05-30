@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-05-24'
+  last_updated: '2026-05-30'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -22,7 +22,7 @@ papers:
     title: 'Learn to Preserve Personality: Federated Foundation Models in Recommendations'
     year: '2025'
   b3glA2AAAAAJ:Y0pCki6q_DkC:
-    citations: 14
+    citations: 15
     title: 'Personalized recommendation models in federated settings: A survey'
     year: '2025'
   b3glA2AAAAAJ:YsMSGLbcyi4C:
