@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-05-30'
+  last_updated: '2026-06-12'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -14,7 +14,7 @@ papers:
     title: 'Learning to Collaborate via Structures: Cluster-Guided Item Alignment for Federated Recommendation'
     year: '2026'
   b3glA2AAAAAJ:UeHWp8X0CEIC:
-    citations: 34
+    citations: 35
     title: 'Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach'
     year: '2024'
   b3glA2AAAAAJ:WF5omc3nYNoC:
@@ -38,11 +38,11 @@ papers:
     title: Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.
     year: '2023'
   b3glA2AAAAAJ:qjMakFHDy7sC:
-    citations: 14
+    citations: 15
     title: Navigating the Future of Federated Recommendation Systems with Foundation Models
     year: '2024'
   b3glA2AAAAAJ:u-x6o8ySG0sC:
-    citations: 90
+    citations: 91
     title: Federated recommendation with additive personalization
     year: '2024'
   b3glA2AAAAAJ:ufrVoPGSRksC:
