@@ -13,3 +13,7 @@ assets/rendercv/rendercv_output/*.typ
 Gemfile.lock
 node_modules/
 vendor
+# migration scratch
+_site/
+.jekyll-cache/
+al-folio-upgrade-report.md
