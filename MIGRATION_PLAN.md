@@ -68,3 +68,16 @@ NEXT (P3, start here):
 3. Re-add genuine overrides only: sidebar social icons (about layout), minimal footer, scholar-badge styling, profile-social. After each, `al-folio upgrade overrides audit` → `accept` → commit `.al-folio-overrides.yml`.
 4. CV data: fork uses `_data/cv.yml` (rendercv) + `cv.md cv_format: rendercv`; v1 `al_folio_cv` + starter config expects `assets/json/resume.json` (jekyll_get_json/jsonresume block still in config). RECONCILE: either keep rendercv path (confirm al_folio_cv supports it) or convert cv.yml→resume.json. Verify `al_citations` reads `_data/citations.yml` in the same shape (SerpApi script output).
 Then P4 audit fixes (feed title "blank" still reproduces; exclude MIGRATION_PLAN.md+requirements.txt from _site; TKDE + 2nd AAAI 2026 bib entries; v1 deploy.yml with Tailwind build), P5 verify, P6 PR.
+
+## P3 progress — burgundy DONE (commit d356c60)
+Approach A confirmed: v1 theme color = CSS var `--global-theme-color`, sourced from `$purple-color`(light)/`$cyan-color`(dark) in gem `_sass/_variables.scss`. Override needs BOTH `_sass/_variables.scss` (burgundy #a51c30/#e5495d) AND `_sass/_themes.scss` (gem-verbatim bridge) — Dart Sass `@use "variables"` resolves relative to the importing file's dir, so shadowing variables alone is ignored until themes.scss is also local. Acknowledged in `.al-folio-overrides.yml`.
+Preview server (KEEP UP for user): `docker run -d --name alfolio-v1-serve -p 8091:8000 -v /tmp/alfolio-v1-mig/_site:/site -w /site amirpourmand/al-folio:latest python3 -m http.server 8000` → http://localhost:8091. Rebuild _site then it auto-serves latest.
+
+### Live-vs-v1 deltas remaining (screenshot compare @1280):
+MATCHES: burgundy accents everywhere, solid-burgundy venue badges, pub buttons (ABS/ARXIV/BIB/CODE), scholar citation badges, job-market callout w/ burgundy left border, nav, dark toggle, name two-tone, all content.
+DELTAS to close (v0 customizations not in v1 default):
+1. Social icons (CV/email/GitHub/LinkedIn/ORCID/Scholar) + "Patiently hoping…" note: live has them in the PROFILE SIDEBAR under the photo; v1 default puts them at PAGE BOTTOM. → override v1 about layout (fork's `.profile-social` in about.liquid). MOST visible.
+2. Publication preview thumbnails: live caps ~110px (small); v1 shows full-size figures. → PREFERENCE (ask user) — `.preview` max-height override if they want the small caps back.
+3. Footer: live "© 2026 Zhiwei Li · Sydney, Australia · Last updated <date>"; v1 default "© Copyright 2026 … Last updated:". → footer override or footer_text config.
+4. Section heading case: v1 renders "news"/"selected publications" lowercase vs live Title Case. → investigate about layout heading (text-transform or content).
+Each delta: find gem file → local override → build → `overrides audit`→`accept` → commit.
