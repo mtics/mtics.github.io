@@ -81,3 +81,27 @@ DELTAS to close (v0 customizations not in v1 default):
 3. Footer: live "© 2026 Zhiwei Li · Sydney, Australia · Last updated <date>"; v1 default "© Copyright 2026 … Last updated:". → footer override or footer_text config.
 4. Section heading case: v1 renders "news"/"selected publications" lowercase vs live Title Case. → investigate about layout heading (text-transform or content).
 Each delta: find gem file → local override → build → `overrides audit`→`accept` → commit.
+
+## P3 COMPLETE (commit 6f1755b) — v1 visually matches live
+All 4 deltas closed and screenshot-verified (home + CV) against live:
+- Burgundy (P3 earlier): `_sass/_variables.scss` + `_sass/_themes.scss` overrides.
+- Social icons in profile sidebar + Title-case headings: `_layouts/about.liquid` override.
+- Minimal footer: `_includes/footer.liquid` override.
+- Preview 110px cap + `.profile-social` styling (with audit `transition:` fix): new `_sass/_brand.scss`, wired via `@use "brand"` in `_themes.scss`.
+- 4 overrides acknowledged in `.al-folio-overrides.yml`; `_brand.scss` is a site-only partial (not a gem shadow).
+CV page: `al_folio_cv` reads `_data/cv.yml` (rendercv) NATIVELY — no resume.json conversion needed. Renders Contact/Summary/Experience/Education/Awards/Service/Languages with burgundy TOC. RECONCILIATION RESOLVED.
+Citation badges: `al_citations` reads `_data/citations.yml` fine (badges show 1/11/39/92 — the July data, fresher than stale live 10/31/88).
+
+### Remaining micro-deltas noted (Phase 4/5):
+- Publication button labels: v1 "Abs/arXiv/Bib/Code" vs live uppercase "ABS/ARXIV/BIB/CODE" (cosmetic; `text-transform: uppercase` if wanted).
+- CV Contact block omits Location row (audit finding — al_folio_cv renders address-shape, not cv.location; add location or address).
+
+## Phase 4 remaining (audit fixes into v1)
+- feed.xml still titled "blank" (jekyll-feed reads site.title raw) → set a real feed title / override.
+- exclude MIGRATION_PLAN.md (+ requirements.txt) from _site (add to _config exclude).
+- Content: add IEEE TKDE @article + 2nd AAAI 2026 entry to papers.bib (google_scholar_id from citations.yml).
+- requirements.txt: scholarly→google-search-results.
+- deploy.yml: rebuild for v1 — Tailwind build step, Gemfile.lock cache, and DECISION (audit #1): schedule a daily/periodic build so citation updates actually publish (GITHUB_TOKEN citation commits don't trigger deploy). NEEDS USER on cadence.
+- CV Location row.
+## Phase 5: publications page, dark mode, ninja-keys search, mobile, feed, functional verification vs live (Playwright). Preview server: docker container `alfolio-v1-serve` on :8091 (restart cmd above).
+## Phase 6: push branch → PR → user approves → merge to main.
