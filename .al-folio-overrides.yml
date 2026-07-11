@@ -1,12 +1,26 @@
 ---
 version: 1
 overrides:
+  _includes/footer.liquid:
+    owner: al_folio_core
+    gem_version: 1.0.11
+    upstream_path: _includes/footer.liquid
+    upstream_sha256: 65219faad5445eb4456649d77921acd07845875bbcad4fb8f33b12b3d52d96d2
+    local_sha256: 5a5c53ef3bc7d1f0053f0fc521b92e8f474fead4de67a9499be77a51df3e32de
+    acknowledged_at: '2026-07-11'
+  _layouts/about.liquid:
+    owner: al_folio_core
+    gem_version: 1.0.11
+    upstream_path: _layouts/about.liquid
+    upstream_sha256: 2c28eb83b71fe65f252202c11f0b4a19a9b6f1faccdc870b4f91c4ea51d0c6f1
+    local_sha256: 17b2b91f4be9901a231616d7f66655cfc33b3f390738b7f187f26a68faca2e67
+    acknowledged_at: '2026-07-11'
   _sass/_themes.scss:
     owner: al_folio_core
     gem_version: 1.0.11
     upstream_path: _sass/_themes.scss
     upstream_sha256: b581e43dcfbf21c14f388e2b585474c886fad62f6b5a0444f7832e7f69745f1f
-    local_sha256: b581e43dcfbf21c14f388e2b585474c886fad62f6b5a0444f7832e7f69745f1f
+    local_sha256: 9d425963ae145aaee280d57a883a76597641b90df6107297fe8caaffb5291498
     acknowledged_at: '2026-07-11'
   _sass/_variables.scss:
     owner: al_folio_core

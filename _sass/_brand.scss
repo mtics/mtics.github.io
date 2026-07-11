@@ -1,0 +1,58 @@
+/*******************************************************************************
+ * zhw.li site brand overrides (ported from v0 _publications.scss / _components.scss)
+ * Loaded via `@use "brand"` from the local _themes.scss override.
+ ******************************************************************************/
+
+// Publication preview thumbnails capped to match the live site
+// (v1 default shows full-size figures; keep the compact ~110px look).
+.preview {
+  max-width: 100%;
+  max-height: 110px;
+  height: auto;
+  object-fit: cover;
+  margin-top: 0.5rem;
+}
+
+// Social icons relocated into the profile sidebar (markup moved in about.liquid).
+.profile-social {
+  margin-top: 1rem;
+  text-align: center;
+
+  .contact-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    font-size: 1.6rem;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+
+      img {
+        width: 1.4rem;
+        height: 1.4rem;
+      }
+
+      i::before {
+        color: var(--global-text-color);
+        // audit fix: v0 used the invalid `transition-property: all 0.2s ease-in-out`
+        // (property name slot can't hold a duration) so the hover never animated.
+        transition: all 0.2s ease-in-out;
+      }
+
+      &:hover i::before {
+        color: var(--global-theme-color);
+      }
+    }
+  }
+
+  .contact-note {
+    margin-top: 0.5rem;
+    font-style: italic;
+    color: var(--global-text-color-light);
+  }
+}
