@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - main
-      - al-folio-migration
+  schedule:
+    # Daily at 09:00 UTC — ~1h after the 08:00 UTC Scholar-citation update commit.
+    # Citation commits use GITHUB_TOKEN and cannot trigger a workflow, so this
+    # scheduled build is what actually publishes refreshed citation counts.
+    - cron: "0 9 * * *"
   workflow_dispatch:
 
 permissions:
@@ -23,25 +27,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
           fetch-depth: 0
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
-          bundler-cache: true
+          bundler-cache: true # Gemfile.lock is committed → reproducible, cached installs
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "20" # required by al-folio v1 Tailwind build
 
-      - name: Install Node dependencies
-        run: npm install
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-      - name: Install ImageMagick
-        run: sudo apt-get update && sudo apt-get install -y imagemagick
+      - name: Install system and notebook dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y imagemagick
+          pip install --upgrade nbconvert
 
       - name: Setup Pages
         id: pages
@@ -59,7 +66,6 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

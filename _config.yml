@@ -2,7 +2,7 @@
 # Site settings
 # -----------------------------------------------------------------------------
 
-title: blank # the website title (if blank, full name will be used instead)
+title: Zhiwei Li # real title (also becomes the RSS/Atom feed title; two-tone name handled in the about.liquid override)
 first_name: Zhiwei
 middle_name:
 last_name: Li
@@ -203,6 +203,7 @@ kramdown:
 # Includes & excludes
 include: ["_pages"]
 exclude:
+  - MIGRATION_PLAN.md
   - al-folio-upgrade-report.md
   - bin/
   - CONTRIBUTING.md

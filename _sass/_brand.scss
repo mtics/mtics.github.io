@@ -13,6 +13,11 @@
   margin-top: 0.5rem;
 }
 
+// Publication link buttons in uppercase to match the live site (ABS / ARXIV / BIB / CODE).
+.publications ol.bibliography li .links a.btn {
+  text-transform: uppercase;
+}
+
 // Social icons relocated into the profile sidebar (markup moved in about.liquid).
 .profile-social {
   margin-top: 1rem;

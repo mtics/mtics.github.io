@@ -3,6 +3,11 @@ cv:
   label: PhD Candidate
   email: lizhw.cs@outlook.com
   location: Sydney, Australia
+  # al_folio_cv renders the Contact "Location" row from cv.address (city/region),
+  # not the flat cv.location string — mirror it here so the row appears.
+  address:
+    city: Sydney
+    region: Australia
   image: ""
   summary: PhD candidate at UTS AAII researching privacy-preserving personalized recommender systems under federated, multimodal, and foundation-model settings.
 
