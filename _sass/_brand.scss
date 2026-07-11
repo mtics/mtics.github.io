@@ -50,7 +50,9 @@ a.scholar-citations:visited {
 
   .scholar-citation-count {
     font-variant-numeric: tabular-nums;
-    color: inherit;
+    // !important to beat al-folio's element-level `span { color: var(--global-text-color) }`
+    // typography rule, which otherwise renders the count in body text color, not burgundy.
+    color: inherit !important;
   }
 
   &:hover {
