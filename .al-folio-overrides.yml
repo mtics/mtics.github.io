@@ -1,6 +1,13 @@
 ---
 version: 1
 overrides:
+  _includes/cv/render.liquid:
+    owner: al_folio_cv
+    gem_version: 1.0.0
+    upstream_path: templates/cv/render.liquid
+    upstream_sha256: 89c9ce23250ace91325d69ae0b8fab67ecc31466de1f09f91958c745e98a2324
+    local_sha256: ea40f848fa997dfdbc34c61da41efcb4d0441cb2eacc5bb7598c74a4a448cb5e
+    acknowledged_at: '2026-07-11'
   _includes/footer.liquid:
     owner: al_folio_core
     gem_version: 1.0.11

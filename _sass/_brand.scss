@@ -19,9 +19,10 @@
 }
 
 // Profile photo width matches live (al_folio_core default is 30%, too large here).
+// !important: the gem's `.profile { width: 30% }` loads after this at equal specificity.
 @media (min-width: 576px) {
   .profile {
-    width: 22%;
+    width: 22% !important;
   }
 }
 
@@ -75,6 +76,11 @@ a.scholar-citations:visited {
   .list-group-item {
     border: 0 !important;
     background: transparent;
+  }
+
+  // Drop the section-card 1px border (the top/bottom lines); keep the soft shadow.
+  .card {
+    border: none !important;
   }
 }
 
