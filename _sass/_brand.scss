@@ -18,6 +18,64 @@
   text-transform: uppercase;
 }
 
+// Profile photo width matches live (al_folio_core default is 30%, too large here).
+@media (min-width: 576px) {
+  .profile {
+    width: 22%;
+  }
+}
+
+// Google Scholar citation badge: burgundy-outlined button matching the ABS/ARXIV/BIB
+// peers (the bib.liquid override renders this instead of al_citations' shields.io image).
+a.scholar-citations,
+a.scholar-citations:visited {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 1rem !important;
+  border: 1px solid var(--global-theme-color) !important;
+  border-radius: 0.125rem;
+  background-color: transparent;
+  color: var(--global-theme-color) !important;
+  font-weight: 600;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  text-decoration: none;
+
+  i.ai-google-scholar {
+    font-size: 1.05rem;
+    line-height: 1;
+    color: inherit;
+  }
+
+  .scholar-citation-count {
+    font-variant-numeric: tabular-nums;
+    color: inherit;
+  }
+
+  &:hover {
+    background-color: var(--global-theme-color);
+    color: var(--global-card-bg-color) !important;
+    border-color: var(--global-theme-color);
+    text-decoration: none;
+  }
+}
+
+// CV (al_folio_cv): drop the timeline list bullets and inter-entry divider lines
+// so the CV reads as clean as the live site.
+.cv {
+  .list-group,
+  .list-group-item {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .list-group-item {
+    border: 0 !important;
+    background: transparent;
+  }
+}
+
 // Social icons relocated into the profile sidebar (markup moved in about.liquid).
 .profile-social {
   margin-top: 1rem;
