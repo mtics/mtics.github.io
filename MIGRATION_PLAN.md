@@ -52,3 +52,19 @@ Fork surface: 13 custom `_layouts`, 15 `_sass` files (+font-awesome), custom `_i
 1. Bootstrap-compat lifespan: reach parity on compat (fast, but deprecated by v1.3) vs. invest now in the Tailwind re-theme (slower, future-proof). Recommend: parity on compat first, Tailwind as a follow-up.
 2. Toolchain: OK to `brew install ruby@3.3` + imagemagick if Docker won't start? (reversible)
 3. Adopt v1's richer defaults (repo trophies, distill, newsletter) or keep the current minimal site? Recommend: keep minimal, enable nothing new during job season.
+
+## STATUS — 2026-07-11 (end of session 1)
+DONE (committed on branch):
+- P0 isolation: worktree `/tmp/alfolio-v1-mig`, branch `al-folio-v1-migration` (base origin/main @78c6960). Live `main` untouched.
+- P1 toolchain PROVEN: `docker compose build` in `/tmp/al-folio-v1-starter` → image `amirpourmand/al-folio:latest` (Ruby 4.0/bundler 4.0.6, all al_folio_* gems baked). `al-folio upgrade` CLI runs; pristine starter builds green.
+  - Reusable run: `docker run --rm -v /tmp/alfolio-v1-mig:/srv/jekyll -w /srv/jekyll amirpourmand/al-folio:latest bash -lc "JEKYLL_ENV=production bundle exec jekyll build"`
+- P2 skeleton (commit ecaf1b8): removed gem-owned `_layouts/_includes/_sass/_plugins`; brought v1 Gemfile/lock+Dockerfile+entry_point; `_config.yml` rebased on v1 contract with site identity + scholar [Li]/[Zhiwei,Z.] + google_scholar-only badges + external_sources removed; dropped v0 theme assets (css/js/fonts/webfonts) + `_scripts`. **Content builds & renders**: home "Zhiwei Li", publications (FedDAE/FedVLR + scholar badges), CV (Education/Experience), news (AAAI/ICLR/PRICAI). `al-folio upgrade audit` = 0 blocking / 0 non-blocking; overrides clean.
+
+CAVEAT: site currently renders in **STOCK v1 look** — burgundy theme, sidebar-social, custom cv/bib/about/footer NOT yet re-applied (that is P3).
+
+NEXT (P3, start here):
+1. Diff live baseline vs current stock-v1 (Playwright screenshots of both).
+2. Burgundy theme: find v1's theme-color mechanism (Tailwind token / CSS var in al_folio_core) — prefer a config/token override over resurrecting the 15 `_sass` files. If needed, enable `al_folio.compat.bootstrap.enabled: true` + re-add minimal `_sass` overrides.
+3. Re-add genuine overrides only: sidebar social icons (about layout), minimal footer, scholar-badge styling, profile-social. After each, `al-folio upgrade overrides audit` → `accept` → commit `.al-folio-overrides.yml`.
+4. CV data: fork uses `_data/cv.yml` (rendercv) + `cv.md cv_format: rendercv`; v1 `al_folio_cv` + starter config expects `assets/json/resume.json` (jekyll_get_json/jsonresume block still in config). RECONCILE: either keep rendercv path (confirm al_folio_cv supports it) or convert cv.yml→resume.json. Verify `al_citations` reads `_data/citations.yml` in the same shape (SerpApi script output).
+Then P4 audit fixes (feed title "blank" still reproduces; exclude MIGRATION_PLAN.md+requirements.txt from _site; TKDE + 2nd AAAI 2026 bib entries; v1 deploy.yml with Tailwind build), P5 verify, P6 PR.
