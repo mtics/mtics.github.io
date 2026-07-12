@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-07-11'
+  last_updated: '2026-07-12'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -8,7 +8,7 @@ papers:
   b3glA2AAAAAJ:IjCSPb-OGe4C:
     citations: 11
     title: Federated Vision-Language-Recommendation with Personalized Fusion
-    year: '2024'
+    year: '2026'
   b3glA2AAAAAJ:LkGwnXOMwfcC:
     citations: 0
     title: 'Learning to Collaborate via Structures: Cluster-Guided Item Alignment for Federated Recommendation'
@@ -32,7 +32,7 @@ papers:
   b3glA2AAAAAJ:_FxGoFyzp5QC:
     citations: 29
     title: 'TransFR: Transferable Federated Recommendation with Adapter Tuning on Pre-trained Language Models'
-    year: '2024'
+    year: '2026'
   b3glA2AAAAAJ:d1gkVwhDpl0C:
     citations: 2
     title: Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.
