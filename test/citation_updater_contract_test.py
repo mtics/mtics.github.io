@@ -22,12 +22,17 @@ UPDATER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(UPDATER)
 
 
-class _SearchResult:
-    def __init__(self, payload: object) -> None:
-        self.payload = payload
+class _SearchClient:
+    def __init__(self, outcomes: list[object]) -> None:
+        self.outcomes = list(outcomes)
+        self.params: list[dict[str, object]] = []
 
-    def get_dict(self) -> object:
-        return self.payload
+    def search(self, params: dict[str, object]) -> object:
+        self.params.append(dict(params))
+        outcome = self.outcomes.pop(0)
+        if isinstance(outcome, BaseException):
+            raise outcome
+        return outcome
 
 
 class CitationUpdaterContractTest(unittest.TestCase):
@@ -65,26 +70,60 @@ class CitationUpdaterContractTest(unittest.TestCase):
             self.assertEqual("scholar-id", UPDATER.load_scholar_user_id())
 
     def test_non_object_payload_fails_closed(self) -> None:
-        with mock.patch.object(UPDATER, "GoogleSearch", return_value=_SearchResult([])):
-            with self.assertRaisesRegex(SystemExit, "object payload"):
-                UPDATER.fetch_author_articles("scholar-id", "api-key")
+        client = _SearchClient([[]])
+        with self.assertRaisesRegex(SystemExit, "object payload"):
+            UPDATER.fetch_author_articles("scholar-id", client)
 
     def test_missing_articles_key_fails_closed(self) -> None:
-        with mock.patch.object(UPDATER, "GoogleSearch", return_value=_SearchResult({})):
-            with self.assertRaisesRegex(SystemExit, "articles"):
-                UPDATER.fetch_author_articles("scholar-id", "api-key")
+        client = _SearchClient([{}])
+        with self.assertRaisesRegex(SystemExit, "articles"):
+            UPDATER.fetch_author_articles("scholar-id", client)
 
     def test_articles_with_the_wrong_type_fails_closed(self) -> None:
         payload = {"articles": "not-a-list"}
-        with mock.patch.object(UPDATER, "GoogleSearch", return_value=_SearchResult(payload)):
-            with self.assertRaisesRegex(SystemExit, "list"):
-                UPDATER.fetch_author_articles("scholar-id", "api-key")
+        client = _SearchClient([payload])
+        with self.assertRaisesRegex(SystemExit, "list"):
+            UPDATER.fetch_author_articles("scholar-id", client)
 
     def test_non_object_article_fails_closed(self) -> None:
         payload = {"articles": ["not-an-object"]}
-        with mock.patch.object(UPDATER, "GoogleSearch", return_value=_SearchResult(payload)):
-            with self.assertRaisesRegex(SystemExit, "article.*object"):
-                UPDATER.fetch_author_articles("scholar-id", "api-key")
+        client = _SearchClient([payload])
+        with self.assertRaisesRegex(SystemExit, "article.*object"):
+            UPDATER.fetch_author_articles("scholar-id", client)
+
+    def test_main_constructs_one_client_and_passes_it_to_pagination(self) -> None:
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Paper",
+            "year": "2025",
+            "cited_by": {"value": 1},
+        }
+        client = mock.sentinel.search_client
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), {})
+            output.unlink()
+            with (
+                mock.patch.dict(
+                    os.environ,
+                    {"SERPAPI_API_KEY": "api-key"},
+                    clear=True,
+                ),
+                mock.patch.object(
+                    UPDATER.serpapi,
+                    "Client",
+                    return_value=client,
+                ) as client_constructor,
+                mock.patch.object(
+                    UPDATER,
+                    "fetch_author_articles",
+                    return_value=[article],
+                ) as fetch_author_articles,
+            ):
+                UPDATER.main()
+
+            client_constructor.assert_called_once_with(api_key="api-key", timeout=15)
+            fetch_author_articles.assert_called_once_with("scholar-id", client)
+            self.assertTrue(output.exists())
 
     def test_citation_id_must_be_a_nonempty_string(self) -> None:
         for name, citation_id in (
@@ -422,7 +461,7 @@ class CitationUpdaterContractTest(unittest.TestCase):
             self.assertEqual(malformed, output.read_text(encoding="utf-8"))
 
     def test_existing_schema_is_validated_before_the_daily_skip(self) -> None:
-        today = UPDATER.datetime.now().strftime("%Y-%m-%d")
+        today = UPDATER.datetime.now(UPDATER.UTC).date().isoformat()
         existing_paper = {"paper": {"title": "Paper", "year": "2024", "citations": 1}}
         cases = [
             ("root", [], "root.*object"),
@@ -439,7 +478,7 @@ class CitationUpdaterContractTest(unittest.TestCase):
                 self.assertEqual(before, output.read_text(encoding="utf-8"))
 
     def test_existing_paper_records_are_validated_before_the_daily_skip(self) -> None:
-        today = UPDATER.datetime.now().strftime("%Y-%m-%d")
+        today = UPDATER.datetime.now(UPDATER.UTC).date().isoformat()
         cases = [
             ("non-string-key", {7: {"citations": 1}}, "paper key.*non-empty string"),
             ("blank-key", {"   ": {"citations": 1}}, "paper key.*non-empty string"),
@@ -473,6 +512,7 @@ class CitationUpdaterContractTest(unittest.TestCase):
         env = {"SERPAPI_API_KEY": "api-key", **environment}
         with (
             mock.patch.dict(os.environ, env, clear=True),
+            mock.patch.object(UPDATER.serpapi, "Client"),
             mock.patch.object(UPDATER, "fetch_author_articles", return_value=articles),
         ):
             UPDATER.main()

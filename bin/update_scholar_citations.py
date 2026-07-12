@@ -22,16 +22,17 @@ Writes _data/citations.yml.
 import os
 import sys
 from collections.abc import Mapping
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
+import serpapi
 import yaml
-from serpapi import GoogleSearch
 
 
 SOCIALS_FILE = Path("_data/socials.yml")
 OUTPUT_FILE = Path("_data/citations.yml")
 ALLOW_KEY_DELETION_ENV = "ALLOW_CITATION_KEY_DELETION"
+REQUEST_TIMEOUT_SECONDS = 15
 
 
 def load_scholar_user_id() -> str:
@@ -71,21 +72,22 @@ def validate_existing_papers(papers: Mapping) -> None:
             )
 
 
-def fetch_author_articles(scholar_id: str, api_key: str) -> list:
+def fetch_author_articles(
+    scholar_id: str, client: serpapi.Client
+) -> list[Mapping]:
     """Page through SerpApi google_scholar_author and return all articles."""
-    articles = []
+    articles: list[Mapping] = []
     start = 0
     page_size = 100
     while True:
         params = {
             "engine": "google_scholar_author",
             "author_id": scholar_id,
-            "api_key": api_key,
             "num": page_size,
             "start": start,
         }
-        result = GoogleSearch(params).get_dict()
-        if not isinstance(result, dict):
+        result = client.search(dict(params))
+        if not isinstance(result, Mapping):
             sys.exit(f"SerpApi error: expected an object payload at start={start}.")
         if "error" in result:
             sys.exit(f"SerpApi error: {result['error']}")
@@ -95,7 +97,7 @@ def fetch_author_articles(scholar_id: str, api_key: str) -> list:
         if not isinstance(page, list):
             sys.exit(f"SerpApi error: 'articles' must be a list at start={start}.")
         for index, article in enumerate(page):
-            if not isinstance(article, dict):
+            if not isinstance(article, Mapping):
                 sys.exit(
                     f"SerpApi error: article {start + index} must be an object."
                 )
@@ -112,7 +114,7 @@ def main() -> None:
     if not api_key:
         sys.exit("Error: SERPAPI_API_KEY environment variable is not set.")
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now(UTC).date().isoformat()
 
     # Skip if already updated today (the schema's metadata.last_updated)
     existing = {}
@@ -137,8 +139,12 @@ def main() -> None:
             print("Citations already up-to-date for today; skipping.")
             return
 
+    client = serpapi.Client(
+        api_key=api_key,
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
     print(f"Fetching SerpApi google_scholar_author for ID: {scholar_id}")
-    articles = fetch_author_articles(scholar_id, api_key)
+    articles = fetch_author_articles(scholar_id, client)
     print(f"Got {len(articles)} articles.")
     existing_papers = existing.get("papers") or {}
     if not articles:

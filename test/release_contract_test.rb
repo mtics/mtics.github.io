@@ -390,7 +390,7 @@ class ReleaseContractTest < Minitest::Test
   def test_python_automation_dependencies_are_fully_hashed
     expected_direct_dependencies = {
       "requirements-build.txt" => %w[nbconvert==7.17.1 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8],
-      "requirements-citations.txt" => %w[google-search-results==2.4.2 pyyaml==6.0.3]
+      "requirements-citations.txt" => %w[serpapi==1.0.2 pyyaml==6.0.3]
     }
 
     expected_direct_dependencies.each do |path, dependencies|
@@ -415,7 +415,7 @@ class ReleaseContractTest < Minitest::Test
       "requirements-build.in" => [
         "nbconvert==7.17.1", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0"
       ],
-      "requirements-citations.in" => ["google-search-results==2.4.2", "PyYAML==6.0.3"]
+      "requirements-citations.in" => ["serpapi==1.0.2", "PyYAML==6.0.3"]
     }
 
     expected_inputs.each do |path, expected|
@@ -424,6 +424,12 @@ class ReleaseContractTest < Minitest::Test
       actual = read(path).lines.map(&:strip).reject { |line| line.empty? || line.start_with?("#") }
       assert_equal expected, actual
     end
+  end
+
+  def test_legacy_scholar_client_is_absent
+    refute_includes read("requirements-citations.in"), "google-search-results"
+    refute_includes read("requirements-citations.txt"), "google-search-results"
+    refute_includes read("bin/update_scholar_citations.py"), "GoogleSearch"
   end
 
   def test_python_locks_record_the_supported_interpreter_and_cutoff
