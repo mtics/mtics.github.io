@@ -21,8 +21,10 @@ Writes _data/citations.yml.
 
 import os
 import sys
+import tempfile
 import time
 from collections.abc import Callable, Mapping
+from contextlib import suppress
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -74,6 +76,38 @@ def validate_existing_papers(papers: Mapping) -> None:
                 "Existing citation citations must be a non-negative integer "
                 f"for {citation_id!r}."
             )
+
+
+def write_citations_atomically(citation_data: Mapping) -> None:
+    temp_path: Path | None = None
+    try:
+        serialized = yaml.safe_dump(
+            citation_data,
+            width=1000,
+            sort_keys=True,
+            allow_unicode=True,
+        )
+        OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=OUTPUT_FILE.parent,
+            prefix=f".{OUTPUT_FILE.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temp_file:
+            temp_path = Path(temp_file.name)
+            temp_file.write(serialized)
+            temp_file.flush()
+            os.fsync(temp_file.fileno())
+        temp_path.chmod(0o644)
+        os.replace(temp_path, OUTPUT_FILE)
+    except (OSError, yaml.YAMLError) as e:
+        sys.exit(f"Error writing citations atomically: {e}")
+    finally:
+        if temp_path is not None:
+            with suppress(OSError):
+                temp_path.unlink()
 
 
 def is_wrapped_connect_timeout(exc: serpapi.HTTPError) -> bool:
@@ -283,9 +317,7 @@ def main() -> None:
         print("No changes in citation counts; not rewriting file.")
         return
 
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with OUTPUT_FILE.open("w") as f:
-        yaml.dump(citation_data, f, width=1000, sort_keys=True, allow_unicode=True)
+    write_citations_atomically(citation_data)
     print(f"Wrote {OUTPUT_FILE}")
 
 

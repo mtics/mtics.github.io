@@ -9,6 +9,7 @@ import importlib.util
 import io
 import os
 from pathlib import Path
+import stat
 import tempfile
 import unittest
 from unittest import mock
@@ -747,6 +748,239 @@ class CitationUpdaterContractTest(unittest.TestCase):
 
             self.assertEqual(malformed, output.read_text(encoding="utf-8"))
 
+    def test_replace_failure_preserves_existing_bytes_and_cleans_temp_file(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Existing paper",
+            "year": "2024",
+            "cited_by": {"value": 8},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+            before = output.read_bytes()
+
+            with (
+                mock.patch.object(
+                    UPDATER.os,
+                    "replace",
+                    side_effect=OSError("replace failed"),
+                ),
+                self.assertRaisesRegex(
+                    SystemExit,
+                    "Error writing citations atomically: replace failed",
+                ),
+            ):
+                self._run_main(output, [article])
+
+            self.assertEqual(before, output.read_bytes())
+            self.assertEqual([], self._citation_temp_files(output))
+
+    def test_yaml_serialization_failure_preserves_existing_bytes(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Existing paper",
+            "year": "2024",
+            "cited_by": {"value": 8},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+            before = output.read_bytes()
+
+            with (
+                mock.patch.object(
+                    UPDATER.yaml,
+                    "safe_dump",
+                    side_effect=yaml.YAMLError("serialization failed"),
+                ),
+                self.assertRaisesRegex(
+                    SystemExit,
+                    "Error writing citations atomically: serialization failed",
+                ),
+            ):
+                self._run_main(output, [article])
+
+            self.assertEqual(before, output.read_bytes())
+            self.assertEqual([], self._citation_temp_files(output))
+
+    def test_fsync_failure_preserves_existing_bytes_and_cleans_temp_file(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Existing paper",
+            "year": "2024",
+            "cited_by": {"value": 8},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+            before = output.read_bytes()
+
+            with (
+                mock.patch.object(
+                    UPDATER.os,
+                    "fsync",
+                    side_effect=OSError("fsync failed"),
+                ),
+                self.assertRaisesRegex(
+                    SystemExit,
+                    "Error writing citations atomically: fsync failed",
+                ),
+            ):
+                self._run_main(output, [article])
+
+            self.assertEqual(before, output.read_bytes())
+            self.assertEqual([], self._citation_temp_files(output))
+
+    def test_first_run_replace_failure_leaves_output_absent_and_cleans_temp_file(self) -> None:
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Paper",
+            "year": "2025",
+            "cited_by": {"value": 1},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), {})
+            output.unlink()
+
+            with (
+                mock.patch.object(
+                    UPDATER.os,
+                    "replace",
+                    side_effect=OSError("replace failed"),
+                ),
+                self.assertRaisesRegex(
+                    SystemExit,
+                    "Error writing citations atomically: replace failed",
+                ),
+            ):
+                self._run_main(output, [article])
+
+            self.assertFalse(output.exists())
+            self.assertEqual([], self._citation_temp_files(output))
+
+    def test_changed_data_is_fsynced_and_atomically_replaced_as_sorted_yaml(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:z-paper": {
+                    "title": "Zed paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        articles = [
+            {
+                "citation_id": "scholar-id:z-paper",
+                "title": "Zed paper",
+                "year": "2024",
+                "cited_by": {"value": 8},
+            },
+            {
+                "citation_id": "scholar-id:a-paper",
+                "title": "Alpha paper",
+                "year": "2025",
+                "cited_by": {"value": 1},
+            },
+        ]
+        real_fsync = os.fsync
+        real_replace = os.replace
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+
+            with (
+                mock.patch.object(UPDATER.os, "fsync", wraps=real_fsync) as fsync,
+                mock.patch.object(
+                    UPDATER.os,
+                    "replace",
+                    wraps=real_replace,
+                ) as replace,
+            ):
+                self._run_main(output, articles)
+
+            fsync.assert_called_once()
+            replace.assert_called_once()
+            self.assertEqual(output, Path(replace.call_args.args[1]))
+            serialized = output.read_text(encoding="utf-8")
+            parsed = yaml.safe_load(serialized)
+            self.assertEqual(
+                yaml.safe_dump(
+                    parsed,
+                    width=1000,
+                    sort_keys=True,
+                    allow_unicode=True,
+                ),
+                serialized,
+            )
+            self.assertLess(
+                serialized.index("scholar-id:a-paper"),
+                serialized.index("scholar-id:z-paper"),
+            )
+            self.assertEqual(0o644, stat.S_IMODE(output.stat().st_mode))
+            self.assertEqual([], self._citation_temp_files(output))
+
+    def test_unchanged_papers_do_not_replace_or_change_existing_bytes(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Existing paper",
+            "year": "2024",
+            "cited_by": {"value": 7},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+            before = output.read_bytes()
+
+            with mock.patch.object(UPDATER.os, "replace") as replace:
+                self._run_main(output, [article])
+
+            replace.assert_not_called()
+            self.assertEqual(before, output.read_bytes())
+            self.assertEqual(
+                "2000-01-01",
+                yaml.safe_load(output.read_text(encoding="utf-8"))["metadata"][
+                    "last_updated"
+                ],
+            )
+            self.assertEqual([], self._citation_temp_files(output))
+
     def test_existing_schema_is_validated_before_the_daily_skip(self) -> None:
         today = UPDATER.datetime.now(UPDATER.UTC).date().isoformat()
         existing_paper = {"paper": {"title": "Paper", "year": "2024", "citations": 1}}
@@ -794,6 +1028,9 @@ class CitationUpdaterContractTest(unittest.TestCase):
         UPDATER.SOCIALS_FILE = socials
         UPDATER.OUTPUT_FILE = output
         return output
+
+    def _citation_temp_files(self, output: Path) -> list[Path]:
+        return sorted(output.parent.glob(f".{output.name}.*.tmp"))
 
     def _run_main(self, output: Path, articles: list[dict], **environment: str) -> None:
         env = {"SERPAPI_API_KEY": "api-key", **environment}
