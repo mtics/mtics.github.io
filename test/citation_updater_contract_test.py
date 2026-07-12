@@ -859,6 +859,59 @@ class CitationUpdaterContractTest(unittest.TestCase):
             self.assertEqual(before, output.read_bytes())
             self.assertEqual([], self._citation_temp_files(output))
 
+    def test_write_failure_preserves_existing_bytes_and_cleans_real_temp_file(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Existing paper",
+            "year": "2024",
+            "cited_by": {"value": 8},
+        }
+        real_named_temporary_file = tempfile.NamedTemporaryFile
+        created_temp_paths: list[Path] = []
+
+        def create_write_failing_temp_file(*args: object, **kwargs: object) -> object:
+            actual_temp_file = real_named_temporary_file(*args, **kwargs)
+            created_temp_paths.append(Path(actual_temp_file.name))
+            wrapper = mock.MagicMock(wraps=actual_temp_file)
+            wrapper.name = actual_temp_file.name
+            wrapper.__enter__.return_value = wrapper
+            wrapper.__exit__.side_effect = actual_temp_file.__exit__
+            wrapper.write.side_effect = OSError("write failed")
+            return wrapper
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+            before = output.read_bytes()
+
+            with (
+                mock.patch.object(
+                    UPDATER.tempfile,
+                    "NamedTemporaryFile",
+                    side_effect=create_write_failing_temp_file,
+                ) as named_temporary_file,
+                self.assertRaisesRegex(
+                    SystemExit,
+                    "Error writing citations atomically: write failed",
+                ),
+            ):
+                self._run_main(output, [article])
+
+            named_temporary_file.assert_called_once()
+            self.assertEqual(1, len(created_temp_paths))
+            self.assertFalse(created_temp_paths[0].exists())
+            self.assertEqual(before, output.read_bytes())
+            self.assertEqual([], self._citation_temp_files(output))
+
     def test_first_run_replace_failure_leaves_output_absent_and_cleans_temp_file(self) -> None:
         article = {
             "citation_id": "scholar-id:paper",
