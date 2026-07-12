@@ -10,6 +10,7 @@ import tempfile
 import unittest
 from unittest import mock
 
+import requests
 import yaml
 
 
@@ -73,6 +74,52 @@ class CitationUpdaterContractTest(unittest.TestCase):
         client = _SearchClient([[]])
         with self.assertRaisesRegex(SystemExit, "object payload"):
             UPDATER.fetch_author_articles("scholar-id", client)
+
+    def test_http_failure_redacts_secret_without_retrying(self) -> None:
+        secret = "sentinel-http-api-key"
+        request_url = f"https://serpapi.example/search?api_key={secret}"
+        response = mock.Mock(status_code=503)
+        response.json.return_value = {"error": f"remote error with {secret}"}
+        original = requests.HTTPError(
+            f"503 Server Error for url: {request_url}",
+            response=response,
+            request=mock.Mock(url=request_url),
+        )
+        client = _SearchClient([UPDATER.serpapi.HTTPError(original)])
+
+        with self.assertRaises(SystemExit) as raised:
+            UPDATER.fetch_author_articles("scholar-id", client)
+
+        message = str(raised.exception)
+        self.assertEqual("SerpApi HTTP error at start=0 (status=503).", message)
+        self.assertNotIn(secret, message)
+        self.assertEqual(1, len(client.params))
+
+    def test_timeout_failure_redacts_secret_without_retrying(self) -> None:
+        secret = "sentinel-timeout-api-key"
+        client = _SearchClient(
+            [UPDATER.serpapi.TimeoutError(f"request URL contained {secret}")]
+        )
+
+        with self.assertRaises(SystemExit) as raised:
+            UPDATER.fetch_author_articles("scholar-id", client)
+
+        message = str(raised.exception)
+        self.assertEqual("SerpApi request timed out at start=0.", message)
+        self.assertNotIn(secret, message)
+        self.assertEqual(1, len(client.params))
+
+    def test_error_payload_redacts_remote_text_without_retrying(self) -> None:
+        secret = "sentinel-remote-api-key"
+        client = _SearchClient([{"error": f"remote error with {secret}"}])
+
+        with self.assertRaises(SystemExit) as raised:
+            UPDATER.fetch_author_articles("scholar-id", client)
+
+        message = str(raised.exception)
+        self.assertEqual("SerpApi returned an error payload at start=0.", message)
+        self.assertNotIn(secret, message)
+        self.assertEqual(1, len(client.params))
 
     def test_missing_articles_key_fails_closed(self) -> None:
         client = _SearchClient([{}])

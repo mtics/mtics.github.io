@@ -86,11 +86,19 @@ def fetch_author_articles(
             "num": page_size,
             "start": start,
         }
-        result = client.search(dict(params))
+        try:
+            result = client.search(dict(params))
+        except serpapi.TimeoutError:
+            sys.exit(f"SerpApi request timed out at start={start}.")
+        except serpapi.HTTPError as exc:
+            sys.exit(
+                f"SerpApi HTTP error at start={start} "
+                f"(status={exc.status_code})."
+            )
         if not isinstance(result, Mapping):
             sys.exit(f"SerpApi error: expected an object payload at start={start}.")
         if "error" in result:
-            sys.exit(f"SerpApi error: {result['error']}")
+            sys.exit(f"SerpApi returned an error payload at start={start}.")
         if "articles" not in result:
             sys.exit(f"SerpApi error: payload missing 'articles' at start={start}.")
         page = result["articles"]
