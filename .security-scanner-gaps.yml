@@ -2,12 +2,33 @@ schema_version: 1
 scanner:
   name: Trivy
   version: 0.70.0
+  severities:
+    - UNKNOWN
+    - LOW
+    - MEDIUM
+    - HIGH
+    - CRITICAL
+  package_types:
+    - os
+    - library
+  vulnerability_db_updated_at: "2026-07-12T07:28:36.403115102Z"
 gaps:
   - package: chromium
     image: delivery
+    gap_type: unresolved_severity_classification
     installed_version: 150.0.7871.114-1~deb12u1
     upstream_fixed_version: 150.0.7871.115
-    scanner_findings: 0
+    scanner_evidence:
+      severity: UNKNOWN
+      status: affected
+      fixed_version: null
+      packages:
+        - chromium
+        - chromium-common
+      unique_cves: 27
+      package_rows:
+        amd64: 54
+        arm64: 54
     status: best_debian_package_upstream_fix_pending
     official_source_url: https://security-tracker.debian.org/tracker/source-package/chromium
     reviewed_at: "2026-07-12"

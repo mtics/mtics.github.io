@@ -21,6 +21,9 @@ on:
 permissions:
   contents: read
 
+env:
+  TRIVY_IMAGE: aquasec/trivy@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e # v0.70.0
+
 concurrency:
   group: pages-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'deploy' }}
   cancel-in-progress: false
@@ -44,67 +47,160 @@ jobs:
       - name: Build pinned development container
         run: docker build --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile .
 
-      # Preserve every HIGH/CRITICAL finding in raw JSON. Trivy's zero exit
-      # applies only to vulnerability matches (scanner/DB errors still fail);
-      # the immediately following tracked gate blocks fixable or unreviewed risk.
-      - name: Scan delivery container
-        if: always()
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          scan-type: image
-          image-ref: mtics-al-folio:ci
-          scanners: vuln
-          vuln-type: os,library
-          severity: HIGH,CRITICAL
-          format: json
-          output: ${{ runner.temp }}/trivy-delivery.json
-          exit-code: "0"
-          version: v0.70.0
-          cache-dir: ${{ runner.temp }}/trivy-cache
+      # Download each scanner database once. Both scans then use this exact,
+      # read-only snapshot and retain every severity in the raw JSON evidence.
+      - name: Prepare frozen Trivy databases
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+          mkdir -p "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+          vulnerability_manifest="$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json"
+          java_manifest="$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json"
+          docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-db:2 \
+            > "$vulnerability_manifest"
+          docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-java-db:1 \
+            > "$java_manifest"
+          vulnerability_db_digest="$(python3 bin/validate_trivy_oci_manifest.py \
+            --database vulnerability --manifest "$vulnerability_manifest")"
+          java_db_digest="$(python3 bin/validate_trivy_oci_manifest.py \
+            --database java --manifest "$java_manifest")"
+          docker run --rm \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --db-repository "ghcr.io/aquasecurity/trivy-db@$vulnerability_db_digest" \
+              --download-db-only \
+              --disable-telemetry \
+              --no-progress \
+              --skip-version-check
+          docker run --rm \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --java-db-repository "ghcr.io/aquasecurity/trivy-java-db@$java_db_digest" \
+              --download-java-db-only \
+              --disable-telemetry \
+              --no-progress \
+              --skip-version-check
+          docker run --rm \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
+            "$TRIVY_IMAGE" version --cache-dir /trivy-cache --format json \
+            > "$RUNNER_TEMP/trivy-version.json"
 
-      - name: Enforce reviewed delivery vulnerability baseline
-        if: always()
+      - name: Scan delivery container
+        if: ${{ success() && !cancelled() }}
         run: |
           docker run --rm \
+            --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --cache-backend memory \
+              --skip-db-update \
+              --skip-java-db-update \
+              --skip-version-check \
+              --offline-scan \
+              --disable-telemetry \
+              --image-src docker \
+              --no-progress \
+              --scanners vuln \
+              --pkg-types os,library \
+              --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
+              --list-all-pkgs \
+              --format json \
+              --output /trivy-reports/trivy-delivery.json \
+              --exit-code 0 \
+              mtics-al-folio:ci
+
+      - name: Scan development container
+        if: ${{ success() && !cancelled() }}
+        run: |
+          docker run --rm \
+            --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --cache-backend memory \
+              --skip-db-update \
+              --skip-java-db-update \
+              --skip-version-check \
+              --offline-scan \
+              --disable-telemetry \
+              --image-src docker \
+              --no-progress \
+              --scanners vuln \
+              --pkg-types os,library \
+              --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
+              --list-all-pkgs \
+              --format json \
+              --output /trivy-reports/trivy-development.json \
+              --exit-code 0 \
+              mtics-devcontainer:ci
+
+      - name: Bind Trivy databases and reports
+        if: ${{ success() && !cancelled() }}
+        run: |
+          python3 bin/create_trivy_db_provenance.py \
+            --trivy-version-json "$RUNNER_TEMP/trivy-version.json" \
+            --vulnerability-db "$RUNNER_TEMP/trivy-cache/db/trivy.db" \
+            --vulnerability-db-metadata "$RUNNER_TEMP/trivy-cache/db/metadata.json" \
+            --java-db "$RUNNER_TEMP/trivy-cache/java-db/trivy-java.db" \
+            --java-db-metadata "$RUNNER_TEMP/trivy-cache/java-db/metadata.json" \
+            --vulnerability-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json" \
+            --java-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json" \
+            --expected-architecture amd64 \
+            --delivery-report "$RUNNER_TEMP/trivy-reports/trivy-delivery.json" \
+            --development-report "$RUNNER_TEMP/trivy-reports/trivy-development.json" \
+            --output "$RUNNER_TEMP/trivy-reports/trivy-db-provenance.json"
+
+      - name: Enforce reviewed delivery vulnerability baseline
+        if: ${{ success() && !cancelled() }}
+        run: |
+          docker run --rm --pull never \
             --user "$(id -u):$(id -g)" \
             --env HOME=/tmp \
             --volume "$PWD:/srv/jekyll:ro" \
-            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --workdir /srv/jekyll \
             mtics-al-folio:ci \
             python3 bin/enforce_trivy_report.py \
               --report /trivy-reports/trivy-delivery.json \
               --baseline .trivy-unfixed-baseline.json \
+              --provenance /trivy-reports/trivy-db-provenance.json \
+              --vulnerability-db /trivy-cache/db/trivy.db \
+              --vulnerability-db-metadata /trivy-cache/db/metadata.json \
+              --java-db /trivy-cache/java-db/trivy-java.db \
+              --java-db-metadata /trivy-cache/java-db/metadata.json \
+              --vulnerability-db-manifest /trivy-reports/trivy-vulnerability-db-manifest.json \
+              --java-db-manifest /trivy-reports/trivy-java-db-manifest.json \
+              --expected-architecture amd64 \
               --image delivery
 
-      - name: Scan development container
-        if: always()
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          scan-type: image
-          image-ref: mtics-devcontainer:ci
-          scanners: vuln
-          vuln-type: os,library
-          severity: HIGH,CRITICAL
-          format: json
-          output: ${{ runner.temp }}/trivy-development.json
-          exit-code: "0"
-          version: v0.70.0
-          cache-dir: ${{ runner.temp }}/trivy-cache
-
       - name: Enforce reviewed development vulnerability baseline
-        if: always()
+        if: ${{ success() && !cancelled() }}
         run: |
-          docker run --rm \
+          docker run --rm --pull never \
             --user "$(id -u):$(id -g)" \
             --env HOME=/tmp \
             --volume "$PWD:/srv/jekyll:ro" \
-            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --workdir /srv/jekyll \
             mtics-al-folio:ci \
             python3 bin/enforce_trivy_report.py \
               --report /trivy-reports/trivy-development.json \
               --baseline .trivy-unfixed-baseline.json \
+              --provenance /trivy-reports/trivy-db-provenance.json \
+              --vulnerability-db /trivy-cache/db/trivy.db \
+              --vulnerability-db-metadata /trivy-cache/db/metadata.json \
+              --java-db /trivy-cache/java-db/trivy-java.db \
+              --java-db-metadata /trivy-cache/java-db/metadata.json \
+              --vulnerability-db-manifest /trivy-reports/trivy-vulnerability-db-manifest.json \
+              --java-db-manifest /trivy-reports/trivy-java-db-manifest.json \
+              --expected-architecture amd64 \
               --image development
 
       - name: Upload delivery vulnerability report
@@ -112,18 +208,30 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: trivy-delivery-validate
-          path: ${{ runner.temp }}/trivy-delivery.json
+          path: ${{ runner.temp }}/trivy-reports/trivy-delivery.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
 
       - name: Upload development vulnerability report
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: trivy-development-validate
-          path: ${{ runner.temp }}/trivy-development.json
+          path: ${{ runner.temp }}/trivy-reports/trivy-development.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
+
+      - name: Upload Trivy database provenance
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-db-provenance-validate
+          path: |
+            ${{ runner.temp }}/trivy-reports/trivy-db-provenance.json
+            ${{ runner.temp }}/trivy-reports/trivy-vulnerability-db-manifest.json
+            ${{ runner.temp }}/trivy-reports/trivy-java-db-manifest.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Verify devcontainer remote-user creation
         run: ./test/devcontainer_post_create_smoke.sh
@@ -284,67 +392,160 @@ jobs:
       - name: Build pinned development container
         run: docker build --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile .
 
-      # Preserve every HIGH/CRITICAL finding in raw JSON. Trivy's zero exit
-      # applies only to vulnerability matches (scanner/DB errors still fail);
-      # the immediately following tracked gate blocks fixable or unreviewed risk.
-      - name: Scan delivery container
-        if: always()
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          scan-type: image
-          image-ref: mtics-al-folio:ci
-          scanners: vuln
-          vuln-type: os,library
-          severity: HIGH,CRITICAL
-          format: json
-          output: ${{ runner.temp }}/trivy-delivery.json
-          exit-code: "0"
-          version: v0.70.0
-          cache-dir: ${{ runner.temp }}/trivy-cache
+      # Download each scanner database once. Both scans then use this exact,
+      # read-only snapshot and retain every severity in the raw JSON evidence.
+      - name: Prepare frozen Trivy databases
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+          mkdir -p "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+          vulnerability_manifest="$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json"
+          java_manifest="$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json"
+          docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-db:2 \
+            > "$vulnerability_manifest"
+          docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-java-db:1 \
+            > "$java_manifest"
+          vulnerability_db_digest="$(python3 bin/validate_trivy_oci_manifest.py \
+            --database vulnerability --manifest "$vulnerability_manifest")"
+          java_db_digest="$(python3 bin/validate_trivy_oci_manifest.py \
+            --database java --manifest "$java_manifest")"
+          docker run --rm \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --db-repository "ghcr.io/aquasecurity/trivy-db@$vulnerability_db_digest" \
+              --download-db-only \
+              --disable-telemetry \
+              --no-progress \
+              --skip-version-check
+          docker run --rm \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --java-db-repository "ghcr.io/aquasecurity/trivy-java-db@$java_db_digest" \
+              --download-java-db-only \
+              --disable-telemetry \
+              --no-progress \
+              --skip-version-check
+          docker run --rm \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
+            "$TRIVY_IMAGE" version --cache-dir /trivy-cache --format json \
+            > "$RUNNER_TEMP/trivy-version.json"
 
-      - name: Enforce reviewed delivery vulnerability baseline
-        if: always()
+      - name: Scan delivery container
+        if: ${{ success() && !cancelled() }}
         run: |
           docker run --rm \
+            --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --cache-backend memory \
+              --skip-db-update \
+              --skip-java-db-update \
+              --skip-version-check \
+              --offline-scan \
+              --disable-telemetry \
+              --image-src docker \
+              --no-progress \
+              --scanners vuln \
+              --pkg-types os,library \
+              --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
+              --list-all-pkgs \
+              --format json \
+              --output /trivy-reports/trivy-delivery.json \
+              --exit-code 0 \
+              mtics-al-folio:ci
+
+      - name: Scan development container
+        if: ${{ success() && !cancelled() }}
+        run: |
+          docker run --rm \
+            --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --cache-backend memory \
+              --skip-db-update \
+              --skip-java-db-update \
+              --skip-version-check \
+              --offline-scan \
+              --disable-telemetry \
+              --image-src docker \
+              --no-progress \
+              --scanners vuln \
+              --pkg-types os,library \
+              --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL \
+              --list-all-pkgs \
+              --format json \
+              --output /trivy-reports/trivy-development.json \
+              --exit-code 0 \
+              mtics-devcontainer:ci
+
+      - name: Bind Trivy databases and reports
+        if: ${{ success() && !cancelled() }}
+        run: |
+          python3 bin/create_trivy_db_provenance.py \
+            --trivy-version-json "$RUNNER_TEMP/trivy-version.json" \
+            --vulnerability-db "$RUNNER_TEMP/trivy-cache/db/trivy.db" \
+            --vulnerability-db-metadata "$RUNNER_TEMP/trivy-cache/db/metadata.json" \
+            --java-db "$RUNNER_TEMP/trivy-cache/java-db/trivy-java.db" \
+            --java-db-metadata "$RUNNER_TEMP/trivy-cache/java-db/metadata.json" \
+            --vulnerability-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json" \
+            --java-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json" \
+            --expected-architecture amd64 \
+            --delivery-report "$RUNNER_TEMP/trivy-reports/trivy-delivery.json" \
+            --development-report "$RUNNER_TEMP/trivy-reports/trivy-development.json" \
+            --output "$RUNNER_TEMP/trivy-reports/trivy-db-provenance.json"
+
+      - name: Enforce reviewed delivery vulnerability baseline
+        if: ${{ success() && !cancelled() }}
+        run: |
+          docker run --rm --pull never \
             --user "$(id -u):$(id -g)" \
             --env HOME=/tmp \
             --volume "$PWD:/srv/jekyll:ro" \
-            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --workdir /srv/jekyll \
             mtics-al-folio:ci \
             python3 bin/enforce_trivy_report.py \
               --report /trivy-reports/trivy-delivery.json \
               --baseline .trivy-unfixed-baseline.json \
+              --provenance /trivy-reports/trivy-db-provenance.json \
+              --vulnerability-db /trivy-cache/db/trivy.db \
+              --vulnerability-db-metadata /trivy-cache/db/metadata.json \
+              --java-db /trivy-cache/java-db/trivy-java.db \
+              --java-db-metadata /trivy-cache/java-db/metadata.json \
+              --vulnerability-db-manifest /trivy-reports/trivy-vulnerability-db-manifest.json \
+              --java-db-manifest /trivy-reports/trivy-java-db-manifest.json \
+              --expected-architecture amd64 \
               --image delivery
 
-      - name: Scan development container
-        if: always()
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          scan-type: image
-          image-ref: mtics-devcontainer:ci
-          scanners: vuln
-          vuln-type: os,library
-          severity: HIGH,CRITICAL
-          format: json
-          output: ${{ runner.temp }}/trivy-development.json
-          exit-code: "0"
-          version: v0.70.0
-          cache-dir: ${{ runner.temp }}/trivy-cache
-
       - name: Enforce reviewed development vulnerability baseline
-        if: always()
+        if: ${{ success() && !cancelled() }}
         run: |
-          docker run --rm \
+          docker run --rm --pull never \
             --user "$(id -u):$(id -g)" \
             --env HOME=/tmp \
             --volume "$PWD:/srv/jekyll:ro" \
-            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports:ro" \
+            --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --workdir /srv/jekyll \
             mtics-al-folio:ci \
             python3 bin/enforce_trivy_report.py \
               --report /trivy-reports/trivy-development.json \
               --baseline .trivy-unfixed-baseline.json \
+              --provenance /trivy-reports/trivy-db-provenance.json \
+              --vulnerability-db /trivy-cache/db/trivy.db \
+              --vulnerability-db-metadata /trivy-cache/db/metadata.json \
+              --java-db /trivy-cache/java-db/trivy-java.db \
+              --java-db-metadata /trivy-cache/java-db/metadata.json \
+              --vulnerability-db-manifest /trivy-reports/trivy-vulnerability-db-manifest.json \
+              --java-db-manifest /trivy-reports/trivy-java-db-manifest.json \
+              --expected-architecture amd64 \
               --image development
 
       - name: Upload delivery vulnerability report
@@ -352,18 +553,30 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: trivy-delivery-build
-          path: ${{ runner.temp }}/trivy-delivery.json
+          path: ${{ runner.temp }}/trivy-reports/trivy-delivery.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
 
       - name: Upload development vulnerability report
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: trivy-development-build
-          path: ${{ runner.temp }}/trivy-development.json
+          path: ${{ runner.temp }}/trivy-reports/trivy-development.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
+
+      - name: Upload Trivy database provenance
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-db-provenance-build
+          path: |
+            ${{ runner.temp }}/trivy-reports/trivy-db-provenance.json
+            ${{ runner.temp }}/trivy-reports/trivy-vulnerability-db-manifest.json
+            ${{ runner.temp }}/trivy-reports/trivy-java-db-manifest.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Verify devcontainer remote-user creation
         run: ./test/devcontainer_post_create_smoke.sh

@@ -1,7 +1,11 @@
 {
-  "schema_version": 2,
+  "schema_version": 4,
   "reviewed_at": "2026-07-12",
   "review_before": "2026-07-26",
+  "minimum_db_updated_at": {
+    "vulnerability": "2026-07-12T07:28:36.403115102Z",
+    "java": "2026-07-12T01:45:25.736113622Z"
+  },
   "images": {
     "delivery": [
       {
@@ -182,7 +186,7 @@
         "VulnerabilityID": "CVE-2026-54369",
         "InstalledVersion": "2.3.1-3",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -272,7 +276,7 @@
         "VulnerabilityID": "CVE-2026-12064",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -292,7 +296,7 @@
         "VulnerabilityID": "CVE-2026-8286",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -302,7 +306,7 @@
         "VulnerabilityID": "CVE-2026-8927",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -312,17 +316,7 @@
         "VulnerabilityID": "CVE-2026-8932",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
-        "PkgName": "libcurl3-gnutls",
-        "VulnerabilityID": "CVE-2026-9547",
-        "InstalledVersion": "7.88.1-10+deb12u15",
-        "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -442,7 +436,7 @@
         "VulnerabilityID": "CVE-2026-58010",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -452,7 +446,7 @@
         "VulnerabilityID": "CVE-2026-58011",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -462,7 +456,7 @@
         "VulnerabilityID": "CVE-2026-58012",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -472,7 +466,7 @@
         "VulnerabilityID": "CVE-2026-58013",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -482,7 +476,7 @@
         "VulnerabilityID": "CVE-2026-58014",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -492,7 +486,7 @@
         "VulnerabilityID": "CVE-2026-58015",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -502,7 +496,7 @@
         "VulnerabilityID": "CVE-2026-58016",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "CRITICAL",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1104,7 +1098,7 @@
         "VulnerabilityID": "CVE-2026-12064",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1124,7 +1118,7 @@
         "VulnerabilityID": "CVE-2026-8286",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1134,7 +1128,7 @@
         "VulnerabilityID": "CVE-2026-8927",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1144,17 +1138,7 @@
         "VulnerabilityID": "CVE-2026-8932",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "curl@7.88.1-10+deb12u15",
-        "PkgName": "curl",
-        "VulnerabilityID": "CVE-2026-9547",
-        "InstalledVersion": "7.88.1-10+deb12u15",
-        "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1324,7 +1308,7 @@
         "VulnerabilityID": "CVE-2026-54369",
         "InstalledVersion": "2.3.1-3",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1414,7 +1398,7 @@
         "VulnerabilityID": "CVE-2026-12064",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1434,7 +1418,7 @@
         "VulnerabilityID": "CVE-2026-8286",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1444,7 +1428,7 @@
         "VulnerabilityID": "CVE-2026-8927",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1454,17 +1438,7 @@
         "VulnerabilityID": "CVE-2026-8932",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
-        "PkgName": "libcurl3-gnutls",
-        "VulnerabilityID": "CVE-2026-9547",
-        "InstalledVersion": "7.88.1-10+deb12u15",
-        "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1474,7 +1448,7 @@
         "VulnerabilityID": "CVE-2026-12064",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1494,7 +1468,7 @@
         "VulnerabilityID": "CVE-2026-8286",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1504,7 +1478,7 @@
         "VulnerabilityID": "CVE-2026-8927",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1514,17 +1488,7 @@
         "VulnerabilityID": "CVE-2026-8932",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libcurl4-openssl-dev@7.88.1-10+deb12u15",
-        "PkgName": "libcurl4-openssl-dev",
-        "VulnerabilityID": "CVE-2026-9547",
-        "InstalledVersion": "7.88.1-10+deb12u15",
-        "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1534,7 +1498,7 @@
         "VulnerabilityID": "CVE-2026-12064",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1554,7 +1518,7 @@
         "VulnerabilityID": "CVE-2026-8286",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1564,7 +1528,7 @@
         "VulnerabilityID": "CVE-2026-8927",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1574,17 +1538,7 @@
         "VulnerabilityID": "CVE-2026-8932",
         "InstalledVersion": "7.88.1-10+deb12u15",
         "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libcurl4@7.88.1-10+deb12u15",
-        "PkgName": "libcurl4",
-        "VulnerabilityID": "CVE-2026-9547",
-        "InstalledVersion": "7.88.1-10+deb12u15",
-        "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1764,7 +1718,7 @@
         "VulnerabilityID": "CVE-2026-58010",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1774,7 +1728,7 @@
         "VulnerabilityID": "CVE-2026-58011",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1784,7 +1738,7 @@
         "VulnerabilityID": "CVE-2026-58012",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1794,7 +1748,7 @@
         "VulnerabilityID": "CVE-2026-58013",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1804,7 +1758,7 @@
         "VulnerabilityID": "CVE-2026-58014",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1814,7 +1768,7 @@
         "VulnerabilityID": "CVE-2026-58015",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1824,7 +1778,7 @@
         "VulnerabilityID": "CVE-2026-58016",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "CRITICAL",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1834,7 +1788,7 @@
         "VulnerabilityID": "CVE-2026-58010",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1844,7 +1798,7 @@
         "VulnerabilityID": "CVE-2026-58011",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1854,7 +1808,7 @@
         "VulnerabilityID": "CVE-2026-58012",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1864,7 +1818,7 @@
         "VulnerabilityID": "CVE-2026-58013",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1874,7 +1828,7 @@
         "VulnerabilityID": "CVE-2026-58014",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1884,7 +1838,7 @@
         "VulnerabilityID": "CVE-2026-58015",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1894,7 +1848,7 @@
         "VulnerabilityID": "CVE-2026-58016",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "CRITICAL",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1904,7 +1858,7 @@
         "VulnerabilityID": "CVE-2026-58010",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1914,7 +1868,7 @@
         "VulnerabilityID": "CVE-2026-58011",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1924,7 +1878,7 @@
         "VulnerabilityID": "CVE-2026-58012",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1934,7 +1888,7 @@
         "VulnerabilityID": "CVE-2026-58013",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1944,7 +1898,7 @@
         "VulnerabilityID": "CVE-2026-58014",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1954,7 +1908,7 @@
         "VulnerabilityID": "CVE-2026-58015",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1964,7 +1918,7 @@
         "VulnerabilityID": "CVE-2026-58016",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "CRITICAL",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1974,7 +1928,7 @@
         "VulnerabilityID": "CVE-2026-58010",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1984,7 +1938,7 @@
         "VulnerabilityID": "CVE-2026-58011",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -1994,7 +1948,7 @@
         "VulnerabilityID": "CVE-2026-58012",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2004,7 +1958,7 @@
         "VulnerabilityID": "CVE-2026-58013",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2014,7 +1968,7 @@
         "VulnerabilityID": "CVE-2026-58014",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2024,7 +1978,7 @@
         "VulnerabilityID": "CVE-2026-58015",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2034,7 +1988,7 @@
         "VulnerabilityID": "CVE-2026-58016",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "CRITICAL",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2044,7 +1998,7 @@
         "VulnerabilityID": "CVE-2026-58010",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2054,7 +2008,7 @@
         "VulnerabilityID": "CVE-2026-58011",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2064,7 +2018,7 @@
         "VulnerabilityID": "CVE-2026-58012",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2074,7 +2028,7 @@
         "VulnerabilityID": "CVE-2026-58013",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2084,7 +2038,7 @@
         "VulnerabilityID": "CVE-2026-58014",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2094,7 +2048,7 @@
         "VulnerabilityID": "CVE-2026-58015",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -2104,7 +2058,7 @@
         "VulnerabilityID": "CVE-2026-58016",
         "InstalledVersion": "2.74.6-2+deb12u9",
         "Severity": "CRITICAL",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -4652,8 +4606,8 @@
         {
           "Class": "os-pkgs",
           "Type": "debian",
-        "PackageCount": 301,
-        "PackageInventorySHA256": "e00ac9040ce4eee6d9f1f6614e265d9778d536f5e3cf639e9e37bf8f34095fe5"
+          "PackageCount": 301,
+          "PackageInventorySHA256": "e00ac9040ce4eee6d9f1f6614e265d9778d536f5e3cf639e9e37bf8f34095fe5"
         }
       ],
       "arm64": [
@@ -4678,8 +4632,8 @@
         {
           "Class": "os-pkgs",
           "Type": "debian",
-        "PackageCount": 299,
-        "PackageInventorySHA256": "7620b9a893e30976a11f73c187e9602769b7196e717a85b54342e32e40e08be5"
+          "PackageCount": 299,
+          "PackageInventorySHA256": "7620b9a893e30976a11f73c187e9602769b7196e717a85b54342e32e40e08be5"
         }
       ]
     },
@@ -4706,8 +4660,8 @@
         {
           "Class": "os-pkgs",
           "Type": "debian",
-        "PackageCount": 454,
-        "PackageInventorySHA256": "4a9402e8fd90299d139ebba423c9faa172fa597acb19fff22337aaa24a1d93a1"
+          "PackageCount": 454,
+          "PackageInventorySHA256": "4a9402e8fd90299d139ebba423c9faa172fa597acb19fff22337aaa24a1d93a1"
         }
       ],
       "arm64": [
@@ -4732,8 +4686,122 @@
         {
           "Class": "os-pkgs",
           "Type": "debian",
-        "PackageCount": 454,
-        "PackageInventorySHA256": "e063693c509a49f632d2e52511564db43d28007f2f810018a634301a17db7dd8"
+          "PackageCount": 454,
+          "PackageInventorySHA256": "e063693c509a49f632d2e52511564db43d28007f2f810018a634301a17db7dd8"
+        }
+      ]
+    }
+  },
+  "vulnerability_coverage": {
+    "delivery": {
+      "amd64": [
+        {
+          "Severity": "CRITICAL",
+          "FindingCount": 17,
+          "FindingInventorySHA256": "5884367fb793bf7785cbeaa0b6f2c5b78558b4fcb4885d38f08190b9ac72d4a0"
+        },
+        {
+          "Severity": "HIGH",
+          "FindingCount": 89,
+          "FindingInventorySHA256": "ab45f18b3b87d198bc365086f06ab97f5740479b98bc7f7ddbce1f0354cd74f2"
+        },
+        {
+          "Severity": "LOW",
+          "FindingCount": 353,
+          "FindingInventorySHA256": "34644ad2b06c26ae2b6f79b4054e78a195f028c66025b5c7434fafdb86b92db1"
+        },
+        {
+          "Severity": "MEDIUM",
+          "FindingCount": 260,
+          "FindingInventorySHA256": "79ccec58f9c080947b08bb7ad55f31be5b626cdb41a34a7fd14020158a430a5e"
+        },
+        {
+          "Severity": "UNKNOWN",
+          "FindingCount": 79,
+          "FindingInventorySHA256": "aa233acf603c47cf6a5c9d1ef9fe1cffae62409c100e6908a8a464e1d483974d"
+        }
+      ],
+      "arm64": [
+        {
+          "Severity": "CRITICAL",
+          "FindingCount": 17,
+          "FindingInventorySHA256": "5884367fb793bf7785cbeaa0b6f2c5b78558b4fcb4885d38f08190b9ac72d4a0"
+        },
+        {
+          "Severity": "HIGH",
+          "FindingCount": 89,
+          "FindingInventorySHA256": "ab45f18b3b87d198bc365086f06ab97f5740479b98bc7f7ddbce1f0354cd74f2"
+        },
+        {
+          "Severity": "LOW",
+          "FindingCount": 353,
+          "FindingInventorySHA256": "34644ad2b06c26ae2b6f79b4054e78a195f028c66025b5c7434fafdb86b92db1"
+        },
+        {
+          "Severity": "MEDIUM",
+          "FindingCount": 260,
+          "FindingInventorySHA256": "79ccec58f9c080947b08bb7ad55f31be5b626cdb41a34a7fd14020158a430a5e"
+        },
+        {
+          "Severity": "UNKNOWN",
+          "FindingCount": 79,
+          "FindingInventorySHA256": "aa233acf603c47cf6a5c9d1ef9fe1cffae62409c100e6908a8a464e1d483974d"
+        }
+      ]
+    },
+    "development": {
+      "amd64": [
+        {
+          "Severity": "CRITICAL",
+          "FindingCount": 27,
+          "FindingInventorySHA256": "e2cdb6774095edd839ea64f1580590de7cda3db05087baac2e1ccede756a18d9"
+        },
+        {
+          "Severity": "HIGH",
+          "FindingCount": 324,
+          "FindingInventorySHA256": "bb661cc244cef07aef4598da3145229411e27c8668a6e58cb2ab22cfbd6829cf"
+        },
+        {
+          "Severity": "LOW",
+          "FindingCount": 1109,
+          "FindingInventorySHA256": "39e442d20ccab5840086b503beba135bcba4899c1daabf8020fb52c3febc06cb"
+        },
+        {
+          "Severity": "MEDIUM",
+          "FindingCount": 1111,
+          "FindingInventorySHA256": "383a663292364c91d02797355249bbbc9ca7fa1bb24949fea13e06394e92b00d"
+        },
+        {
+          "Severity": "UNKNOWN",
+          "FindingCount": 33,
+          "FindingInventorySHA256": "3cdbc3ce4ca09cbbe0295a898ea178d55c807ce253b62bd8699d51dbfed9fc6a"
+        }
+      ],
+      "arm64": [
+        {
+          "Severity": "CRITICAL",
+          "FindingCount": 27,
+          "FindingInventorySHA256": "e2cdb6774095edd839ea64f1580590de7cda3db05087baac2e1ccede756a18d9"
+        },
+        {
+          "Severity": "HIGH",
+          "FindingCount": 324,
+          "FindingInventorySHA256": "bb661cc244cef07aef4598da3145229411e27c8668a6e58cb2ab22cfbd6829cf"
+        },
+        {
+          "Severity": "LOW",
+          "FindingCount": 1109,
+          "FindingInventorySHA256": "3cd83d43752b1eef937140a239bb69342a834ae8ca489013bced5f46ce5130be"
+        },
+        {
+          "Severity": "MEDIUM",
+          "FindingCount": 1111,
+          "FindingInventorySHA256": "383a663292364c91d02797355249bbbc9ca7fa1bb24949fea13e06394e92b00d"
+        },
+        {
+          "Severity": "UNKNOWN",
+          "FindingCount": 33,
+          "FindingInventorySHA256": "3cdbc3ce4ca09cbbe0295a898ea178d55c807ce253b62bd8699d51dbfed9fc6a"
         }
       ]
     }

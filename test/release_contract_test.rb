@@ -2,6 +2,7 @@
 
 require "minitest/autorun"
 require "date"
+require "digest"
 require "json"
 require "open3"
 require "tmpdir"
@@ -32,8 +33,7 @@ class ReleaseContractTest < Minitest::Test
     "actions/download-artifact" => ["3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c", "v8.0.1"],
     "actions/setup-python" => ["ece7cb06caefa5fff74198d8649806c4678c61a1", "v6.3.0"],
     "actions/upload-artifact" => ["043fb46d1a93c77aae656e7c1c64a875d1fc6a0a", "v7.0.1"],
-    "actions/upload-pages-artifact" => ["fc324d3547104276b827a68afc52ff2a11cc49c9", "v5.0.0"],
-    "aquasecurity/trivy-action" => ["ed142fd0673e97e23eac54620cfb913e5ce36c25", "v0.36.0"]
+    "actions/upload-pages-artifact" => ["fc324d3547104276b827a68afc52ff2a11cc49c9", "v5.0.0"]
   }.freeze
   RELEASE_INPUTS = %w[
     .al-folio-overrides.yml
@@ -56,9 +56,13 @@ class ReleaseContractTest < Minitest::Test
     .github/dependabot.yml
     .security-scanner-gaps.yml
     bin/dependency_audit
+    bin/create_trivy_baseline.py
+    bin/create_trivy_db_provenance.py
     bin/enforce_trivy_report.py
+    bin/validate_trivy_oci_manifest.py
     bin/update_scholar_citations.py
     .trivy-unfixed-baseline.json
+    .trivy-baseline-review.json
     _data/cv.yml
     _plugins/local_asset_cache_bust.rb
     assets/pdf/cv.pdf
@@ -703,18 +707,27 @@ class ReleaseContractTest < Minitest::Test
   def test_release_jobs_preserve_residual_reports_and_fail_closed_on_unreviewed_or_fixable_risk
     workflow_source = read(".github/workflows/deploy.yml")
     trivy_gate = read("bin/enforce_trivy_report.py")
+    trivy_image = "aquasec/trivy@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e"
     refute_includes workflow_source, "ignore-unfixed"
+    refute_includes workflow_source, "aquasecurity/trivy-action@"
     assert_equal 2, workflow_source.scan("python3 test/trivy_report_contract_test.py").length
+    assert_equal 2, workflow_source.scan("python3 bin/create_trivy_db_provenance.py").length
+    assert_equal 1, workflow_source.scan(trivy_image).length
+    workflow = load_workflow(".github/workflows/deploy.yml")
+    assert_equal trivy_image, workflow.dig("env", "TRIVY_IMAGE")
     assert_match(/^EXPECTED_TRIVY_VERSION = "0\.70\.0"$/, trivy_gate)
     assert_match(/^EXPECTED_ARCHITECTURES = \("amd64", "arm64"\)$/, trivy_gate)
     assert_includes trivy_gate, "EXPECTED_RESULT_IDENTITIES"
     assert_includes trivy_gate, "package_inventory_coverage"
     assert_includes trivy_gate, "PackageInventorySHA256"
+    assert_includes trivy_gate, "minimum_db_updated_at"
+    assert_includes trivy_gate, "load_provenance"
+    assert_includes trivy_gate, "hash_file"
     assert_includes trivy_gate, "package coverage differs from reviewed"
     assert_includes trivy_gate, "unreviewed = residuals - reviewed"
     assert_includes trivy_gate, "missing = reviewed - residuals"
 
-    jobs = load_workflow(".github/workflows/deploy.yml").fetch("jobs")
+    jobs = workflow.fetch("jobs")
     %w[validate build].each do |job_name|
       steps = jobs.fetch(job_name).fetch("steps")
       delivery_build_index = steps.index do |step|
@@ -725,65 +738,140 @@ class ReleaseContractTest < Minitest::Test
           "docker build --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile ."
         )
       end
-      scans = steps.each_with_index.select do |step, _index|
-        step.fetch("uses", "").start_with?("aquasecurity/trivy-action@")
+      prepare_index = steps.index do |step|
+        step.fetch("name", "") == "Prepare frozen Trivy databases"
+      end
+      provenance_index = steps.index do |step|
+        step.fetch("name", "") == "Bind Trivy databases and reports"
       end
       first_test_index = steps.index do |step|
         step.fetch("name", "").start_with?("Verify devcontainer")
       end
 
       refute_nil development_build_index, "#{job_name} must build the development image before scanning it"
-      assert_equal 2, scans.length, "#{job_name} must scan both release images"
-      assert_equal %w[mtics-al-folio:ci mtics-devcontainer:ci],
-                   scans.map { |step, _index| step.dig("with", "image-ref") }
+      refute_nil prepare_index, "#{job_name} must prepare one frozen database snapshot"
+      refute_nil provenance_index, "#{job_name} must bind the reports to that snapshot"
+      assert_operator delivery_build_index, :<, prepare_index
+      assert_operator development_build_index, :<, prepare_index
 
-      scans.each_with_index do |(step, scan_index), image_index|
-        inputs = step.fetch("with")
-        assert_equal "image", inputs.fetch("scan-type")
-        assert_equal "vuln", inputs["scanners"]
-        assert_equal "os,library", inputs.fetch("vuln-type")
-        assert_equal "HIGH,CRITICAL", inputs.fetch("severity")
-        refute inputs.key?("ignore-unfixed")
-        assert_equal "json", inputs.fetch("format")
-        assert_equal "0", inputs.fetch("exit-code").to_s,
-                     "exit 0 is permitted only because the immediately following gate is fail-closed"
-        assert_equal "v0.70.0", inputs.fetch("version")
-        assert_equal "${{ runner.temp }}/trivy-cache", inputs["cache-dir"],
-                     "Trivy must not write its database under the Git checkout"
-        refute_includes inputs.fetch("cache-dir", ""), "github.workspace"
+      prepare_command = steps.fetch(prepare_index).fetch("run")
+      assert_includes prepare_command, 'rm -rf "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"'
+      assert_equal 1, prepare_command.scan("--download-db-only").length
+      assert_equal 1, prepare_command.scan("--download-java-db-only").length
+      assert_includes prepare_command, 'mkdir -p "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"'
+      assert_includes prepare_command, "docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-db:2"
+      assert_includes prepare_command, "docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-java-db:1"
+      assert_equal 2, prepare_command.scan("python3 bin/validate_trivy_oci_manifest.py").length
+      assert_includes prepare_command, '--database vulnerability'
+      assert_includes prepare_command, '--database java'
+      assert_includes prepare_command, '--db-repository "ghcr.io/aquasecurity/trivy-db@$vulnerability_db_digest"'
+      assert_includes prepare_command, '--java-db-repository "ghcr.io/aquasecurity/trivy-java-db@$java_db_digest"'
+      assert_includes prepare_command, "--no-progress"
+      assert_includes prepare_command, "version --cache-dir /trivy-cache --format json"
+      assert_equal 3, prepare_command.scan('"$TRIVY_IMAGE"').length
+      assert_includes prepare_command, "$RUNNER_TEMP/trivy-version.json"
 
-        label = %w[delivery development].fetch(image_index)
-        report_path = "${{ runner.temp }}/trivy-#{label}.json"
-        assert_equal report_path, inputs.fetch("output")
+      scan_indices = %w[delivery development].map do |label|
+        steps.index { |step| step.fetch("name", "") == "Scan #{label} container" }
+      end
+      refute_includes scan_indices, nil
 
-        gate = steps.fetch(scan_index + 1)
+      %w[delivery development].zip(scan_indices).each do |label, scan_index|
+        scan = steps.fetch(scan_index)
+        assert_equal "${{ success() && !cancelled() }}", scan.fetch("if")
+        scan_command = scan.fetch("run")
+        image_ref = label == "delivery" ? "mtics-al-folio:ci" : "mtics-devcontainer:ci"
+        assert_equal 1, scan_command.scan('"$TRIVY_IMAGE"').length
+        assert_includes scan_command, '--volume /var/run/docker.sock:/var/run/docker.sock:ro'
+        assert_includes scan_command, '--volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro"'
+        assert_includes scan_command, '--volume "$RUNNER_TEMP/trivy-reports:/trivy-reports"'
+        assert_includes scan_command, "--cache-dir /trivy-cache"
+        assert_includes scan_command, "--cache-backend memory"
+        assert_includes scan_command, "--skip-db-update"
+        assert_includes scan_command, "--skip-java-db-update"
+        assert_includes scan_command, "--skip-version-check"
+        assert_includes scan_command, "--offline-scan"
+        assert_includes scan_command, "--disable-telemetry"
+        assert_includes scan_command, "--image-src docker"
+        assert_includes scan_command, "--no-progress"
+        assert_includes scan_command, "--scanners vuln"
+        assert_includes scan_command, "--pkg-types os,library"
+        assert_includes scan_command, "--severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
+        assert_includes scan_command, "--list-all-pkgs"
+        assert_includes scan_command, "--format json"
+        assert_includes scan_command, "--output /trivy-reports/trivy-#{label}.json"
+        assert_includes scan_command, image_ref
+        refute_includes scan_command, "--ignore-unfixed"
+        assert_operator prepare_index, :<, scan_index
+        assert_operator scan_index, :<, provenance_index
+      end
+
+      provenance = steps.fetch(provenance_index)
+      assert_equal "${{ success() && !cancelled() }}", provenance.fetch("if")
+      provenance_command = provenance.fetch("run")
+      assert_includes provenance_command, "python3 bin/create_trivy_db_provenance.py"
+      assert_includes provenance_command, '--trivy-version-json "$RUNNER_TEMP/trivy-version.json"'
+      assert_includes provenance_command, '--vulnerability-db "$RUNNER_TEMP/trivy-cache/db/trivy.db"'
+      assert_includes provenance_command, '--vulnerability-db-metadata "$RUNNER_TEMP/trivy-cache/db/metadata.json"'
+      assert_includes provenance_command, '--java-db "$RUNNER_TEMP/trivy-cache/java-db/trivy-java.db"'
+      assert_includes provenance_command, '--java-db-metadata "$RUNNER_TEMP/trivy-cache/java-db/metadata.json"'
+      assert_includes provenance_command, '--vulnerability-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json"'
+      assert_includes provenance_command, '--java-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json"'
+      assert_includes provenance_command, "--expected-architecture amd64"
+      assert_includes provenance_command, '--delivery-report "$RUNNER_TEMP/trivy-reports/trivy-delivery.json"'
+      assert_includes provenance_command, '--development-report "$RUNNER_TEMP/trivy-reports/trivy-development.json"'
+      assert_includes provenance_command, '--output "$RUNNER_TEMP/trivy-reports/trivy-db-provenance.json"'
+
+      %w[delivery development].each do |label|
+        gate_index = steps.index do |step|
+          step.fetch("name", "") == "Enforce reviewed #{label} vulnerability baseline"
+        end
+        refute_nil gate_index
+        gate = steps.fetch(gate_index)
         assert_equal "Enforce reviewed #{label} vulnerability baseline", gate.fetch("name")
-        assert_equal "always()", gate.fetch("if")
+        assert_equal "${{ success() && !cancelled() }}", gate.fetch("if")
         gate_command = gate.fetch("run")
-        assert_includes gate_command, '--volume "$RUNNER_TEMP:/trivy-reports:ro"'
+        assert_includes gate_command, '--volume "$RUNNER_TEMP/trivy-reports:/trivy-reports:ro"'
+        assert_includes gate_command, '--volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro"'
         assert_includes gate_command, '--volume "$PWD:/srv/jekyll:ro"'
+        assert_includes gate_command, "docker run --rm --pull never"
         assert_includes gate_command, "python3 bin/enforce_trivy_report.py"
         assert_includes gate_command, "--report /trivy-reports/trivy-#{label}.json"
         assert_includes gate_command, "--baseline .trivy-unfixed-baseline.json"
+        assert_includes gate_command, "--provenance /trivy-reports/trivy-db-provenance.json"
+        assert_includes gate_command, "--vulnerability-db /trivy-cache/db/trivy.db"
+        assert_includes gate_command, "--vulnerability-db-metadata /trivy-cache/db/metadata.json"
+        assert_includes gate_command, "--java-db /trivy-cache/java-db/trivy-java.db"
+        assert_includes gate_command, "--java-db-metadata /trivy-cache/java-db/metadata.json"
+        assert_includes gate_command, "--vulnerability-db-manifest /trivy-reports/trivy-vulnerability-db-manifest.json"
+        assert_includes gate_command, "--java-db-manifest /trivy-reports/trivy-java-db-manifest.json"
+        assert_includes gate_command, "--expected-architecture amd64"
         assert_includes gate_command, "--image #{label}"
-        assert_operator scan_index + 1, :<, first_test_index,
+        assert_operator provenance_index, :<, gate_index
+        assert_operator gate_index, :<, first_test_index,
                         "#{job_name} must gate both reports before any downstream test"
       end
 
-      assert_operator delivery_build_index, :<, scans.fetch(0).fetch(1)
-      assert_operator development_build_index, :<, scans.fetch(1).fetch(1)
-
-      report_uploads = steps.select do |step|
-        step.fetch("uses", "").start_with?("actions/upload-artifact@") &&
-          step.dig("with", "name").to_s.start_with?("trivy-")
-      end
-      assert_equal 2, report_uploads.length
-      %w[delivery development].zip(report_uploads).each do |label, upload|
+      %w[delivery development].each do |label|
+        upload = steps.find do |step|
+          step.dig("with", "name") == "trivy-#{label}-#{job_name}"
+        end
+        refute_nil upload
         assert_equal "always()", upload.fetch("if")
-        assert_equal "trivy-#{label}-#{job_name}", upload.dig("with", "name")
-        assert_equal "${{ runner.temp }}/trivy-#{label}.json", upload.dig("with", "path")
+        assert_equal "${{ runner.temp }}/trivy-reports/trivy-#{label}.json", upload.dig("with", "path")
         assert_equal "error", upload.dig("with", "if-no-files-found")
       end
+
+      provenance_upload = steps.find do |step|
+        step.dig("with", "name") == "trivy-db-provenance-#{job_name}"
+      end
+      refute_nil provenance_upload
+      assert_equal "always()", provenance_upload.fetch("if")
+      provenance_paths = provenance_upload.dig("with", "path")
+      assert_includes provenance_paths, "${{ runner.temp }}/trivy-reports/trivy-db-provenance.json"
+      assert_includes provenance_paths, "${{ runner.temp }}/trivy-reports/trivy-vulnerability-db-manifest.json"
+      assert_includes provenance_paths, "${{ runner.temp }}/trivy-reports/trivy-java-db-manifest.json"
+      assert_equal "error", provenance_upload.dig("with", "if-no-files-found")
     end
   end
 
@@ -825,10 +913,18 @@ class ReleaseContractTest < Minitest::Test
 
   def test_trivy_baseline_commits_to_findings_and_multi_arch_package_coverage
     baseline = JSON.parse(read(".trivy-unfixed-baseline.json"))
-    assert_equal 2, baseline.fetch("schema_version")
-    assert_equal %w[coverage images review_before reviewed_at schema_version], baseline.keys.sort
+    assert_equal 4, baseline.fetch("schema_version")
+    assert_equal %w[coverage images minimum_db_updated_at review_before reviewed_at schema_version vulnerability_coverage],
+                 baseline.keys.sort
+    minimum_db_updated_at = baseline.fetch("minimum_db_updated_at")
+    assert_equal %w[java vulnerability], minimum_db_updated_at.keys.sort
+    minimum_db_updated_at.each_value do |timestamp|
+      assert_match(/\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\z/, timestamp)
+      DateTime.iso8601(timestamp)
+    end
     assert_equal %w[delivery development], baseline.fetch("images").keys.sort
     assert_equal %w[delivery development], baseline.fetch("coverage").keys.sort
+    assert_equal %w[delivery development], baseline.fetch("vulnerability_coverage").keys.sort
 
     expected_identities = [
       ["lang-pkgs", "gemspec"],
@@ -849,19 +945,206 @@ class ReleaseContractTest < Minitest::Test
         end
       end
     end
+
+    baseline.fetch("vulnerability_coverage").each do |image, architectures|
+      assert_equal %w[amd64 arm64], architectures.keys.sort
+      architectures.each do |architecture, entries|
+        assert_equal %w[CRITICAL HIGH LOW MEDIUM UNKNOWN],
+                     entries.map { |entry| entry.fetch("Severity") },
+                     "#{image}/#{architecture} must prove every severity was retained"
+        entries.each do |entry|
+          assert_equal %w[FindingCount FindingInventorySHA256 Severity], entry.keys.sort
+          assert_operator entry.fetch("FindingCount"), :>=, 0
+          assert_match(/\A[0-9a-f]{64}\z/, entry.fetch("FindingInventorySHA256"))
+        end
+        blocking_count = entries
+                         .select { |entry| %w[CRITICAL HIGH].include?(entry.fetch("Severity")) }
+                         .sum { |entry| entry.fetch("FindingCount") }
+        assert_equal baseline.dig("images", image).length, blocking_count
+      end
+    end
+  end
+
+  def test_trivy_review_manifest_binds_the_generated_baseline_and_four_reports
+    baseline_path = File.join(ROOT, ".trivy-unfixed-baseline.json")
+    baseline_bytes = File.binread(baseline_path)
+    baseline = JSON.parse(baseline_bytes)
+    manifest = JSON.parse(read(".trivy-baseline-review.json"))
+
+    assert_equal 1, manifest.fetch("schema_version")
+    assert_equal %w[
+      baseline databases high_critical_inventory_sha256 reports scanner schema_version
+      trivy_version_json_sha256
+    ], manifest.keys.sort
+    assert_equal(
+      {
+        "path" => ".trivy-unfixed-baseline.json",
+        "schema_version" => 4,
+        "sha256" => Digest::SHA256.hexdigest(baseline_bytes)
+      },
+      manifest.fetch("baseline")
+    )
+    assert_match(/\A[0-9a-f]{64}\z/, manifest.fetch("trivy_version_json_sha256"))
+
+    scanner = manifest.fetch("scanner")
+    assert_equal "Trivy", scanner.fetch("name")
+    assert_equal "0.70.0", scanner.fetch("version")
+    assert_equal(
+      "aquasec/trivy@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e",
+      scanner.fetch("container_image")
+    )
+    assert_equal(
+      {
+        "scanners" => ["vuln"],
+        "pkg_types" => %w[os library],
+        "severities" => %w[UNKNOWN LOW MEDIUM HIGH CRITICAL],
+        "list_all_packages" => true,
+        "offline_scan" => true,
+        "skip_db_update" => true,
+        "skip_java_db_update" => true
+      },
+      scanner.fetch("scan_profile")
+    )
+
+    databases = manifest.fetch("databases")
+    assert_equal %w[java vulnerability], databases.keys.sort
+    {"vulnerability" => 2, "java" => 1}.each do |database_name, schema_version|
+      database = databases.fetch(database_name)
+      assert_equal %w[
+        downloaded_at metadata_sha256 next_update oci schema_version sha256 updated_at
+      ], database.keys.sort
+      assert_equal schema_version, database.fetch("schema_version")
+      assert_equal baseline.dig("minimum_db_updated_at", database_name),
+                   database.fetch("updated_at")
+      %w[updated_at next_update downloaded_at].each do |field|
+        DateTime.iso8601(database.fetch(field))
+      end
+      assert_operator DateTime.iso8601(database.fetch("updated_at")), :<,
+                      DateTime.iso8601(database.fetch("next_update"))
+      assert_match(/\A[0-9a-f]{64}\z/, database.fetch("sha256"))
+      assert_match(/\A[0-9a-f]{64}\z/, database.fetch("metadata_sha256"))
+      oci = database.fetch("oci")
+      assert_equal %w[
+        layer_digest layer_media_type layer_size manifest_digest repository resolved_from
+      ], oci.keys.sort
+      expected_oci = if database_name == "vulnerability"
+                       {
+                         "repository" => "ghcr.io/aquasecurity/trivy-db",
+                         "resolved_from" => "ghcr.io/aquasecurity/trivy-db:2",
+                         "layer_media_type" => "application/vnd.aquasec.trivy.db.layer.v1.tar+gzip"
+                       }
+                     else
+                       {
+                         "repository" => "ghcr.io/aquasecurity/trivy-java-db",
+                         "resolved_from" => "ghcr.io/aquasecurity/trivy-java-db:1",
+                         "layer_media_type" => "application/vnd.aquasec.trivy.javadb.layer.v1.tar+gzip"
+                       }
+                     end
+      expected_oci.each { |field, value| assert_equal value, oci.fetch(field) }
+      assert_match(/\Asha256:[0-9a-f]{64}\z/, oci.fetch("manifest_digest"))
+      assert_match(/\Asha256:[0-9a-f]{64}\z/, oci.fetch("layer_digest"))
+      assert_operator oci.fetch("layer_size"), :>, 0
+    end
+
+    expected_artifacts = {
+      ["delivery", "amd64"] => "mtics-al-folio:ci",
+      ["delivery", "arm64"] => "mtics-al-folio:release-arm64",
+      ["development", "amd64"] => "mtics-devcontainer:ci",
+      ["development", "arm64"] => "mtics-devcontainer:release-arm64"
+    }
+    reports = manifest.fetch("reports")
+    assert_equal %w[delivery development], reports.keys.sort
+    reports.each do |image, architectures|
+      assert_equal %w[amd64 arm64], architectures.keys.sort
+      architectures.each do |architecture, report|
+        assert_equal %w[
+          architecture artifact_name created_at fixable_high_critical_count image_id
+          severity_counts sha256
+        ], report.keys.sort
+        assert_equal expected_artifacts.fetch([image, architecture]),
+                     report.fetch("artifact_name")
+        assert_equal architecture, report.fetch("architecture")
+        assert_match(/\Asha256:[0-9a-f]{64}\z/, report.fetch("image_id"))
+        assert_match(/\A[0-9a-f]{64}\z/, report.fetch("sha256"))
+        assert_equal 0, report.fetch("fixable_high_critical_count")
+        created_at = DateTime.iso8601(report.fetch("created_at"))
+        databases.each_value do |database|
+          assert_operator created_at, :>=, DateTime.iso8601(database.fetch("downloaded_at"))
+          assert_operator created_at, :<, DateTime.iso8601(database.fetch("next_update"))
+        end
+        coverage = baseline.dig("vulnerability_coverage", image, architecture)
+        expected_counts = coverage.to_h do |entry|
+          [entry.fetch("Severity"), entry.fetch("FindingCount")]
+        end
+        assert_equal expected_counts, report.fetch("severity_counts")
+      end
+    end
+
+    manifest.fetch("high_critical_inventory_sha256").each do |image, digest|
+      entries = baseline.dig("images", image)
+      canonical_rows = entries.map do |entry|
+        %w[Class Type PkgID PkgName VulnerabilityID InstalledVersion Severity Status]
+          .map { |field| entry.fetch(field) }
+      end.sort
+      assert_equal Digest::SHA256.hexdigest(JSON.generate(canonical_rows)), digest
+
+      %w[CRITICAL HIGH].each do |severity|
+        inventory = entries
+                    .select { |entry| entry.fetch("Severity") == severity }
+                    .map do |entry|
+          %w[Class Type PkgID PkgName VulnerabilityID InstalledVersion Severity Status]
+            .map { |field| entry.fetch(field) } + [""]
+        end.sort
+        expected_digest = Digest::SHA256.hexdigest(JSON.generate(inventory))
+        expected_count = inventory.length
+        %w[amd64 arm64].each do |architecture|
+          coverage_entry = baseline
+                           .dig("vulnerability_coverage", image, architecture)
+                           .find { |entry| entry.fetch("Severity") == severity }
+          assert_equal expected_count, coverage_entry.fetch("FindingCount")
+          assert_equal expected_digest, coverage_entry.fetch("FindingInventorySHA256")
+        end
+      end
+    end
   end
 
   def test_chromium_scanner_gap_is_explicit_short_lived_and_bound_to_the_image
     gap_document = YAML.load_file(File.join(ROOT, ".security-scanner-gaps.yml"))
     assert_equal 1, gap_document.fetch("schema_version")
-    assert_equal({"name" => "Trivy", "version" => "0.70.0"}, gap_document.fetch("scanner"))
+    assert_equal %w[gaps scanner schema_version], gap_document.keys.sort
+    assert_equal(
+      {
+        "name" => "Trivy",
+        "version" => "0.70.0",
+        "severities" => %w[UNKNOWN LOW MEDIUM HIGH CRITICAL],
+        "package_types" => %w[os library],
+        "vulnerability_db_updated_at" => "2026-07-12T07:28:36.403115102Z"
+      },
+      gap_document.fetch("scanner")
+    )
+    assert_equal 1, gap_document.fetch("gaps").length
     gap = gap_document.fetch("gaps").then { |gaps| gaps.fetch(0) }
+    assert_equal %w[
+      containment cves gap_type image installed_version official_source_url package
+      review_before reviewed_at scanner_evidence status upstream_fixed_version
+    ], gap.keys.sort
 
     assert_equal "chromium", gap.fetch("package")
     assert_equal "150.0.7871.114-1~deb12u1", gap.fetch("installed_version")
     assert_equal "150.0.7871.115", gap.fetch("upstream_fixed_version")
     assert_equal "delivery", gap.fetch("image")
-    assert_equal 0, gap.fetch("scanner_findings")
+    assert_equal "unresolved_severity_classification", gap.fetch("gap_type")
+    assert_equal(
+      {
+        "severity" => "UNKNOWN",
+        "status" => "affected",
+        "fixed_version" => nil,
+        "packages" => %w[chromium chromium-common],
+        "unique_cves" => 27,
+        "package_rows" => {"amd64" => 54, "arm64" => 54}
+      },
+      gap.fetch("scanner_evidence")
+    )
     assert_equal "https://security-tracker.debian.org/tracker/source-package/chromium",
                  gap.fetch("official_source_url")
 
@@ -885,7 +1168,8 @@ class ReleaseContractTest < Minitest::Test
       dockerfile
     )
     workflow = read(".github/workflows/deploy.yml")
-    assert_includes workflow, "version: v#{gap_document.dig('scanner', 'version')}"
+    assert_includes workflow,
+                    "TRIVY_IMAGE: aquasec/trivy@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e # v#{gap_document.dig('scanner', 'version')}"
   end
 
   def test_ci_builds_and_runs_the_same_pinned_container_as_local_delivery
