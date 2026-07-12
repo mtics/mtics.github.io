@@ -26,6 +26,7 @@ from collections.abc import Callable, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
 
+import requests
 import serpapi
 import yaml
 
@@ -75,6 +76,13 @@ def validate_existing_papers(papers: Mapping) -> None:
             )
 
 
+def is_wrapped_connect_timeout(exc: serpapi.HTTPError) -> bool:
+    original = exc.__cause__ or exc.__context__
+    return isinstance(exc, serpapi.HTTPConnectionError) and isinstance(
+        original, requests.ConnectTimeout
+    )
+
+
 def search_page_with_retry(
     client: serpapi.Client,
     params: dict[str, object],
@@ -87,12 +95,15 @@ def search_page_with_retry(
         except serpapi.TimeoutError:
             reason = "timeout"
         except serpapi.HTTPError as exc:
-            if not 500 <= exc.status_code <= 599:
+            if is_wrapped_connect_timeout(exc):
+                reason = "timeout"
+            elif 500 <= exc.status_code <= 599:
+                reason = f"HTTP {exc.status_code}"
+            else:
                 sys.exit(
                     "SerpApi request failed permanently "
                     f"with HTTP {exc.status_code} at start={params['start']}."
                 )
-            reason = f"HTTP {exc.status_code}"
         else:
             if not isinstance(result, Mapping):
                 sys.exit(

@@ -13,6 +13,7 @@ import tempfile
 import unittest
 from unittest import mock
 
+import requests
 import yaml
 
 
@@ -40,11 +41,13 @@ class _SearchClient:
 
 class _MutatingSearchClient:
     def __init__(self) -> None:
-        self.params_at_entry: dict[str, object] | None = None
+        self.params_at_entry: list[dict[str, object]] = []
 
     def search(self, params: dict[str, object]) -> object:
-        self.params_at_entry = dict(params)
+        self.params_at_entry.append(dict(params))
         params["api_key"] = "injected-by-client"
+        if len(self.params_at_entry) == 1:
+            raise UPDATER.serpapi.TimeoutError("transient timeout")
         return {"articles": []}
 
 
@@ -145,6 +148,78 @@ class CitationUpdaterContractTest(unittest.TestCase):
         self.assertEqual([mock.call(1), mock.call(2)], sleep.call_args_list)
         self.assertEqual(3, len(client.params))
         self.assertNotIn(secret, stderr.getvalue())
+
+    def test_real_client_retries_wrapped_connect_timeouts(self) -> None:
+        secret = "sentinel-connect-timeout-api-key"
+        request_url = f"https://serpapi.example/search?api_key={secret}"
+        wrapping_client = UPDATER.serpapi.Client(api_key=secret, timeout=15)
+        wrapping_client.session.request = mock.Mock(
+            side_effect=requests.ConnectTimeout(request_url)
+        )
+
+        with self.assertRaises(UPDATER.serpapi.HTTPConnectionError) as wrapped:
+            wrapping_client.search({"engine": "google_scholar_author"})
+
+        self.assertIsInstance(wrapped.exception.__context__, requests.ConnectTimeout)
+
+        response = requests.Response()
+        response.status_code = 200
+        response._content = b'{"articles": []}'
+        client = UPDATER.serpapi.Client(api_key=secret, timeout=15)
+        client.session.request = mock.Mock(
+            side_effect=[
+                requests.ConnectTimeout(request_url),
+                requests.ConnectTimeout(request_url),
+                response,
+            ]
+        )
+        sleep = mock.Mock()
+        stderr = io.StringIO()
+
+        try:
+            with redirect_stderr(stderr):
+                articles = UPDATER.fetch_author_articles(
+                    "scholar-id",
+                    client,
+                    sleep=sleep,
+                )
+        except SystemExit as exc:
+            self.fail(f"wrapped connect timeout was not retried: {exc}")
+
+        self.assertEqual([], articles)
+        self.assertEqual([mock.call(1), mock.call(2)], sleep.call_args_list)
+        self.assertEqual(3, client.session.request.call_count)
+        self.assertEqual(
+            "Transient SerpApi timeout; retrying in 1s (1/3).\n"
+            "Transient SerpApi timeout; retrying in 2s (2/3).\n",
+            stderr.getvalue(),
+        )
+        self.assertNotIn(secret, stderr.getvalue())
+        self.assertNotIn(request_url, stderr.getvalue())
+
+    def test_real_client_connection_error_fails_without_retry(self) -> None:
+        secret = "sentinel-connection-error-api-key"
+        request_url = f"https://serpapi.example/search?api_key={secret}"
+        client = UPDATER.serpapi.Client(api_key=secret, timeout=15)
+        client.session.request = mock.Mock(
+            side_effect=requests.ConnectionError(request_url)
+        )
+        sleep = mock.Mock()
+        stderr = io.StringIO()
+
+        with redirect_stderr(stderr), self.assertRaises(SystemExit) as raised:
+            UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
+
+        message = str(raised.exception)
+        self.assertEqual(
+            "SerpApi request failed permanently with HTTP -1 at start=0.",
+            message,
+        )
+        self.assertNotIn(secret, message)
+        self.assertNotIn(request_url, message)
+        self.assertNotIn(secret, stderr.getvalue())
+        sleep.assert_not_called()
+        self.assertEqual(1, client.session.request.call_count)
 
     def test_three_timeouts_exhaust_the_page_budget(self) -> None:
         secret = "sentinel-timeout-api-key"
@@ -248,11 +323,15 @@ class CitationUpdaterContractTest(unittest.TestCase):
         }
         original = dict(params)
         client = _MutatingSearchClient()
+        sleep = mock.Mock()
 
-        UPDATER.search_page_with_retry(client, params, sleep=mock.Mock())
+        UPDATER.search_page_with_retry(client, params, sleep=sleep)
 
         self.assertEqual(original, params)
-        self.assertNotIn("api_key", client.params_at_entry or {})
+        self.assertEqual(2, len(client.params_at_entry))
+        for received in client.params_at_entry:
+            self.assertNotIn("api_key", received)
+        self.assertEqual([mock.call(1)], sleep.call_args_list)
 
     def test_non_dict_mapping_response_and_article_are_accepted(self) -> None:
         article = UserDict({"citation_id": "scholar-id:paper"})
