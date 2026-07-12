@@ -21,7 +21,8 @@ Writes _data/citations.yml.
 
 import os
 import sys
-from collections.abc import Mapping
+import time
+from collections.abc import Callable, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -33,6 +34,8 @@ SOCIALS_FILE = Path("_data/socials.yml")
 OUTPUT_FILE = Path("_data/citations.yml")
 ALLOW_KEY_DELETION_ENV = "ALLOW_CITATION_KEY_DELETION"
 REQUEST_TIMEOUT_SECONDS = 15
+MAX_SEARCH_ATTEMPTS = 3
+RETRY_DELAYS_SECONDS = (1, 2)
 
 
 def load_scholar_user_id() -> str:
@@ -72,31 +75,70 @@ def validate_existing_papers(papers: Mapping) -> None:
             )
 
 
+def search_page_with_retry(
+    client: serpapi.Client,
+    params: dict[str, object],
+    *,
+    sleep: Callable[[float], None] = time.sleep,
+) -> Mapping:
+    for attempt in range(1, MAX_SEARCH_ATTEMPTS + 1):
+        try:
+            result = client.search(dict(params))
+        except serpapi.TimeoutError:
+            reason = "timeout"
+        except serpapi.HTTPError as exc:
+            if not 500 <= exc.status_code <= 599:
+                sys.exit(
+                    "SerpApi request failed permanently "
+                    f"with HTTP {exc.status_code} at start={params['start']}."
+                )
+            reason = f"HTTP {exc.status_code}"
+        else:
+            if not isinstance(result, Mapping):
+                sys.exit(
+                    "SerpApi error: expected an object payload "
+                    f"at start={params['start']}."
+                )
+            return result
+
+        if attempt == MAX_SEARCH_ATTEMPTS:
+            sys.exit(
+                f"SerpApi request failed after {MAX_SEARCH_ATTEMPTS} attempts "
+                f"at start={params['start']} ({reason})."
+            )
+
+        delay = RETRY_DELAYS_SECONDS[attempt - 1]
+        print(
+            f"Transient SerpApi {reason}; retrying in {delay}s "
+            f"({attempt}/{MAX_SEARCH_ATTEMPTS}).",
+            file=sys.stderr,
+        )
+        sleep(delay)
+
+    raise AssertionError("unreachable")
+
+
 def fetch_author_articles(
-    scholar_id: str, client: serpapi.Client
+    scholar_id: str,
+    client: serpapi.Client,
+    *,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> list[Mapping]:
     """Page through SerpApi google_scholar_author and return all articles."""
     articles: list[Mapping] = []
     start = 0
     page_size = 100
     while True:
-        params = {
-            "engine": "google_scholar_author",
-            "author_id": scholar_id,
-            "num": page_size,
-            "start": start,
-        }
-        try:
-            result = client.search(dict(params))
-        except serpapi.TimeoutError:
-            sys.exit(f"SerpApi request timed out at start={start}.")
-        except serpapi.HTTPError as exc:
-            sys.exit(
-                f"SerpApi HTTP error at start={start} "
-                f"(status={exc.status_code})."
-            )
-        if not isinstance(result, Mapping):
-            sys.exit(f"SerpApi error: expected an object payload at start={start}.")
+        result = search_page_with_retry(
+            client,
+            {
+                "engine": "google_scholar_author",
+                "author_id": scholar_id,
+                "num": page_size,
+                "start": start,
+            },
+            sleep=sleep,
+        )
         if "error" in result:
             sys.exit(f"SerpApi returned an error payload at start={start}.")
         if "articles" not in result:
@@ -111,9 +153,8 @@ def fetch_author_articles(
                 )
         articles.extend(page)
         if len(page) < page_size:
-            break
+            return articles
         start += page_size
-    return articles
 
 
 def main() -> None:

@@ -3,14 +3,16 @@
 
 from __future__ import annotations
 
+from collections import UserDict
+from contextlib import redirect_stderr
 import importlib.util
+import io
 import os
 from pathlib import Path
 import tempfile
 import unittest
 from unittest import mock
 
-import requests
 import yaml
 
 
@@ -34,6 +36,23 @@ class _SearchClient:
         if isinstance(outcome, BaseException):
             raise outcome
         return outcome
+
+
+class _MutatingSearchClient:
+    def __init__(self) -> None:
+        self.params_at_entry: dict[str, object] | None = None
+
+    def search(self, params: dict[str, object]) -> object:
+        self.params_at_entry = dict(params)
+        params["api_key"] = "injected-by-client"
+        return {"articles": []}
+
+
+def _http_error(status_code: int, detail: str = "request failed") -> BaseException:
+    error = UPDATER.serpapi.HTTPError(Exception(detail))
+    error.status_code = status_code
+    error.error = detail
+    return error
 
 
 class CitationUpdaterContractTest(unittest.TestCase):
@@ -72,71 +91,213 @@ class CitationUpdaterContractTest(unittest.TestCase):
 
     def test_non_object_payload_fails_closed(self) -> None:
         client = _SearchClient([[]])
+        sleep = mock.Mock()
+
         with self.assertRaisesRegex(SystemExit, "object payload"):
-            UPDATER.fetch_author_articles("scholar-id", client)
+            UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
 
-    def test_http_failure_redacts_secret_without_retrying(self) -> None:
-        secret = "sentinel-http-api-key"
-        request_url = f"https://serpapi.example/search?api_key={secret}"
-        response = mock.Mock(status_code=503)
-        response.json.return_value = {"error": f"remote error with {secret}"}
-        original = requests.HTTPError(
-            f"503 Server Error for url: {request_url}",
-            response=response,
-            request=mock.Mock(url=request_url),
-        )
-        client = _SearchClient([UPDATER.serpapi.HTTPError(original)])
-
-        with self.assertRaises(SystemExit) as raised:
-            UPDATER.fetch_author_articles("scholar-id", client)
-
-        message = str(raised.exception)
-        self.assertEqual("SerpApi HTTP error at start=0 (status=503).", message)
-        self.assertNotIn(secret, message)
+        sleep.assert_not_called()
         self.assertEqual(1, len(client.params))
 
-    def test_timeout_failure_redacts_secret_without_retrying(self) -> None:
+    def test_timeout_retries_once_then_returns_the_page(self) -> None:
         secret = "sentinel-timeout-api-key"
         client = _SearchClient(
-            [UPDATER.serpapi.TimeoutError(f"request URL contained {secret}")]
+            [
+                UPDATER.serpapi.TimeoutError(f"request URL contained {secret}"),
+                {"articles": []},
+            ]
         )
+        sleep = mock.Mock()
+        stderr = io.StringIO()
 
-        with self.assertRaises(SystemExit) as raised:
-            UPDATER.fetch_author_articles("scholar-id", client)
+        with redirect_stderr(stderr):
+            articles = UPDATER.fetch_author_articles(
+                "scholar-id",
+                client,
+                sleep=sleep,
+            )
+
+        self.assertEqual([], articles)
+        self.assertEqual([mock.call(1)], sleep.call_args_list)
+        self.assertEqual(2, len(client.params))
+        self.assertNotIn(secret, stderr.getvalue())
+
+    def test_server_errors_use_one_and_two_second_backoff(self) -> None:
+        secret = "sentinel-http-api-key"
+        client = _SearchClient(
+            [
+                _http_error(500, f"request URL contained {secret}"),
+                _http_error(503, f"remote response contained {secret}"),
+                {"articles": []},
+            ]
+        )
+        sleep = mock.Mock()
+        stderr = io.StringIO()
+
+        with redirect_stderr(stderr):
+            articles = UPDATER.fetch_author_articles(
+                "scholar-id",
+                client,
+                sleep=sleep,
+            )
+
+        self.assertEqual([], articles)
+        self.assertEqual([mock.call(1), mock.call(2)], sleep.call_args_list)
+        self.assertEqual(3, len(client.params))
+        self.assertNotIn(secret, stderr.getvalue())
+
+    def test_three_timeouts_exhaust_the_page_budget(self) -> None:
+        secret = "sentinel-timeout-api-key"
+        client = _SearchClient(
+            [
+                UPDATER.serpapi.TimeoutError(f"request URL contained {secret}"),
+                UPDATER.serpapi.TimeoutError(f"remote response contained {secret}"),
+                UPDATER.serpapi.TimeoutError(f"request detail contained {secret}"),
+            ]
+        )
+        sleep = mock.Mock()
+        stderr = io.StringIO()
+
+        with redirect_stderr(stderr), self.assertRaises(SystemExit) as raised:
+            UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
 
         message = str(raised.exception)
-        self.assertEqual("SerpApi request timed out at start=0.", message)
+        self.assertEqual(
+            "SerpApi request failed after 3 attempts at start=0 (timeout).",
+            message,
+        )
         self.assertNotIn(secret, message)
-        self.assertEqual(1, len(client.params))
+        self.assertNotIn(secret, stderr.getvalue())
+        self.assertEqual([mock.call(1), mock.call(2)], sleep.call_args_list)
+        self.assertEqual(3, len(client.params))
 
-    def test_error_payload_redacts_remote_text_without_retrying(self) -> None:
+    def test_permanent_http_errors_fail_without_retry(self) -> None:
+        secret = "sentinel-permanent-http-api-key"
+        for status_code in (400, 401, 429, -1):
+            with self.subTest(status_code=status_code):
+                client = _SearchClient(
+                    [_http_error(status_code, f"request URL contained {secret}")]
+                )
+                sleep = mock.Mock()
+
+                with self.assertRaises(SystemExit) as raised:
+                    UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
+
+                message = str(raised.exception)
+                self.assertEqual(
+                    "SerpApi request failed permanently "
+                    f"with HTTP {status_code} at start=0.",
+                    message,
+                )
+                self.assertNotIn(secret, message)
+                sleep.assert_not_called()
+                self.assertEqual(1, len(client.params))
+
+    def test_error_payload_redacts_remote_text_without_retry(self) -> None:
         secret = "sentinel-remote-api-key"
         client = _SearchClient([{"error": f"remote error with {secret}"}])
+        sleep = mock.Mock()
 
         with self.assertRaises(SystemExit) as raised:
-            UPDATER.fetch_author_articles("scholar-id", client)
+            UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
 
         message = str(raised.exception)
         self.assertEqual("SerpApi returned an error payload at start=0.", message)
         self.assertNotIn(secret, message)
+        sleep.assert_not_called()
         self.assertEqual(1, len(client.params))
 
     def test_missing_articles_key_fails_closed(self) -> None:
         client = _SearchClient([{}])
+        sleep = mock.Mock()
+
         with self.assertRaisesRegex(SystemExit, "articles"):
-            UPDATER.fetch_author_articles("scholar-id", client)
+            UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
+
+        sleep.assert_not_called()
+        self.assertEqual(1, len(client.params))
 
     def test_articles_with_the_wrong_type_fails_closed(self) -> None:
         payload = {"articles": "not-a-list"}
         client = _SearchClient([payload])
+        sleep = mock.Mock()
+
         with self.assertRaisesRegex(SystemExit, "list"):
-            UPDATER.fetch_author_articles("scholar-id", client)
+            UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
+
+        sleep.assert_not_called()
+        self.assertEqual(1, len(client.params))
 
     def test_non_object_article_fails_closed(self) -> None:
         payload = {"articles": ["not-an-object"]}
         client = _SearchClient([payload])
+        sleep = mock.Mock()
+
         with self.assertRaisesRegex(SystemExit, "article.*object"):
-            UPDATER.fetch_author_articles("scholar-id", client)
+            UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
+
+        sleep.assert_not_called()
+        self.assertEqual(1, len(client.params))
+
+    def test_search_uses_a_copy_without_an_api_key(self) -> None:
+        params: dict[str, object] = {
+            "engine": "google_scholar_author",
+            "author_id": "scholar-id",
+            "num": 100,
+            "start": 0,
+        }
+        original = dict(params)
+        client = _MutatingSearchClient()
+
+        UPDATER.search_page_with_retry(client, params, sleep=mock.Mock())
+
+        self.assertEqual(original, params)
+        self.assertNotIn("api_key", client.params_at_entry or {})
+
+    def test_non_dict_mapping_response_and_article_are_accepted(self) -> None:
+        article = UserDict({"citation_id": "scholar-id:paper"})
+        client = _SearchClient([UserDict({"articles": [article]})])
+        sleep = mock.Mock()
+
+        articles = UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
+
+        self.assertEqual([article], articles)
+        sleep.assert_not_called()
+        self.assertEqual(1, len(client.params))
+
+    def test_each_page_has_an_independent_retry_budget(self) -> None:
+        first_page = [
+            {
+                "citation_id": f"scholar-id:paper-{index}",
+                "title": f"Paper {index}",
+                "year": "2025",
+                "cited_by": {"value": index},
+            }
+            for index in range(100)
+        ]
+        client = _SearchClient(
+            [
+                _http_error(500),
+                _http_error(503),
+                {"articles": first_page},
+                _http_error(500),
+                _http_error(503),
+                {"articles": []},
+            ]
+        )
+        sleep = mock.Mock()
+
+        articles = UPDATER.fetch_author_articles("scholar-id", client, sleep=sleep)
+
+        self.assertEqual(first_page, articles)
+        self.assertEqual(
+            [mock.call(1), mock.call(2), mock.call(1), mock.call(2)],
+            sleep.call_args_list,
+        )
+        self.assertEqual(
+            [0, 0, 0, 100, 100, 100],
+            [item["start"] for item in client.params],
+        )
 
     def test_main_constructs_one_client_and_passes_it_to_pagination(self) -> None:
         article = {
