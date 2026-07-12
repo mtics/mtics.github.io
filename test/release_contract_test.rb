@@ -1465,6 +1465,23 @@ class ReleaseContractTest < Minitest::Test
     end
   end
 
+  def test_citation_refresh_uses_off_hour_daily_schedule_and_fixed_concurrency
+    workflow = load_workflow(".github/workflows/update_scholar_citations.yml")
+    triggers = workflow.fetch("on")
+
+    assert_equal ["17 8 * * *"], triggers.fetch("schedule").map { |entry| entry.fetch("cron") }
+    assert triggers.key?("workflow_dispatch"), "citation refresh must remain manually dispatchable"
+    assert_equal({ "group" => "scholar-citations", "cancel-in-progress" => false },
+                 workflow.fetch("concurrency"))
+  end
+
+  def test_citation_refresh_jobs_have_bounded_timeouts
+    jobs = load_workflow(".github/workflows/update_scholar_citations.yml").fetch("jobs")
+
+    assert_equal 15, jobs.fetch("update").fetch("timeout-minutes")
+    assert_equal 5, jobs.fetch("commit").fetch("timeout-minutes")
+  end
+
   def test_citation_refresh_isolates_secreted_updates_from_write_credentials
     jobs = load_workflow(".github/workflows/update_scholar_citations.yml").fetch("jobs")
     update = jobs.fetch("update")
@@ -1488,6 +1505,7 @@ class ReleaseContractTest < Minitest::Test
     assert_equal false, update_checkout.dig("with", "persist-credentials")
     assert_equal "3.13.14", setup_python.dig("with", "python-version")
     assert_includes install.fetch("run"), "--require-hashes -r requirements-citations.txt"
+    assert_equal "scholar-citations", upload.dig("with", "name")
     assert_equal "_data/citations.yml", upload.dig("with", "path")
     assert_equal "error", upload.dig("with", "if-no-files-found")
 
@@ -1498,6 +1516,7 @@ class ReleaseContractTest < Minitest::Test
     assert_equal true, commit_checkout.dig("with", "persist-credentials")
     assert_equal "${{ github.sha }}", commit_checkout.dig("with", "ref"),
                  "the artifact must be committed on the exact source revision that generated it"
+    assert_equal "scholar-citations", download.dig("with", "name")
     assert_equal "${{ runner.temp }}/citations", download.dig("with", "path")
     assert_includes publish.fetch("run"),
                     'install -m 0644 "$RUNNER_TEMP/citations/citations.yml" _data/citations.yml'
