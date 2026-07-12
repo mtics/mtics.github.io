@@ -1,0 +1,21 @@
+{% comment %}JSON Resume skills: compact name/level labels with keyword values.{% endcomment %}
+
+<div class="card-text font-weight-light">
+  {% for entry in entries %}
+    {% assign skill_name = entry.name | default: '' | strip %}
+    {% assign skill_level = entry.level | default: '' | strip %}
+    {% if skill_name != blank or skill_level != blank or entry.keywords != blank %}
+      <div class="skill-item py-2">
+        {% if entry.icon %}<i class="{{ entry.icon | escape }}" aria-hidden="true"></i>{% endif %}
+        {% if skill_name != blank %}
+          <strong>{{ skill_name | escape }}{% if skill_level != blank %} ({{ skill_level | escape }}){% endif %}:</strong>
+        {% elsif skill_level != blank %}
+          <strong>{{ skill_level | escape }}:</strong>
+        {% endif %}
+        {% for keyword in entry.keywords %}
+          {{ keyword | escape }}{% unless forloop.last %}, {% endunless %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>

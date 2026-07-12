@@ -11,7 +11,7 @@ $red-color-dark: #b71c1c !default;
 $orange-color: #f29105 !default;
 $blue-color: #0076df !default;
 $blue-color-dark: #00369f !default;
-$cyan-color: #e5495d !default; // zhw.li brand: burgundy-bright → dark-theme --global-theme-color
+$cyan-color: #ed6072 !default; // zhw.li brand: AA burgundy-bright on dark cards/backgrounds
 $light-cyan-color: color.adjust($cyan-color, $lightness: 25%);
 $green-color: #00ab37 !default;
 $green-color-lime: #b7d12a !default;
@@ -27,6 +27,8 @@ $yellow-color: #efcc00 !default;
 $grey-color: #828282 !default;
 $grey-color-light: color.adjust($grey-color, $lightness: 40%);
 $grey-color-dark: #1c1c1d;
+$grey-color-readable-light: #666666;
+$grey-color-readable-dark: #9e9e9e;
 $grey-900: #212529;
 
 $white-color: #ffffff !default;

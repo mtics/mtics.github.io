@@ -1,0 +1,21 @@
+{% comment %}RenderCV bullet and numbered entry renderer.{% endcomment %}
+
+{% assign first_entry = entries | first %}
+{% if first_entry.bullet %}
+  <ul class="card-text font-weight-light list-group list-group-flush">
+    {% for entry in entries %}
+      <li class="list-group-item cv-markdown-list-item">{{ entry.bullet | markdownify }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <ol{% if first_entry.reversed_number %} reversed{% endif %} class="card-text font-weight-light list-group list-group-flush">
+    {% for entry in entries %}
+      {% if first_entry.number %}
+        {% assign item = entry.number %}
+      {% else %}
+        {% assign item = entry.reversed_number %}
+      {% endif %}
+      <li class="list-group-item cv-markdown-list-item">{{ item | markdownify }}</li>
+    {% endfor %}
+  </ol>
+{% endif %}

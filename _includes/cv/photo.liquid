@@ -1,0 +1,46 @@
+{% comment %}
+  RenderCV 2.8 photos may be HTTP(S) URLs or paths relative to the YAML input.
+  Local photos are exposed only when they resolve into the site's public assets
+  tree. Other local values get an accessible placeholder instead of a broken
+  reference to Jekyll's private _data tree or a leaked filesystem path.
+{% endcomment %}
+
+{% assign photo_value = include.photo | default: cv.photo | default: '' | strip %}
+{% assign photo_alt_name = include.name | default: cv.name | default: 'CV' | strip %}
+{% assign photo_src = '' %}
+{% assign photo_is_local = false %}
+{% assign photo_scheme_7 = photo_value | slice: 0, 7 | downcase %}
+{% assign photo_scheme_8 = photo_value | slice: 0, 8 | downcase %}
+{% if photo_scheme_7 == 'http://' or photo_scheme_8 == 'https://' %}
+  {% assign photo_src = photo_value %}
+{% elsif photo_value contains 'assets/' %}
+  {% assign photo_asset_path = photo_value | split: 'assets/' | last %}
+  {% unless photo_asset_path contains '..' %}
+    {% assign photo_src = photo_asset_path | prepend: '/assets/' %}
+    {% assign photo_is_local = true %}
+  {% endunless %}
+{% endif %}
+
+{% if photo_src != blank %}
+  <figure class="cv-photo-wrapper text-center mb-3">
+    <img
+      class="cv-photo img-fluid rounded"
+      {% if photo_is_local %}
+        src="{{ photo_src | local_asset_fingerprint | relative_url }}"
+      {% else %}
+        src="{{ photo_src | escape }}"
+      {% endif %}
+      alt="{{ photo_alt_name | append: ' portrait' | escape }}"
+      decoding="async"
+      style="max-width: 10rem"
+    >
+  </figure>
+{% elsif photo_value != blank %}
+  <div
+    class="cv-photo-placeholder text-center mb-3"
+    role="img"
+    aria-label="{{ photo_alt_name | append: ' portrait unavailable' | escape }}"
+  >
+    <i class="fa-solid fa-user" aria-hidden="true"></i>
+  </div>
+{% endif %}

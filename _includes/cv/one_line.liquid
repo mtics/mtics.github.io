@@ -1,0 +1,11 @@
+{% comment %}RenderCV OneLineEntry renderer.{% endcomment %}
+
+<div class="card-text font-weight-light">
+  {% for entry in entries %}
+    <div class="skill-item" style="padding: 0.5rem 0;">
+      {% if entry.icon != blank %}<i class="{{ entry.icon | escape }}" aria-hidden="true"></i> {% endif %}
+      {% if entry.label %}<strong>{{ entry.label }}:</strong>{% endif %}
+      <div class="cv-one-line-details cv-markdown-block">{{ entry.details | markdownify }}</div>
+    </div>
+  {% endfor %}
+</div>

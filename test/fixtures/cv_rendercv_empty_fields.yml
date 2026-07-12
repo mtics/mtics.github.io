@@ -1,0 +1,13 @@
+cv:
+  name: Ada Lovelace
+  sections:
+    Education:
+      - institution: Example University
+        area: Computer Science
+        degree: PhD
+    Experience:
+      - company: Example Company
+        position: Engineer
+    Awards:
+      - name: Undated Award
+        summary: An award with no date or location must not reserve metadata space.

@@ -13,9 +13,87 @@
   margin-top: 0.5rem;
 }
 
+// FedDAE's diagram is transparent and was effectively lost against the dark
+// theme. Keep the original asset intact and give it a paper-like carrier.
+.publications img.preview[src*="publication_preview/FedDAE"] {
+  box-sizing: border-box;
+  padding: 0.25rem;
+  background-color: #fff;
+}
+
+// Year headings used the 10%-opacity divider token (~1.2:1 on white).
+.publications h2.bibliography {
+  color: var(--global-text-color-light) !important;
+}
+
+// Venue badges use the card color as their foreground in both themes. This
+// also overrides the core's hard-coded white link inside linked badges.
+.publications ol.bibliography li .abbr abbr a {
+  color: var(--global-card-bg-color) !important;
+}
+
 // Publication link buttons in uppercase to match the live site (ABS / ARXIV / BIB / CODE).
 .publications ol.bibliography li .links a.btn {
   text-transform: uppercase;
+}
+
+// Embedded video is a native button so the core's `a.abstract` handler cannot
+// resolve it to the entry's abstract panel. Match the adjacent link controls.
+.publications ol.bibliography li .links button.video-toggle.btn {
+  margin-left: 0;
+  border: 1px solid var(--global-text-color);
+  padding: 0.25rem 1rem;
+  background: transparent;
+  color: var(--global-text-color);
+  text-transform: uppercase;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--global-theme-color);
+    color: var(--global-theme-color);
+  }
+}
+
+// Inline prose links remain identifiable without relying on color alone.
+.post article p a:not(.btn),
+.post article .clearfix a:not(.btn),
+.post .desc a:not(.btn),
+.post article td a:not(.btn) {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
+}
+
+// Bootstrap's table utility retains its light-theme #212529 foreground after
+// a theme change; restore inherited text contrast for the news table.
+html[data-theme="dark"] .post article table.table,
+html[data-theme="dark"] .post article table.table th,
+html[data-theme="dark"] .post article table.table td {
+  color: var(--global-text-color) !important;
+}
+
+// The inline author disclosure is a native button for keyboard activation, but
+// should continue to read visually as part of the author sentence.
+.publications ol.bibliography li .author > button.more-authors {
+  appearance: none;
+  border: 0;
+  border-bottom: 1px dashed var(--global-text-color-light);
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--global-text-color-light);
+  cursor: pointer;
+  font: inherit;
+
+  &:hover {
+    border-bottom-color: var(--global-text-color);
+    color: var(--global-text-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 2px;
+  }
 }
 
 // Profile photo width matches live (al_folio_core default is 30%, too large here).
@@ -76,6 +154,86 @@ a.scholar-citations:visited {
   .list-group-item {
     border: 0 !important;
     background: transparent;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  // Date and location rows inherit the global table-cell divider. Removing
+  // it here keeps the time badge free of horizontal rules. The collapsed
+  // table restores Bootstrap's former reset and removes a 2px alignment drift.
+  .list-group-item .table-cv {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .list-group-item .table-cv td {
+    border-top: 0;
+  }
+
+  // The upstream date column shifts left by 15px and upward by 5px. Reset both
+  // offsets so the metadata abuts the content grid and shares its top edge.
+  .date-column {
+    transform: none;
+  }
+
+  // Recreate the compact text hierarchy used by the pre-migration CV while
+  // keeping semantic paragraph markup in the migrated templates.
+  .cv-entry-content {
+    font-size: 1rem;
+    font-weight: 300;
+    margin-top: 0.5rem;
+
+    .title {
+      font-size: 1rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .cv-entry-institution,
+    .cv-entry-area,
+    .cv-entry-company,
+    .cv-entry-summary,
+    .cv-entry-awarder {
+      font-size: 0.95rem !important;
+      line-height: 1.2;
+      margin-bottom: 0.5rem !important;
+    }
+  }
+
+  // Keep simple Markdown visually compact while allowing authored multi-block
+  // paragraphs/lists to remain valid block-level HTML.
+  .cv-markdown-block > :last-child,
+  .cv-markdown-list-item > :last-child {
+    margin-bottom: 0;
+  }
+
+  .items .item > p:only-child,
+  .cv-markdown-list-item > p:only-child,
+  .cv-one-line-details > p:only-child {
+    display: inline;
+    margin: 0;
+  }
+
+  .cv-one-line-details {
+    display: inline;
+  }
+
+  // Stack metadata above content on small screens, then align both columns
+  // at the desktop breakpoint without relying on legacy Bootstrap utilities.
+  @media (max-width: 767.98px) {
+    .cv-entry-meta,
+    .cv-entry-content {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .cv-entry-content {
+      margin-top: 0;
+    }
   }
 
   // Drop the section-card 1px border (the top/bottom lines); keep the soft shadow.

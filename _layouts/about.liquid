@@ -2,29 +2,32 @@
 layout: default
 ---
 <div class="post">
-  <header class="post-header">
+  <div class="post-header">
     <h1 class="post-title">
       <span class="font-weight-bold">{{ site.first_name }}</span>
       {% if site.middle_name %}{{ site.middle_name }} {% endif %}{{ site.last_name }}
     </h1>
     <p class="desc">{{ page.subtitle }}</p>
-  </header>
+  </div>
 
   <article>
     {% if page.profile %}
       <div class="profile float-{% if page.profile.align == 'left' %}left{% else %}right{% endif %}">
         {% if page.profile.image %}
           {% assign profile_image_path = page.profile.image | prepend: 'assets/img/' %}
+          {% capture profile_image_alt -%}
+            {{ site.first_name }}{% if site.middle_name %} {{ site.middle_name }}{% endif %} {{ site.last_name }}
+          {%- endcapture %}
+          {% assign profile_image_alt = profile_image_alt | strip %}
           {% if page.profile.image_circular %}
             {% assign profile_image_class = 'img-fluid z-depth-1 rounded-circle' %}
           {% else %}
             {% assign profile_image_class = 'img-fluid z-depth-1
       rounded' %}
           {% endif %}
-          {% capture sizes %}(min-width: {{ site.max_width }}) {{ site.max_width | minus: 30 | times: 0.3}}px, (min-width: 576px)
-      30vw, 95vw"{% endcapture %}
+          {% capture sizes %}(min-width: {{ site.max_width }}) {{ site.max_width | minus: 30 | times: 0.3 }}px, (min-width: 576px) 30vw, 95vw{% endcapture %}
           {%
-            include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image
+            include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=profile_image_alt
             cache_bust=true
           %}
         {% endif %}
@@ -38,6 +41,13 @@ layout: default
               <div class="contact-note">{{ site.contact_note }}</div>
             {% endif %}
           </div>
+        {% endif %}
+      </div>
+    {% elsif page.social %}
+      <div class="profile-social">
+        <div class="contact-icons">{% social_links %}</div>
+        {% if site.contact_note %}
+          <div class="contact-note">{{ site.contact_note }}</div>
         {% endif %}
       </div>
     {% endif %}

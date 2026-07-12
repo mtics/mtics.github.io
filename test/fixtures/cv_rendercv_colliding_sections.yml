@@ -1,0 +1,9 @@
+cv:
+  name: Ada Lovelace
+  sections:
+    "C-2":
+      - bullet: C dash two
+    "C++":
+      - bullet: C plus plus
+    "C#":
+      - bullet: C sharp

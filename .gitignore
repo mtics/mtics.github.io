@@ -1,19 +1,22 @@
 _site
 .bundle
-.DS_store
+.DS_Store
+.env*
 .idea
 .jekyll-cache
 .jekyll-metadata
+.jekyll-reproducible.yml
 .ruby-version
 .sass-cache
 .tweet-cache
 .venv
+.claude/
+.codex/
+.playwright-cli/
+__pycache__/
+*.py[cod]
 assets/libs/
 assets/rendercv/rendercv_output/*.typ
-Gemfile.lock
 node_modules/
 vendor
-# migration scratch
-_site/
-.jekyll-cache/
 al-folio-upgrade-report.md

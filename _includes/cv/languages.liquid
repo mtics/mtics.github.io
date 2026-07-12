@@ -1,0 +1,23 @@
+{% comment %}
+  Unified languages renderer for RenderCV and JSONResume formats. Language
+  names are inline labels, not document headings.
+{% endcomment %}
+
+<div class="card-text font-weight-light">
+  {% for entry in entries %}
+    {% assign lang_name = entry.name | default: entry.language | default: entry.label %}
+    {% assign fluency = entry.summary | default: entry.fluency | default: entry.details %}
+    {% if lang_name != blank or fluency != blank %}
+      <div class="language-item">
+        {% if entry.icon != blank %}<i class="{{ entry.icon | escape }}" aria-hidden="true"></i>{% endif %}
+        {% if lang_name != blank %}<strong>{{ lang_name }}</strong>{% endif %}{% if lang_name != blank and fluency != blank %}: {% endif %}{% if fluency != blank %}{{ fluency }}{% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<style>
+  .language-item {
+    padding: 0.5rem 0;
+  }
+</style>

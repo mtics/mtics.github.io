@@ -1,0 +1,72 @@
+cv:
+  name: Ada Lovelace
+  headline: Research Engineer
+  photo: ../../assets/img/prof_pic.jpg
+  social_networks:
+    - network: LinkedIn
+      username: ada-lovelace
+    - network: GitHub
+      username: ada-lovelace
+    - network: GitLab
+      username: ada-lovelace
+    - network: IMDB
+      username: nm0000123
+    - network: Instagram
+      username: ada-lovelace
+    - network: ORCID
+      username: 0000-0002-1825-0097
+    - network: Mastodon
+      username: "@ada@mastodon.social"
+    - network: StackOverflow
+      username: 12345/ada-lovelace
+    - network: ResearchGate
+      username: Ada_Lovelace
+    - network: YouTube
+      username: ada-lovelace
+    - network: Google Scholar
+      username: scholar-token
+    - network: Telegram
+      username: ada_lovelace
+    - network: WhatsApp
+      username: "+61412345678"
+    - network: Leetcode
+      username: ada-lovelace
+    - network: X
+      username: ada_lovelace
+    - network: Bluesky
+      username: ada.bsky.social
+    - network: Reddit
+      username: ada_lovelace
+  custom_connections:
+    - fontawesome_icon: calendar-days
+      placeholder: Book a call
+      url: https://calendar.example.test/ada
+    - fontawesome_icon: building-columns
+      placeholder: Academic office
+      url:
+  sections:
+    Numbered Work:
+      - number: First numbered item
+      - number: Second numbered item
+    Reverse Chronology:
+      - reversed_number: Latest reverse-numbered item
+      - reversed_number: Earlier reverse-numbered item
+    End-only Experience:
+      - company: Example Labs
+        position: Visiting Researcher
+        end_date: 2024-05
+    End-only Education:
+      - institution: Example University
+        area: Computer Science
+        degree: Short Course
+        end_date: 2023-06
+    End-only Normal:
+      - name: One-day Event
+        end_date: 2022
+    DOI Priority:
+      - title: Canonical DOI Publication
+        authors:
+          - Ada Lovelace
+        doi: 10.1000/rendercv-edge
+        url: https://publisher.example.test/noncanonical-copy
+        date: 2026

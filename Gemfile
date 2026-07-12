@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'jekyll'
+gem 'bundler-audit', '= 0.9.3'
 
 # Core plugins that directly affect site building
 group :jekyll_plugins do
@@ -9,7 +10,6 @@ group :jekyll_plugins do
     gem 'jekyll-cache-bust'
     gem 'jekyll-email-protect'
     gem 'jekyll-feed'
-    gem 'jekyll-get-json'
     gem 'jekyll-imagemagick'
     gem 'jekyll-jupyter-notebook'
     gem 'jekyll-link-attributes'
@@ -43,7 +43,6 @@ group :al_folio_plugins do
     gem 'al_folio_core', '= 1.0.11'
     gem 'al_icons', '= 1.0.0'
     gem 'al_folio_cv', '= 1.0.0'
-    gem 'al_folio_distill', '= 1.0.2'
     gem 'al_folio_upgrade', '= 1.0.3'
     gem 'al_folio_bootstrap_compat', '= 1.0.0'
     gem 'al_cookie', '= 1.0.0'

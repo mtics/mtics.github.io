@@ -1,0 +1,56 @@
+{% comment %}
+  Unified awards renderer. Only the award title is a heading; the awarding
+  organization and summary remain descriptive text.
+{% endcomment %}
+
+<ul class="card-text font-weight-light list-group list-group-flush">
+  {% for entry in entries %}
+    <li class="list-group-item">
+      <div class="row">
+        {% assign award_date = entry.date | default: '' | strip %}
+        {% assign award_date_display = award_date %}
+        {% unless include.jsonresume or page.cv_format == 'jsonresume' %}
+          {% assign award_date_display = award_date | split: '-' | first %}
+        {% endunless %}
+        {% if award_date != blank %}
+          <div class="col-xs-2 col-sm-2 col-md-2 text-center date-column cv-entry-meta">
+            <table class="table-cv">
+              <tbody>
+                <tr>
+                  <td>
+                    <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px">
+                      {{- award_date_display -}}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-xs-10 col-sm-10 col-md-10 cv-entry-content">
+        {% else %}
+          <div class="col-xs-12 col-sm-12 col-md-12 cv-entry-content">
+        {% endif %}
+
+        {% assign award_title = entry.name | default: entry.title %}
+        {% assign award_url = entry.url | default: '' | strip %}
+        {% assign award_url_scheme_7 = award_url | slice: 0, 7 | downcase %}
+        {% assign award_url_scheme_8 = award_url | slice: 0, 8 | downcase %}
+        {% unless award_url_scheme_7 == 'http://' or award_url_scheme_8 == 'https://' %}
+          {% assign award_url = '' %}
+        {% endunless %}
+        {% if award_title != blank %}
+          <h3 class="title font-weight-bold ml-1 ml-md-4" data-toc-skip>
+            {% if award_url != blank %}<a href="{{ award_url | escape }}">{{ award_title }}</a>{% else %}{{ award_title }}{% endif %}
+          </h3>
+        {% endif %}
+        {% if entry.awarder != blank %}
+          <p class="cv-entry-awarder ml-1 ml-md-4 mb-1" style="font-size: 0.95rem">{{ entry.awarder }}</p>
+        {% endif %}
+        {% if entry.summary != blank %}
+          <div class="cv-entry-summary cv-markdown-block ml-1 ml-md-4">{{ entry.summary | markdownify }}</div>
+        {% endif %}
+          </div>
+      </div>
+    </li>
+  {% endfor %}
+</ul>

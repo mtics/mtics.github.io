@@ -1,15 +1,8 @@
 cv:
   name: Zhiwei Li
-  label: PhD Candidate
+  headline: PhD Candidate
   email: lizhw.cs@outlook.com
   location: Sydney, Australia
-  # al_folio_cv renders the Contact "Location" row from cv.address (city/region),
-  # not the flat cv.location string — mirror it here so the row appears.
-  address:
-    city: Sydney
-    region: Australia
-  image: ""
-  summary: PhD candidate at UTS AAII researching privacy-preserving personalized recommender systems under federated, multimodal, and foundation-model settings.
 
   social_networks:
     - network: GitHub
@@ -18,12 +11,15 @@ cv:
       username: lizhiwi
 
   sections:
+    Professional Summary:
+      - PhD candidate at UTS AAII researching privacy-preserving personalized recommender systems under federated, multimodal, and foundation-model settings.
+
     Education:
       - institution: University of Technology Sydney
         location: Sydney, Australia
         url: https://www.uts.edu.au/research/australian-artificial-intelligence-institute
         area: Analytics (Australian Artificial Intelligence Institute)
-        studyType: PhD Candidate
+        degree: PhD Candidate
         start_date: 2023-11
         end_date: present
         highlights:
@@ -34,7 +30,7 @@ cv:
         location: Shanghai, China
         url: https://www.shanghaitech.edu.cn/
         area: Computer Science and Technology
-        studyType: M.S.
+        degree: M.S.
         start_date: 2020-09
         end_date: 2023-06
         highlights:
@@ -45,7 +41,7 @@ cv:
         location: Zhengzhou, China
         url: https://en.wikipedia.org/wiki/Zhengzhou_University
         area: Computer Science and Technology
-        studyType: B.E.
+        degree: B.E.
         start_date: 2016-09
         end_date: 2020-06
         highlights:
@@ -75,61 +71,61 @@ cv:
         summary: Instructor — Prof. Hao Wang (Spring 2022).
 
     Awards:
-      - title: Best Reviewer
+      - name: Best Reviewer
         date: 2025-04
         awarder: AISTATS 2025
         url: https://aistats.org/aistats2025/awards.html
         summary: Recognized as one of the Best Reviewers at the 28th International Conference on Artificial Intelligence and Statistics.
 
-      - title: AAII Student Best Paper Award 2024
+      - name: AAII Student Best Paper Award 2024
         date: 2024-11
         awarder: Australian Artificial Intelligence Institute, UTS
         summary: Top student award in the AI Application category at AAII, UTS.
 
-      - title: Merit Student
+      - name: Merit Student
         date: 2022-12
         awarder: ShanghaiTech University
         summary: Awarded for outstanding academic performance during M.S. studies.
 
-      - title: Outstanding Student Cadre
+      - name: Outstanding Student Cadre
         date: 2018-12
         awarder: Zhengzhou University (School of Information Engineering)
 
-      - title: 2nd Place
+      - name: 2nd Place
         date: 2019-05
         awarder: RoboCup Asia-Pacific Tianjin Invitational Tournament 2019
         summary: With the ZZU-DROID bipedal-robot team.
 
-      - title: 3rd Place
+      - name: 3rd Place
         date: 2019-04
         awarder: RoboCup China Open 2019, Standard Platform League (NAO)
         summary: With the ZZU-DROID bipedal-robot team.
 
-      - title: 2nd Prize
+      - name: 2nd Prize
         date: 2017-12
         awarder: Softbank Robot Cup — 2017 China Robot Skills Competition
         summary: With the ZZU-DROID bipedal-robot team.
 
     Service:
-      - name: Conference Reviewer / PC Member
-        keywords: "ICLR, NeurIPS, AAAI, IJCAI, WWW, ECAI, AISTATS"
+      - label: Conference Reviewer / PC Member
+        details: "ICLR, NeurIPS, AAAI, IJCAI, WWW, ECAI, AISTATS"
         icon: fa-solid fa-pen-to-square
 
-      - name: Journal Reviewer
-        keywords: "IEEE TPAMI, IEEE TNNLS, IEEE TKDE, IEEE TAFFC, IEEE TAI"
+      - label: Journal Reviewer
+        details: "IEEE TPAMI, IEEE TNNLS, IEEE TKDE, IEEE TAFFC, IEEE TAI"
         icon: fa-solid fa-book-open
 
-      - name: Tutorial Speaker
-        keywords: "Personalized Federated Recommender Systems @ WWW 2025"
+      - label: Tutorial Speaker
+        details: "Personalized Federated Recommender Systems @ WWW 2025"
         icon: fa-solid fa-chalkboard-user
 
-      - name: Invited Speaker / Workshop Host
-        keywords: "FL@FM-AJCAI 2024 — Federated Learning for Foundation Models"
+      - label: Invited Speaker / Workshop Host
+        details: "FL@FM-AJCAI 2024 — Federated Learning for Foundation Models"
         icon: fa-solid fa-microphone
 
     Languages:
-      - name: Chinese (Mandarin)
-        summary: Native speaker
+      - label: Chinese (Mandarin)
+        details: Native speaker
 
-      - name: English
-        summary: Fluent
+      - label: English
+        details: Fluent

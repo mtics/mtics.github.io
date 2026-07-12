@@ -1,8 +1,12 @@
 # al-folio v0.x → v1.x Migration Plan (zhw.li)
 
-Branch: `al-folio-v1-migration` (worktree at `/tmp/alfolio-v1-mig`, based on origin/main @ 78c6960).
-Live `main` is untouched and stays the deployed site until this branch is verified and approved.
-Reference starter clone: `/tmp/al-folio-v1-starter` (alshedivat/al-folio main = v1 contract + `al-folio upgrade` tooling).
+> **ARCHIVED MIGRATION RECORD — NOT CURRENT OPERATING INSTRUCTIONS.**
+> This file preserves the decisions and session notes from the v0→v1 migration. Temporary worktrees, preview servers, and upstream images mentioned historically are no longer valid entry points. For the current branch, run `docker compose up --build` from the repository root and open <http://localhost:8080>. Release validation and GitHub Pages deployment are defined by the `Deploy site` workflow in `.github/workflows/deploy.yml`.
+> The current minimal site does not use Distill posts. The unused `al_folio_distill` runtime was therefore removed after the final upgrade audit; only an inert, remote-loading-disabled namespace remains for upgrade-schema compatibility. Historical starter inventories below remain historical facts only.
+
+Branch: `al-folio-v1-migration` (originally based on origin/main @ 78c6960 in an isolated temporary worktree).
+At the start of the migration, live `main` was intentionally left untouched until this branch could be verified and approved.
+Reference starter: a temporary clone of alshedivat/al-folio main (v1 contract + `al-folio upgrade` tooling).
 
 ## Goal & constraints
 - Move zhw.li onto al-folio v1.x (gem-owned runtime) so future upgrades are conflict-free via the override-drift system.
@@ -45,7 +49,7 @@ Fork surface: 13 custom `_layouts`, 15 `_sass` files (+font-awesome), custom `_i
 - **P2 Scaffold+content**: copy starter's v1 wiring (`_config.yml` al_folio block + plugin list, Gemfile, Gemfile.lock, Dockerfile, assets/tailwind, bin/, .github) into the branch; port site content/data/bibliography/assets; merge v0 `_config.yml` VALUES into the v1 config contract (identity, socials, scholar, enable_* → v1 feature flags). Remove stale copied runtime files now gem-owned.
 - **P3 Overrides**: enable bootstrap-compat; re-add only genuine overrides (burgundy `_sass`, about/footer/bib layout bits) as local files; `overrides audit` → `diff` → `accept`; commit `.al-folio-overrides.yml`.
 - **P4 Audit fixes**: apply the 22 confirmed fixes in the v1 context (many now free: Gemfile.lock committed, cv.location via al_folio_cv, figure.liquid jQuery gone in core, SRI/purgecss obsolete under Tailwind). Track which are auto-resolved vs still-manual.
-- **P5 Verify**: `docker compose up`, drive home/CV/publications/news + mobile; Playwright pixelmatch vs P1 baseline; 0 console errors; feed title, search index, dark mode, citation badges, MathJax. `al-folio upgrade report`.
+- **P5 Verify**: `docker compose up --build`, open <http://localhost:8080>, and drive home/CV/publications/news + mobile; Playwright pixelmatch vs P1 baseline; 0 console errors; feed title, search index, dark mode, citation badges, MathJax. `al-folio upgrade report`.
 - **P6 Land**: push branch, open PR, present visual diff + change summary for approval; only then merge to main. Rollback = tag `pre-al-folio-cutover` already exists; main is unchanged so revert = ignore branch.
 
 ## Open decisions (surface to user)
@@ -55,9 +59,9 @@ Fork surface: 13 custom `_layouts`, 15 `_sass` files (+font-awesome), custom `_i
 
 ## STATUS — 2026-07-11 (end of session 1)
 DONE (committed on branch):
-- P0 isolation: worktree `/tmp/alfolio-v1-mig`, branch `al-folio-v1-migration` (base origin/main @78c6960). Live `main` untouched.
-- P1 toolchain PROVEN: `docker compose build` in `/tmp/al-folio-v1-starter` → image `amirpourmand/al-folio:latest` (Ruby 4.0/bundler 4.0.6, all al_folio_* gems baked). `al-folio upgrade` CLI runs; pristine starter builds green.
-  - Reusable run: `docker run --rm -v /tmp/alfolio-v1-mig:/srv/jekyll -w /srv/jekyll amirpourmand/al-folio:latest bash -lc "JEKYLL_ENV=production bundle exec jekyll build"`
+- P0 isolation: temporary worktree on branch `al-folio-v1-migration` (base origin/main @78c6960). Live `main` untouched.
+- P1 toolchain PROVEN: a disposable starter clone built the then-current upstream image (Ruby 4.0/bundler 4.0.6, all al_folio_* gems baked). `al-folio upgrade` CLI runs; pristine starter builds green.
+  - Historical note: that upstream starter image validated the initial scaffold only. Current builds use the repository Dockerfile and the `Deploy site` workflow; current local preview uses `docker compose up --build`.
 - P2 skeleton (commit ecaf1b8): removed gem-owned `_layouts/_includes/_sass/_plugins`; brought v1 Gemfile/lock+Dockerfile+entry_point; `_config.yml` rebased on v1 contract with site identity + scholar [Li]/[Zhiwei,Z.] + google_scholar-only badges + external_sources removed; dropped v0 theme assets (css/js/fonts/webfonts) + `_scripts`. **Content builds & renders**: home "Zhiwei Li", publications (FedDAE/FedVLR + scholar badges), CV (Education/Experience), news (AAAI/ICLR/PRICAI). `al-folio upgrade audit` = 0 blocking / 0 non-blocking; overrides clean.
 
 CAVEAT: site currently renders in **STOCK v1 look** — burgundy theme, sidebar-social, custom cv/bib/about/footer NOT yet re-applied (that is P3).
@@ -67,11 +71,11 @@ NEXT (P3, start here):
 2. Burgundy theme: find v1's theme-color mechanism (Tailwind token / CSS var in al_folio_core) — prefer a config/token override over resurrecting the 15 `_sass` files. If needed, enable `al_folio.compat.bootstrap.enabled: true` + re-add minimal `_sass` overrides.
 3. Re-add genuine overrides only: sidebar social icons (about layout), minimal footer, scholar-badge styling, profile-social. After each, `al-folio upgrade overrides audit` → `accept` → commit `.al-folio-overrides.yml`.
 4. CV data: fork uses `_data/cv.yml` (rendercv) + `cv.md cv_format: rendercv`; v1 `al_folio_cv` + starter config expects `assets/json/resume.json` (jekyll_get_json/jsonresume block still in config). RECONCILE: either keep rendercv path (confirm al_folio_cv supports it) or convert cv.yml→resume.json. Verify `al_citations` reads `_data/citations.yml` in the same shape (SerpApi script output).
-Then P4 audit fixes (feed title "blank" still reproduces; exclude MIGRATION_PLAN.md+requirements.txt from _site; TKDE + 2nd AAAI 2026 bib entries; v1 deploy.yml with Tailwind build), P5 verify, P6 PR.
+Then P4 audit fixes (historical checklist at that point: repair the blank feed title, exclude migration/build files from `_site`, consider extra bibliography entries, and rebuild the v1 deploy workflow), followed by P5 verification and P6 PR. The proposed extra bibliography entries were later rejected by the explicit content decision below: `papers.bib` remains first-author-only and formal publication metadata is authoritative.
 
 ## P3 progress — burgundy DONE (commit d356c60)
 Approach A confirmed: v1 theme color = CSS var `--global-theme-color`, sourced from `$purple-color`(light)/`$cyan-color`(dark) in gem `_sass/_variables.scss`. Override needs BOTH `_sass/_variables.scss` (burgundy #a51c30/#e5495d) AND `_sass/_themes.scss` (gem-verbatim bridge) — Dart Sass `@use "variables"` resolves relative to the importing file's dir, so shadowing variables alone is ignored until themes.scss is also local. Acknowledged in `.al-folio-overrides.yml`.
-Preview server (KEEP UP for user): `docker run -d --name alfolio-v1-serve -p 8091:8000 -v /tmp/alfolio-v1-mig/_site:/site -w /site amirpourmand/al-folio:latest python3 -m http.server 8000` → http://localhost:8091. Rebuild _site then it auto-serves latest.
+Historical preview note: the session used a disposable static server for screenshot comparison. It is no longer a current preview target. Use `docker compose up --build` from the repository root and open <http://localhost:8080>.
 
 ### Live-vs-v1 deltas remaining (screenshot compare @1280):
 MATCHES: burgundy accents everywhere, solid-burgundy venue badges, pub buttons (ABS/ARXIV/BIB/CODE), scholar citation badges, job-market callout w/ burgundy left border, nav, dark toggle, name two-tone, all content.
@@ -99,9 +103,9 @@ Citation badges: `al_citations` reads `_data/citations.yml` fine (badges show 1/
 ## Phase 4 remaining (audit fixes into v1)
 - feed.xml still titled "blank" (jekyll-feed reads site.title raw) → set a real feed title / override.
 - exclude MIGRATION_PLAN.md (+ requirements.txt) from _site (add to _config exclude).
-- Content: add IEEE TKDE @article + 2nd AAAI 2026 entry to papers.bib (google_scholar_id from citations.yml).
+- Content decision: `papers.bib` intentionally lists only Zhiwei's first-author papers; the announcement may mention two AAAI papers without adding the non-first-author paper. Formal published metadata remains authoritative over earlier arXiv metadata.
 - requirements.txt: scholarly→google-search-results.
-- deploy.yml: rebuild for v1 — Tailwind build step, Gemfile.lock cache, and DECISION (audit #1): schedule a daily/periodic build so citation updates actually publish (GITHUB_TOKEN citation commits don't trigger deploy). NEEDS USER on cadence.
+- deploy.yml: DONE — successful completion of `Update Scholar Citations` triggers `Deploy site` through `workflow_run`, covering citation commits made with `GITHUB_TOKEN` without adding a racing scheduled deploy path. Normal pushes to `main` continue to deploy directly.
 - CV Location row.
-## Phase 5: publications page, dark mode, ninja-keys search, mobile, feed, functional verification vs live (Playwright). Preview server: docker container `alfolio-v1-serve` on :8091 (restart cmd above).
+## Phase 5: publications page, dark mode, ninja-keys search, mobile, feed, functional verification vs live (Playwright). Current local preview: run `docker compose up --build` from the repository root and open <http://localhost:8080>.
 ## Phase 6: push branch → PR → user approves → merge to main.

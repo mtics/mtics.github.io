@@ -17,6 +17,15 @@ icon: portrait.png # favicon (black-and-white line drawing, distinct from profil
 
 url: https://zhw.li # the base hostname & protocol for your site
 baseurl: "" # root domain
+
+# Security and data-contract filters are local build inputs. A missing plugin
+# or misspelled filter must stop the build instead of silently returning the
+# unfiltered attribute value.
+liquid:
+  error_mode: strict
+  strict_filters: true
+  strict_variables: false
+
 last_updated: true # display last updated in the footer
 impressum_path: # set to path to include impressum link in the footer, use the same path as permalink in a page, helps to conform with EU GDPR
 back_to_top: true # set to false to disable the back to top button
@@ -51,15 +60,17 @@ al_folio:
     version: 4.1.18
     preflight: false
     css_entry: assets/tailwind/app.css
+  # Schema-only compatibility for the upgrade auditor. The runtime gem is not
+  # installed or registered, the feature is disabled, and remote loading is off.
   distill:
     engine: distillpub-template
     source: al-org-dev/distill-template#al-folio
-    allow_remote_loader: true
+    allow_remote_loader: false
   features:
     cv:
       enabled: true
     distill:
-      enabled: true
+      enabled: false
   compat:
     bootstrap:
       enabled: false
@@ -126,10 +137,10 @@ lsi: false # produce an index for related posts
 
 # Pagination
 pagination:
-  enabled: true
+  enabled: false
 
 related_blog_posts:
-  enabled: true
+  enabled: false
   max_related: 5
 
 # Giscus comments (RECOMMENDED)
@@ -203,6 +214,7 @@ kramdown:
 # Includes & excludes
 include: ["_pages"]
 exclude:
+  - .jekyll-reproducible.yml
   - MIGRATION_PLAN.md
   - al-folio-upgrade-report.md
   - bin/
@@ -220,6 +232,12 @@ exclude:
   - lighthouse_results/
   - package.json
   - package-lock.json
+  - requirements.txt
+  - requirements-build.in
+  - requirements-build.txt
+  - requirements-citations.in
+  - requirements-citations.txt
+  - test/
   - _pages/about_einstein.md
   - purgecss.config.js
   - README.md
@@ -241,7 +259,6 @@ plugins:
   - jekyll-cache-bust
   - jekyll-email-protect
   - jekyll-feed
-  - jekyll-get-json
   - jekyll-imagemagick
   - jekyll-jupyter-notebook
   - jekyll-link-attributes
@@ -261,7 +278,6 @@ plugins:
   - al_folio_core
   - al_icons
   - al_folio_cv
-  - al_folio_distill
   - al_folio_upgrade
   - al_folio_bootstrap_compat
   - al_cookie
@@ -313,13 +329,13 @@ terser:
 
 jekyll-archives:
   posts:
-    enabled: [year, tags, categories] # enables year, tag and category archives (remove if you need to disable one of them).
+    enabled: []
     permalinks:
       year: "/blog/:year/"
       tags: "/blog/:type/:name/"
       categories: "/blog/:type/:name/"
   books:
-    enabled: [year, tags, categories] # enables year, tag and category archives (remove if you need to disable one of them).
+    enabled: []
 
 display_tags: ["formatting", "images", "links", "math", "code", "blockquotes"] # these tags will be displayed on the front page of your blog
 display_categories: ["external-services"] # these categories will be displayed on the front page of your blog
@@ -448,8 +464,8 @@ lazy_loading_images: true # enables lazy loading of images (recommended)
 enable_google_verification: false # enables google site verification
 enable_bing_verification: false # enables bing site verification
 enable_cookie_consent: false # enables GDPR-compliant cookie consent dialog (https://github.com/orestbida/cookieconsent)
-enable_masonry: true # enables automatic project cards arrangement
-enable_math: true # enables math typesetting (uses MathJax)
+enable_masonry: false # no masonry/grid content; avoid global Masonry and imagesLoaded downloads
+enable_math: false # no math content; avoid global MathJax and unsri polyfill downloads
 enable_tooltips: false # enables automatic tooltip links generated for each section titles on pages and posts
 enable_darkmode: true # enables switching between light/dark modes
 enable_navbar_social: false # enables displaying social links in the navbar on the about page
@@ -667,24 +683,5 @@ third_party_libraries:
       js_map: "https://cdn.jsdelivr.net/npm/vega-lite@{{version}}/build/vega-lite.min.js.map"
     version: "5.16.3"
 
-# -----------------------------------------------------------------------------
-# Get external JSON data
-# -----------------------------------------------------------------------------
-
-jekyll_get_json:
-  - data: resume
-    json: assets/json/resume.json # it can also be an url
-
-jsonresume:
-  - basics
-  - work
-  - education
-  - publications
-  - projects
-  - volunteer
-  - awards
-  - certificates
-  - skills
-  - languages
-  - interests
-  - references
+# JSON Resume input is local and deterministic: place it at
+# `_data/resume.json`, which Jekyll loads natively as `site.data.resume`.

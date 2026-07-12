@@ -1,0 +1,16 @@
+{% comment %}JSON Resume interests: compact name labels with keyword values.{% endcomment %}
+
+<div class="card-text font-weight-light">
+  {% for entry in entries %}
+    {% assign interest_name = entry.name | default: '' | strip %}
+    {% if interest_name != blank or entry.keywords != blank %}
+      <div class="interest-item py-2">
+        {% if entry.icon %}<i class="{{ entry.icon | escape }}" aria-hidden="true"></i>{% endif %}
+        {% if interest_name != blank %}<strong>{{ interest_name | escape }}:</strong>{% endif %}
+        {% for keyword in entry.keywords %}
+          {{ keyword | escape }}{% unless forloop.last %}, {% endunless %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>

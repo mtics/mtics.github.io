@@ -1,0 +1,59 @@
+{% comment %}Unified RenderCV and JSON Resume publication renderer.{% endcomment %}
+
+<ul class="card-text font-weight-light list-group list-group-flush">
+  {% for entry in entries %}
+    {% assign publication_title = entry.title | default: entry.name %}
+    {% assign publication_date = entry.date | default: entry.releaseDate %}
+    {% if entry.releaseDate == blank and publication_date != blank %}
+      {% assign publication_date = publication_date | split: '-' | first %}
+    {% endif %}
+    {% assign venue = entry.journal | default: entry.publisher %}
+    {% assign publication_url = entry.url | default: '' | strip %}
+    {% assign publication_url_scheme_7 = publication_url | slice: 0, 7 | downcase %}
+    {% assign publication_url_scheme_8 = publication_url | slice: 0, 8 | downcase %}
+    {% unless publication_url_scheme_7 == 'http://' or publication_url_scheme_8 == 'https://' %}
+      {% assign publication_url = '' %}
+    {% endunless %}
+    {% assign authored_doi = entry.doi | default: '' | strip %}
+    {% assign doi_value = authored_doi | normalize_doi %}
+    {% assign doi_url = '' %}
+    {% if doi_value != blank %}
+      {% assign doi_url = doi_value | prepend: 'https://doi.org/' %}
+      {% assign publication_url = doi_url %}
+    {% endif %}
+    <li class="list-group-item">
+      <div class="row">
+        {% if publication_date != blank %}
+          <div class="col-xs-2 col-sm-2 col-md-2 text-center date-column cv-entry-meta">
+            <table class="table-cv"><tbody><tr><td>
+              <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px">{{ publication_date }}</span>
+            </td></tr></tbody></table>
+          </div>
+          <div class="col-xs-10 col-sm-10 col-md-10 cv-entry-content">
+        {% else %}
+          <div class="col-xs-12 col-sm-12 col-md-12 cv-entry-content">
+        {% endif %}
+          {% if publication_title != blank %}
+            <h3 class="title font-weight-bold ml-1 ml-md-4" data-toc-skip>
+              {% if publication_url != blank %}<a href="{{ publication_url | escape }}">{{ publication_title }}</a>{% else %}{{ publication_title }}{% endif %}
+            </h3>
+          {% endif %}
+          {% if entry.authors != blank %}
+            <p class="ml-1 ml-md-4 mb-1" style="font-size: 0.95rem">
+              {% for author in entry.authors %}{% if forloop.index > 1 %}, {% endif %}{{ author.name | default: author }}{% endfor %}
+            </p>
+          {% endif %}
+          {% if venue != blank %}<p class="ml-1 ml-md-4 mb-1" style="font-size: 0.95rem; font-style: italic">{{ venue }}</p>{% endif %}
+          {% if doi_url != blank %}
+            <p class="ml-1 ml-md-4 mb-1"><a href="{{ doi_url | escape }}">doi:{{ doi_value | escape }}</a></p>
+          {% elsif authored_doi != blank %}
+            <p class="ml-1 ml-md-4 mb-1">doi:{{ authored_doi | escape }}</p>
+          {% endif %}
+          {% if entry.summary != blank %}
+            <div class="cv-entry-summary cv-markdown-block ml-1 ml-md-4 mb-1">{{ entry.summary | markdownify }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,4741 @@
+{
+  "schema_version": 2,
+  "reviewed_at": "2026-07-12",
+  "review_before": "2026-07-26",
+  "images": {
+    "delivery": [
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "bsdutils@1:2.38.1-5+deb12u3",
+        "PkgName": "bsdutils",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "1:2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "gzip@1.12-1",
+        "PkgName": "gzip",
+        "VulnerabilityID": "CVE-2026-41992",
+        "InstalledVersion": "1.12-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libacl1@2.3.1-3",
+        "PkgName": "libacl1",
+        "VulnerabilityID": "CVE-2026-54369",
+        "InstalledVersion": "2.3.1-3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2023-39616",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2023-6879",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56208",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56209",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56210",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56211",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libblkid1@2.38.1-5+deb12u3",
+        "PkgName": "libblkid1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcups2@2.4.2-3+deb12u9",
+        "PkgName": "libcups2",
+        "VulnerabilityID": "CVE-2026-34980",
+        "InstalledVersion": "2.4.2-3+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-12064",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-6276",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-8286",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-8927",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-8932",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-9547",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-33164",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-49295",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-49337",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-49346",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2025-59375",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-25210",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-45186",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-56131",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-56407",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-56408",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libfdisk1@2.38.1-5+deb12u3",
+        "PkgName": "libfdisk1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58010",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58011",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58012",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58013",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58014",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58015",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58016",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libharfbuzz-subset0@6.0.0+dfsg-3",
+        "PkgName": "libharfbuzz-subset0",
+        "VulnerabilityID": "CVE-2023-25193",
+        "InstalledVersion": "6.0.0+dfsg-3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libharfbuzz0b@6.0.0+dfsg-3",
+        "PkgName": "libharfbuzz0b",
+        "VulnerabilityID": "CVE-2023-25193",
+        "InstalledVersion": "6.0.0+dfsg-3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2025-68431",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-32740",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-32741",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-32882",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-41071",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libldap-2.5-0@2.5.13+dfsg-5",
+        "PkgName": "libldap-2.5-0",
+        "VulnerabilityID": "CVE-2023-2953",
+        "InstalledVersion": "2.5.13+dfsg-5",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmount1@2.38.1-5+deb12u3",
+        "PkgName": "libmount1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libncursesw6@6.4-4",
+        "PkgName": "libncursesw6",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libsmartcols1@2.38.1-5+deb12u3",
+        "PkgName": "libsmartcols1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libsndfile1@1.2.0-1+deb12u1",
+        "PkgName": "libsndfile1",
+        "VulnerabilityID": "CVE-2026-37555",
+        "InstalledVersion": "1.2.0-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libsqlite3-0@3.40.1-2+deb12u2",
+        "PkgName": "libsqlite3-0",
+        "VulnerabilityID": "CVE-2025-7458",
+        "InstalledVersion": "3.40.1-2+deb12u2",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libssh2-1@1.10.0-3+b1",
+        "PkgName": "libssh2-1",
+        "VulnerabilityID": "CVE-2026-55199",
+        "InstalledVersion": "1.10.0-3+b1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libssh2-1@1.10.0-3+b1",
+        "PkgName": "libssh2-1",
+        "VulnerabilityID": "CVE-2026-55200",
+        "InstalledVersion": "1.10.0-3+b1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libssh2-1@1.10.0-3+b1",
+        "PkgName": "libssh2-1",
+        "VulnerabilityID": "CVE-2026-7598",
+        "InstalledVersion": "1.10.0-3+b1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libtiff6@4.5.0-6+deb12u4",
+        "PkgName": "libtiff6",
+        "VulnerabilityID": "CVE-2023-52355",
+        "InstalledVersion": "4.5.0-6+deb12u4",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libtiff6@4.5.0-6+deb12u4",
+        "PkgName": "libtiff6",
+        "VulnerabilityID": "CVE-2026-12912",
+        "InstalledVersion": "4.5.0-6+deb12u4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libtinfo6@6.4-4",
+        "PkgName": "libtinfo6",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libuuid1@2.38.1-5+deb12u3",
+        "PkgName": "libuuid1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "mount@2.38.1-5+deb12u3",
+        "PkgName": "mount",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "ncurses-base@6.4-4",
+        "PkgName": "ncurses-base",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "ncurses-bin@6.4-4",
+        "PkgName": "ncurses-bin",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "util-linux-extra@2.38.1-5+deb12u3",
+        "PkgName": "util-linux-extra",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "util-linux@2.38.1-5+deb12u3",
+        "PkgName": "util-linux",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "xdg-utils@1.1.3-4.1",
+        "PkgName": "xdg-utils",
+        "VulnerabilityID": "CVE-2022-4055",
+        "InstalledVersion": "1.1.3-4.1",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "zlib1g@1:1.2.13.dfsg-1",
+        "PkgName": "zlib1g",
+        "VulnerabilityID": "CVE-2023-45853",
+        "InstalledVersion": "1:1.2.13.dfsg-1",
+        "Severity": "CRITICAL",
+        "Status": "will_not_fix"
+      }
+    ],
+    "development": [
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "bsdextrautils@2.38.1-5+deb12u3",
+        "PkgName": "bsdextrautils",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "bsdutils@1:2.38.1-5+deb12u3",
+        "PkgName": "bsdutils",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "1:2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "curl@7.88.1-10+deb12u15",
+        "PkgName": "curl",
+        "VulnerabilityID": "CVE-2026-12064",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "curl@7.88.1-10+deb12u15",
+        "PkgName": "curl",
+        "VulnerabilityID": "CVE-2026-6276",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "curl@7.88.1-10+deb12u15",
+        "PkgName": "curl",
+        "VulnerabilityID": "CVE-2026-8286",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "curl@7.88.1-10+deb12u15",
+        "PkgName": "curl",
+        "VulnerabilityID": "CVE-2026-8927",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "curl@7.88.1-10+deb12u15",
+        "PkgName": "curl",
+        "VulnerabilityID": "CVE-2026-8932",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "curl@7.88.1-10+deb12u15",
+        "PkgName": "curl",
+        "VulnerabilityID": "CVE-2026-9547",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "gzip@1.12-1",
+        "PkgName": "gzip",
+        "VulnerabilityID": "CVE-2026-41992",
+        "InstalledVersion": "1.12-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6-common",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick-6.q16",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "imagemagick",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libacl1@2.3.1-3",
+        "PkgName": "libacl1",
+        "VulnerabilityID": "CVE-2026-54369",
+        "InstalledVersion": "2.3.1-3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2023-39616",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2023-6879",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56208",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56209",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56210",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libaom3@3.6.0-1+deb12u2",
+        "PkgName": "libaom3",
+        "VulnerabilityID": "CVE-2026-56211",
+        "InstalledVersion": "3.6.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libblkid-dev@2.38.1-5+deb12u3",
+        "PkgName": "libblkid-dev",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libblkid1@2.38.1-5+deb12u3",
+        "PkgName": "libblkid1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-12064",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-6276",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-8286",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-8927",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-8932",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl3-gnutls@7.88.1-10+deb12u15",
+        "PkgName": "libcurl3-gnutls",
+        "VulnerabilityID": "CVE-2026-9547",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4-openssl-dev@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4-openssl-dev",
+        "VulnerabilityID": "CVE-2026-12064",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4-openssl-dev@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4-openssl-dev",
+        "VulnerabilityID": "CVE-2026-6276",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4-openssl-dev@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4-openssl-dev",
+        "VulnerabilityID": "CVE-2026-8286",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4-openssl-dev@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4-openssl-dev",
+        "VulnerabilityID": "CVE-2026-8927",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4-openssl-dev@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4-openssl-dev",
+        "VulnerabilityID": "CVE-2026-8932",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4-openssl-dev@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4-openssl-dev",
+        "VulnerabilityID": "CVE-2026-9547",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4",
+        "VulnerabilityID": "CVE-2026-12064",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4",
+        "VulnerabilityID": "CVE-2026-6276",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4",
+        "VulnerabilityID": "CVE-2026-8286",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4",
+        "VulnerabilityID": "CVE-2026-8927",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4",
+        "VulnerabilityID": "CVE-2026-8932",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libcurl4@7.88.1-10+deb12u15",
+        "PkgName": "libcurl4",
+        "VulnerabilityID": "CVE-2026-9547",
+        "InstalledVersion": "7.88.1-10+deb12u15",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-33164",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-49295",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-49337",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libde265-0@1.0.11-1+deb12u2",
+        "PkgName": "libde265-0",
+        "VulnerabilityID": "CVE-2026-49346",
+        "InstalledVersion": "1.0.11-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1-dev@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1-dev",
+        "VulnerabilityID": "CVE-2025-59375",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1-dev@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1-dev",
+        "VulnerabilityID": "CVE-2026-25210",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1-dev@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1-dev",
+        "VulnerabilityID": "CVE-2026-45186",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1-dev@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1-dev",
+        "VulnerabilityID": "CVE-2026-56131",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1-dev@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1-dev",
+        "VulnerabilityID": "CVE-2026-56407",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1-dev@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1-dev",
+        "VulnerabilityID": "CVE-2026-56408",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2025-59375",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-25210",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-45186",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-56131",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-56407",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libexpat1@2.5.0-1+deb12u2",
+        "PkgName": "libexpat1",
+        "VulnerabilityID": "CVE-2026-56408",
+        "InstalledVersion": "2.5.0-1+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libfdisk1@2.38.1-5+deb12u3",
+        "PkgName": "libfdisk1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58010",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58011",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58012",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58013",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58014",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58015",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-0@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-0",
+        "VulnerabilityID": "CVE-2026-58016",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-bin",
+        "VulnerabilityID": "CVE-2026-58010",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-bin",
+        "VulnerabilityID": "CVE-2026-58011",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-bin",
+        "VulnerabilityID": "CVE-2026-58012",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-bin",
+        "VulnerabilityID": "CVE-2026-58013",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-bin",
+        "VulnerabilityID": "CVE-2026-58014",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-bin",
+        "VulnerabilityID": "CVE-2026-58015",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-bin",
+        "VulnerabilityID": "CVE-2026-58016",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-data@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-data",
+        "VulnerabilityID": "CVE-2026-58010",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-data@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-data",
+        "VulnerabilityID": "CVE-2026-58011",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-data@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-data",
+        "VulnerabilityID": "CVE-2026-58012",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-data@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-data",
+        "VulnerabilityID": "CVE-2026-58013",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-data@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-data",
+        "VulnerabilityID": "CVE-2026-58014",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-data@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-data",
+        "VulnerabilityID": "CVE-2026-58015",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-data@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-data",
+        "VulnerabilityID": "CVE-2026-58016",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev-bin",
+        "VulnerabilityID": "CVE-2026-58010",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev-bin",
+        "VulnerabilityID": "CVE-2026-58011",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev-bin",
+        "VulnerabilityID": "CVE-2026-58012",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev-bin",
+        "VulnerabilityID": "CVE-2026-58013",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev-bin",
+        "VulnerabilityID": "CVE-2026-58014",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev-bin",
+        "VulnerabilityID": "CVE-2026-58015",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev-bin@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev-bin",
+        "VulnerabilityID": "CVE-2026-58016",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev",
+        "VulnerabilityID": "CVE-2026-58010",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev",
+        "VulnerabilityID": "CVE-2026-58011",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev",
+        "VulnerabilityID": "CVE-2026-58012",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev",
+        "VulnerabilityID": "CVE-2026-58013",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev",
+        "VulnerabilityID": "CVE-2026-58014",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev",
+        "VulnerabilityID": "CVE-2026-58015",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libglib2.0-dev@2.74.6-2+deb12u9",
+        "PkgName": "libglib2.0-dev",
+        "VulnerabilityID": "CVE-2026-58016",
+        "InstalledVersion": "2.74.6-2+deb12u9",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2025-68431",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-32740",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-32741",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-32882",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libheif1@1.15.1-1+deb12u1",
+        "PkgName": "libheif1",
+        "VulnerabilityID": "CVE-2026-41071",
+        "InstalledVersion": "1.15.1-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libldap-2.5-0@2.5.13+dfsg-5",
+        "PkgName": "libldap-2.5-0",
+        "VulnerabilityID": "CVE-2023-2953",
+        "InstalledVersion": "2.5.13+dfsg-5",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libldap-dev@2.5.13+dfsg-5",
+        "PkgName": "libldap-dev",
+        "VulnerabilityID": "CVE-2023-2953",
+        "InstalledVersion": "2.5.13+dfsg-5",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libldap2-dev@2.5.13+dfsg-5",
+        "PkgName": "libldap2-dev",
+        "VulnerabilityID": "CVE-2023-2953",
+        "InstalledVersion": "2.5.13+dfsg-5",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickcore-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56361",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56367",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56368",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56370",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgName": "libmagickwand-6.q16-6",
+        "VulnerabilityID": "CVE-2026-56378",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmount-dev@2.38.1-5+deb12u3",
+        "PkgName": "libmount-dev",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libmount1@2.38.1-5+deb12u3",
+        "PkgName": "libmount1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libncurses-dev@6.4-4",
+        "PkgName": "libncurses-dev",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libncurses5-dev@6.4-4",
+        "PkgName": "libncurses5-dev",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libncurses6@6.4-4",
+        "PkgName": "libncurses6",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libncursesw5-dev@6.4-4",
+        "PkgName": "libncursesw5-dev",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libncursesw6@6.4-4",
+        "PkgName": "libncursesw6",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libperl5.36@5.36.0-7+deb12u3",
+        "PkgName": "libperl5.36",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-minimal",
+        "VulnerabilityID": "CVE-2025-69534",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-minimal",
+        "VulnerabilityID": "CVE-2026-11940",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-minimal",
+        "VulnerabilityID": "CVE-2026-3644",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-minimal",
+        "VulnerabilityID": "CVE-2026-7210",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-stdlib@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-stdlib",
+        "VulnerabilityID": "CVE-2025-69534",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-stdlib@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-stdlib",
+        "VulnerabilityID": "CVE-2026-11940",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-stdlib@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-stdlib",
+        "VulnerabilityID": "CVE-2026-3644",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libpython3.11-stdlib@3.11.2-6+deb12u8",
+        "PkgName": "libpython3.11-stdlib",
+        "VulnerabilityID": "CVE-2026-7210",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libsmartcols1@2.38.1-5+deb12u3",
+        "PkgName": "libsmartcols1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libsqlite3-0@3.40.1-2+deb12u2",
+        "PkgName": "libsqlite3-0",
+        "VulnerabilityID": "CVE-2025-7458",
+        "InstalledVersion": "3.40.1-2+deb12u2",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libsqlite3-dev@3.40.1-2+deb12u2",
+        "PkgName": "libsqlite3-dev",
+        "VulnerabilityID": "CVE-2025-7458",
+        "InstalledVersion": "3.40.1-2+deb12u2",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libssh2-1@1.10.0-3+b1",
+        "PkgName": "libssh2-1",
+        "VulnerabilityID": "CVE-2026-55199",
+        "InstalledVersion": "1.10.0-3+b1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libssh2-1@1.10.0-3+b1",
+        "PkgName": "libssh2-1",
+        "VulnerabilityID": "CVE-2026-55200",
+        "InstalledVersion": "1.10.0-3+b1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libssh2-1@1.10.0-3+b1",
+        "PkgName": "libssh2-1",
+        "VulnerabilityID": "CVE-2026-7598",
+        "InstalledVersion": "1.10.0-3+b1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libtiff6@4.5.0-6+deb12u4",
+        "PkgName": "libtiff6",
+        "VulnerabilityID": "CVE-2023-52355",
+        "InstalledVersion": "4.5.0-6+deb12u4",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libtiff6@4.5.0-6+deb12u4",
+        "PkgName": "libtiff6",
+        "VulnerabilityID": "CVE-2026-12912",
+        "InstalledVersion": "4.5.0-6+deb12u4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libtinfo6@6.4-4",
+        "PkgName": "libtinfo6",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "libuuid1@2.38.1-5+deb12u3",
+        "PkgName": "libuuid1",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2013-7445",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2019-19449",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2019-19814",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2021-3847",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2021-3864",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2023-52452",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2023-52586",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2023-52624",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2023-52751",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2023-53218",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-21803",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-26669",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-26836",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-26913",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-26914",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-26944",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-35887",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-38570",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-38630",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-41045",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-41935",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-42118",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-42162",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-44941",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-44942",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-44951",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-46729",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-46811",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-46813",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-47691",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-50029",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-50217",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-50226",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-50282",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-53068",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-53147",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-53168",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-53179",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-53218",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-56538",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-56775",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-57900",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-57982",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2024-58093",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-21927",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-21967",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-21969",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-21985",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-22039",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-22104",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-23133",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-37750",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-37776",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-37777",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-37861",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-37952",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-37957",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38069",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38081",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38117",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38182",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38204",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38206",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38248",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38369",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38582",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38585",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38595",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38616",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38636",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38722",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-38734",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-39744",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-39797",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-39810",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-39859",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-39901",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-39952",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-71068",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-71073",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2025-71152",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23171",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23191",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23208",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23226",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23327",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23361",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23447",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-23448",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31419",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31432",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31493",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31527",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31536",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31568",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31663",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31706",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-31729",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-43049",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-43125",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-43185",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-43198",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-43250",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-43490",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-45893",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-45943",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-45957",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-46054",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-46068",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-46130",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-46181",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-46219",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-46241",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-46293",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-52991",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53000",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53091",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53129",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53138",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53143",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53156",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53157",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53179",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53262",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53272",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53359",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "linux-libc-dev@6.1.176-1",
+        "PkgName": "linux-libc-dev",
+        "VulnerabilityID": "CVE-2026-53362",
+        "InstalledVersion": "6.1.176-1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "mount@2.38.1-5+deb12u3",
+        "PkgName": "mount",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "ncurses-base@6.4-4",
+        "PkgName": "ncurses-base",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "ncurses-bin@6.4-4",
+        "PkgName": "ncurses-bin",
+        "VulnerabilityID": "CVE-2025-69720",
+        "InstalledVersion": "6.4-4",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "openssh-client@1:9.2p1-2+deb12u10",
+        "PkgName": "openssh-client",
+        "VulnerabilityID": "CVE-2026-59999",
+        "InstalledVersion": "1:9.2p1-2+deb12u10",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "openssh-client@1:9.2p1-2+deb12u10",
+        "PkgName": "openssh-client",
+        "VulnerabilityID": "CVE-2026-60000",
+        "InstalledVersion": "1:9.2p1-2+deb12u10",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "openssh-client@1:9.2p1-2+deb12u10",
+        "PkgName": "openssh-client",
+        "VulnerabilityID": "CVE-2026-60002",
+        "InstalledVersion": "1:9.2p1-2+deb12u10",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-base@5.36.0-7+deb12u3",
+        "PkgName": "perl-base",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl-modules-5.36@5.36.0-7+deb12u3",
+        "PkgName": "perl-modules-5.36",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-42496",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-42497",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-48962",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-8376",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "perl@5.36.0-7+deb12u3",
+        "PkgName": "perl",
+        "VulnerabilityID": "CVE-2026-9538",
+        "InstalledVersion": "5.36.0-7+deb12u3",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3-cryptography@38.0.4-3+deb12u1",
+        "PkgName": "python3-cryptography",
+        "VulnerabilityID": "CVE-2023-50782",
+        "InstalledVersion": "38.0.4-3+deb12u1",
+        "Severity": "HIGH",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3-httplib2@0.20.4-3",
+        "PkgName": "python3-httplib2",
+        "VulnerabilityID": "CVE-2026-59939",
+        "InstalledVersion": "0.20.4-3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3-jwt@2.6.0-1+deb12u1",
+        "PkgName": "python3-jwt",
+        "VulnerabilityID": "CVE-2026-48526",
+        "InstalledVersion": "2.6.0-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "python3.11-minimal",
+        "VulnerabilityID": "CVE-2025-69534",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "python3.11-minimal",
+        "VulnerabilityID": "CVE-2026-11940",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "python3.11-minimal",
+        "VulnerabilityID": "CVE-2026-3644",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11-minimal@3.11.2-6+deb12u8",
+        "PkgName": "python3.11-minimal",
+        "VulnerabilityID": "CVE-2026-7210",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11@3.11.2-6+deb12u8",
+        "PkgName": "python3.11",
+        "VulnerabilityID": "CVE-2025-69534",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11@3.11.2-6+deb12u8",
+        "PkgName": "python3.11",
+        "VulnerabilityID": "CVE-2026-11940",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "fix_deferred"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11@3.11.2-6+deb12u8",
+        "PkgName": "python3.11",
+        "VulnerabilityID": "CVE-2026-3644",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "python3.11@3.11.2-6+deb12u8",
+        "PkgName": "python3.11",
+        "VulnerabilityID": "CVE-2026-7210",
+        "InstalledVersion": "3.11.2-6+deb12u8",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "socat@1.7.4.4-2",
+        "PkgName": "socat",
+        "VulnerabilityID": "CVE-2026-56123",
+        "InstalledVersion": "1.7.4.4-2",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "sqlite3@3.40.1-2+deb12u2",
+        "PkgName": "sqlite3",
+        "VulnerabilityID": "CVE-2025-7458",
+        "InstalledVersion": "3.40.1-2+deb12u2",
+        "Severity": "CRITICAL",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "util-linux-extra@2.38.1-5+deb12u3",
+        "PkgName": "util-linux-extra",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "util-linux@2.38.1-5+deb12u3",
+        "PkgName": "util-linux",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "uuid-dev@2.38.1-5+deb12u3",
+        "PkgName": "uuid-dev",
+        "VulnerabilityID": "CVE-2026-53615",
+        "InstalledVersion": "2.38.1-5+deb12u3",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-26269",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-28417",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-28421",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-33412",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-34982",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-35177",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-39881",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-46483",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-47162",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-52858",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-52860",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-55693",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-55895",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-57453",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-57455",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-57456",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-59856",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-common@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-common",
+        "VulnerabilityID": "CVE-2026-59858",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-26269",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-28417",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-28421",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-33412",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-34982",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-35177",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-39881",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-46483",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-47162",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-52858",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-52860",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-55693",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-55895",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-57453",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-57455",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-57456",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-59856",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "vim-tiny@2:9.0.1378-2+deb12u2",
+        "PkgName": "vim-tiny",
+        "VulnerabilityID": "CVE-2026-59858",
+        "InstalledVersion": "2:9.0.1378-2+deb12u2",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "wget@1.21.3-1+deb12u1",
+        "PkgName": "wget",
+        "VulnerabilityID": "CVE-2026-58471",
+        "InstalledVersion": "1.21.3-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "wget@1.21.3-1+deb12u1",
+        "PkgName": "wget",
+        "VulnerabilityID": "CVE-2026-58472",
+        "InstalledVersion": "1.21.3-1+deb12u1",
+        "Severity": "HIGH",
+        "Status": "affected"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "zlib1g-dev@1:1.2.13.dfsg-1",
+        "PkgName": "zlib1g-dev",
+        "VulnerabilityID": "CVE-2023-45853",
+        "InstalledVersion": "1:1.2.13.dfsg-1",
+        "Severity": "CRITICAL",
+        "Status": "will_not_fix"
+      },
+      {
+        "Class": "os-pkgs",
+        "Type": "debian",
+        "PkgID": "zlib1g@1:1.2.13.dfsg-1",
+        "PkgName": "zlib1g",
+        "VulnerabilityID": "CVE-2023-45853",
+        "InstalledVersion": "1:1.2.13.dfsg-1",
+        "Severity": "CRITICAL",
+        "Status": "will_not_fix"
+      }
+    ]
+  },
+  "coverage": {
+    "delivery": {
+      "amd64": [
+        {
+          "Class": "lang-pkgs",
+          "Type": "gemspec",
+          "PackageCount": 201,
+          "PackageInventorySHA256": "cafc13a0534c6ec1d95d9a1550493bf6d6606985df5a06b1988e0006adc6a33f"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "node-pkg",
+          "PackageCount": 146,
+          "PackageInventorySHA256": "b98a32ce1c0a607247e0a2b7be3a3337f265dba96dbdde060b76027234ec3e5c"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "python-pkg",
+          "PackageCount": 76,
+          "PackageInventorySHA256": "be04891987dbc5c10fa3e78382e9d84a4c187027de7a08a2f81eff67739c858e"
+        },
+        {
+          "Class": "os-pkgs",
+          "Type": "debian",
+        "PackageCount": 301,
+        "PackageInventorySHA256": "e00ac9040ce4eee6d9f1f6614e265d9778d536f5e3cf639e9e37bf8f34095fe5"
+        }
+      ],
+      "arm64": [
+        {
+          "Class": "lang-pkgs",
+          "Type": "gemspec",
+          "PackageCount": 201,
+          "PackageInventorySHA256": "660cb2371c17430a94278bd459f476c752e329f745f516a1d3b32de340c0b971"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "node-pkg",
+          "PackageCount": 146,
+          "PackageInventorySHA256": "b98a32ce1c0a607247e0a2b7be3a3337f265dba96dbdde060b76027234ec3e5c"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "python-pkg",
+          "PackageCount": 76,
+          "PackageInventorySHA256": "be04891987dbc5c10fa3e78382e9d84a4c187027de7a08a2f81eff67739c858e"
+        },
+        {
+          "Class": "os-pkgs",
+          "Type": "debian",
+        "PackageCount": 299,
+        "PackageInventorySHA256": "7620b9a893e30976a11f73c187e9602769b7196e717a85b54342e32e40e08be5"
+        }
+      ]
+    },
+    "development": {
+      "amd64": [
+        {
+          "Class": "lang-pkgs",
+          "Type": "gemspec",
+          "PackageCount": 87,
+          "PackageInventorySHA256": "f5a872c57081e4cbd3557a57c3627d837493ddfd3e7fdf283e3f230a17692584"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "node-pkg",
+          "PackageCount": 146,
+          "PackageInventorySHA256": "5c9623ee11176f1681075f2632a60f607495bd40d28d1aad667332cb10334ac9"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "python-pkg",
+          "PackageCount": 1,
+          "PackageInventorySHA256": "372a3e9054de5fd7ef9acf6095c0608311593c55fbab831ca611bc68abc48934"
+        },
+        {
+          "Class": "os-pkgs",
+          "Type": "debian",
+        "PackageCount": 454,
+        "PackageInventorySHA256": "4a9402e8fd90299d139ebba423c9faa172fa597acb19fff22337aaa24a1d93a1"
+        }
+      ],
+      "arm64": [
+        {
+          "Class": "lang-pkgs",
+          "Type": "gemspec",
+          "PackageCount": 87,
+          "PackageInventorySHA256": "f5a872c57081e4cbd3557a57c3627d837493ddfd3e7fdf283e3f230a17692584"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "node-pkg",
+          "PackageCount": 146,
+          "PackageInventorySHA256": "5c9623ee11176f1681075f2632a60f607495bd40d28d1aad667332cb10334ac9"
+        },
+        {
+          "Class": "lang-pkgs",
+          "Type": "python-pkg",
+          "PackageCount": 1,
+          "PackageInventorySHA256": "372a3e9054de5fd7ef9acf6095c0608311593c55fbab831ca611bc68abc48934"
+        },
+        {
+          "Class": "os-pkgs",
+          "Type": "debian",
+        "PackageCount": 454,
+        "PackageInventorySHA256": "e063693c509a49f632d2e52511564db43d28007f2f810018a634301a17db7dd8"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{% comment %}JSON Resume references with semantic entry headings.{% endcomment %}
+
+<ul class="card-text font-weight-light list-group list-group-flush">
+  {% for entry in entries %}
+    {% assign reference_name = entry.name | default: '' | strip %}
+    {% assign reference_text = entry.reference | default: '' | strip %}
+    {% if reference_name != blank or reference_text != blank %}
+      <li class="list-group-item">
+        <div class="cv-entry-content">
+          {% if entry.icon %}<i class="{{ entry.icon | escape }}" aria-hidden="true"></i>{% endif %}
+          {% if reference_name != blank %}
+            <h3 class="title font-weight-bold ml-1 ml-md-4" data-toc-skip>{{ reference_name | escape }}</h3>
+          {% endif %}
+          {% if reference_text != blank %}
+            <div class="cv-entry-summary ml-1 ml-md-4 mb-1">{{ reference_text | markdownify }}</div>
+          {% endif %}
+        </div>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

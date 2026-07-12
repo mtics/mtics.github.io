@@ -4,73 +4,510 @@ on:
   push:
     branches:
       - main
-  schedule:
-    # Daily at 09:00 UTC — ~1h after the 08:00 UTC Scholar-citation update commit.
-    # Citation commits use GITHUB_TOKEN and cannot trigger a workflow, so this
-    # scheduled build is what actually publishes refreshed citation counts.
-    - cron: "0 9 * * *"
+  pull_request:
+    branches:
+      - main
+  workflow_run:
+    # Citation commits use GITHUB_TOKEN, whose pushes do not start workflows;
+    # this completion event is therefore the single citation deploy path.
+    workflows:
+      - Update Scholar Citations
+    types:
+      - completed
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'deploy' }}
   cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout pull request
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Build pinned delivery container
+        run: docker build --tag mtics-al-folio:ci .
+
+      - name: Build pinned development container
+        run: docker build --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile .
+
+      # Preserve every HIGH/CRITICAL finding in raw JSON. Trivy's zero exit
+      # applies only to vulnerability matches (scanner/DB errors still fail);
+      # the immediately following tracked gate blocks fixable or unreviewed risk.
+      - name: Scan delivery container
+        if: always()
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
-          ruby-version: "3.3"
-          bundler-cache: true # Gemfile.lock is committed → reproducible, cached installs
+          scan-type: image
+          image-ref: mtics-al-folio:ci
+          scanners: vuln
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+          format: json
+          output: ${{ runner.temp }}/trivy-delivery.json
+          exit-code: "0"
+          version: v0.70.0
+          cache-dir: ${{ runner.temp }}/trivy-cache
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20" # required by al-folio v1 Tailwind build
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install system and notebook dependencies
+      - name: Enforce reviewed delivery vulnerability baseline
+        if: always()
         run: |
-          sudo apt-get update && sudo apt-get install -y imagemagick
-          pip install --upgrade nbconvert
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll:ro" \
+            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            python3 bin/enforce_trivy_report.py \
+              --report /trivy-reports/trivy-delivery.json \
+              --baseline .trivy-unfixed-baseline.json \
+              --image delivery
+
+      - name: Scan development container
+        if: always()
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: mtics-devcontainer:ci
+          scanners: vuln
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+          format: json
+          output: ${{ runner.temp }}/trivy-development.json
+          exit-code: "0"
+          version: v0.70.0
+          cache-dir: ${{ runner.temp }}/trivy-cache
+
+      - name: Enforce reviewed development vulnerability baseline
+        if: always()
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll:ro" \
+            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            python3 bin/enforce_trivy_report.py \
+              --report /trivy-reports/trivy-development.json \
+              --baseline .trivy-unfixed-baseline.json \
+              --image development
+
+      - name: Upload delivery vulnerability report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-delivery-validate
+          path: ${{ runner.temp }}/trivy-delivery.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload development vulnerability report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-development-validate
+          path: ${{ runner.temp }}/trivy-development.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Verify devcontainer remote-user creation
+        run: ./test/devcontainer_post_create_smoke.sh
+        env:
+          DEVCONTAINER_SMOKE_IMAGE: mtics-devcontainer:ci
+          DEVCONTAINER_SMOKE_REUSE_IMAGE: "true"
+
+      - name: Audit locked dependencies
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            ./bin/dependency_audit
+
+      - name: Verify release and PDF contracts
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --env VERIFY_GIT_INDEX \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bash -lc '
+              set -euo pipefail
+              ruby test/release_contract_test.rb
+              python3 test/trivy_report_contract_test.py
+              bundle exec ruby test/cache_bust_contract_test.rb
+              bundle exec ruby test/cv_schema_rendering_contract_test.rb
+              rendercv_inputs=(_data/cv.yml test/fixtures/cv_rendercv_*.yml)
+              for rendercv_input in "${rendercv_inputs[@]}"; do
+                rendercv_output="$(mktemp -d)"
+                rendercv render "$rendercv_input" --output-folder "$rendercv_output" --dont-generate-markdown --dont-generate-png --quiet
+                find "$rendercv_output" -maxdepth 1 -type f -name '*.pdf' -size +0c -print -quit | grep -q .
+              done
+              bundle exec ruby test/accessibility_social_contract_test.rb
+              python3 test/pdf_contract_test.py
+            '
+        env:
+          VERIFY_GIT_INDEX: "1"
+
+      - name: Audit al-folio overrides
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bundle exec al-folio upgrade overrides audit --fail-on-stale
+
+      - name: Create reproducible Jekyll config
+        run: |
+          printf 'time: "%s"\n' "$(git show -s --format=%cI HEAD)" > .jekyll-reproducible.yml
+
+      - name: Validate Jekyll site
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bundle exec jekyll build --config _config.yml,.jekyll-reproducible.yml
+
+      - name: Verify built site contracts
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bash -lc '
+              set -euo pipefail
+              node --test test/search_contract_test.mjs
+              python3 test/accessibility_contract_test.py
+              python3 test/minimal_runtime_contract_test.py
+              bundle exec ruby test/frontend_theme_accessibility_contract_20260712_test.rb
+            '
+
+      - name: Verify browser interaction contracts
+        run: |
+          mkdir -p "$RUNNER_TEMP/a11y-validate"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --env A11Y_ARTIFACT_DIR=/a11y-artifacts \
+            --env CHROME_EXECUTABLE \
+            --volume "$RUNNER_TEMP/a11y-validate:/a11y-artifacts" \
+            --volume "$PWD:/srv/jekyll:ro" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bash -lc '
+              set -euo pipefail
+              python3 -m http.server 8091 --directory _site >/tmp/site-server.log 2>&1 &
+              site_pid=$!
+              cleanup() { kill "$site_pid" 2>/dev/null || true; wait "$site_pid" 2>/dev/null || true; }
+              trap cleanup EXIT
+              ready=false
+              for _attempt in {1..50}; do
+                if ! kill -0 "$site_pid" 2>/dev/null; then cat /tmp/site-server.log >&2; exit 1; fi
+                if (exec 3<>/dev/tcp/127.0.0.1/8091) 2>/dev/null; then ready=true; break; fi
+                sleep 0.1
+              done
+              if [[ "$ready" != true ]]; then cat /tmp/site-server.log >&2; exit 1; fi
+              python3 test/accessibility_browser_test.py
+              python3 test/frontend_theme_browser_interactions_20260712_test.py
+            '
+        env:
+          CHROME_EXECUTABLE: /usr/bin/chromium
+
+      - name: Upload browser audit artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-audit-validate
+          path: ${{ runner.temp }}/a11y-validate
+          if-no-files-found: warn
+          retention-days: 7
+
+  build:
+    if: >-
+      github.event_name != 'pull_request' &&
+      (github.event_name != 'workflow_dispatch' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch)) &&
+      (github.event_name != 'workflow_run' ||
+        (github.event.workflow_run.conclusion == 'success' &&
+         github.event.workflow_run.head_branch == github.event.repository.default_branch &&
+         github.event.workflow_run.head_repository.full_name == github.repository))
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      # workflow_run.head_sha predates the citation commit created inside that
+      # run, so explicitly fetch the updated default branch after success.
+      - name: Checkout refreshed citations
+        if: github.event_name == 'workflow_run'
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout event revision
+        if: github.event_name != 'workflow_run'
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Build pinned delivery container
+        run: docker build --tag mtics-al-folio:ci .
+
+      - name: Build pinned development container
+        run: docker build --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile .
+
+      # Preserve every HIGH/CRITICAL finding in raw JSON. Trivy's zero exit
+      # applies only to vulnerability matches (scanner/DB errors still fail);
+      # the immediately following tracked gate blocks fixable or unreviewed risk.
+      - name: Scan delivery container
+        if: always()
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: mtics-al-folio:ci
+          scanners: vuln
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+          format: json
+          output: ${{ runner.temp }}/trivy-delivery.json
+          exit-code: "0"
+          version: v0.70.0
+          cache-dir: ${{ runner.temp }}/trivy-cache
+
+      - name: Enforce reviewed delivery vulnerability baseline
+        if: always()
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll:ro" \
+            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            python3 bin/enforce_trivy_report.py \
+              --report /trivy-reports/trivy-delivery.json \
+              --baseline .trivy-unfixed-baseline.json \
+              --image delivery
+
+      - name: Scan development container
+        if: always()
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: mtics-devcontainer:ci
+          scanners: vuln
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+          format: json
+          output: ${{ runner.temp }}/trivy-development.json
+          exit-code: "0"
+          version: v0.70.0
+          cache-dir: ${{ runner.temp }}/trivy-cache
+
+      - name: Enforce reviewed development vulnerability baseline
+        if: always()
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll:ro" \
+            --volume "$RUNNER_TEMP:/trivy-reports:ro" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            python3 bin/enforce_trivy_report.py \
+              --report /trivy-reports/trivy-development.json \
+              --baseline .trivy-unfixed-baseline.json \
+              --image development
+
+      - name: Upload delivery vulnerability report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-delivery-build
+          path: ${{ runner.temp }}/trivy-delivery.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload development vulnerability report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-development-build
+          path: ${{ runner.temp }}/trivy-development.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Verify devcontainer remote-user creation
+        run: ./test/devcontainer_post_create_smoke.sh
+        env:
+          DEVCONTAINER_SMOKE_IMAGE: mtics-devcontainer:ci
+          DEVCONTAINER_SMOKE_REUSE_IMAGE: "true"
+
+      - name: Audit locked dependencies
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            ./bin/dependency_audit
+
+      - name: Verify release and PDF contracts
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --env VERIFY_GIT_INDEX \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bash -lc '
+              set -euo pipefail
+              ruby test/release_contract_test.rb
+              python3 test/trivy_report_contract_test.py
+              bundle exec ruby test/cache_bust_contract_test.rb
+              bundle exec ruby test/cv_schema_rendering_contract_test.rb
+              rendercv_inputs=(_data/cv.yml test/fixtures/cv_rendercv_*.yml)
+              for rendercv_input in "${rendercv_inputs[@]}"; do
+                rendercv_output="$(mktemp -d)"
+                rendercv render "$rendercv_input" --output-folder "$rendercv_output" --dont-generate-markdown --dont-generate-png --quiet
+                find "$rendercv_output" -maxdepth 1 -type f -name '*.pdf' -size +0c -print -quit | grep -q .
+              done
+              bundle exec ruby test/accessibility_social_contract_test.rb
+              python3 test/pdf_contract_test.py
+            '
+        env:
+          VERIFY_GIT_INDEX: "1"
+
+      - name: Audit al-folio overrides
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bundle exec al-folio upgrade overrides audit --fail-on-stale
+
+      - name: Create reproducible Jekyll config
+        run: |
+          printf 'time: "%s"\n' "$(git show -s --format=%cI HEAD)" > .jekyll-reproducible.yml
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
-      - name: Build Jekyll site
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+      - name: Build Pages artifact
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bundle exec jekyll build --config _config.yml,.jekyll-reproducible.yml --baseurl "${{ steps.pages.outputs.base_path }}"
+
+      - name: Verify built site contracts
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/srv/jekyll" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bash -lc '
+              set -euo pipefail
+              node --test test/search_contract_test.mjs
+              python3 test/accessibility_contract_test.py
+              python3 test/minimal_runtime_contract_test.py
+              bundle exec ruby test/frontend_theme_accessibility_contract_20260712_test.rb
+            '
+
+      - name: Verify browser interaction contracts
+        run: |
+          mkdir -p "$RUNNER_TEMP/a11y-build"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --env A11Y_ARTIFACT_DIR=/a11y-artifacts \
+            --env CHROME_EXECUTABLE \
+            --volume "$RUNNER_TEMP/a11y-build:/a11y-artifacts" \
+            --volume "$PWD:/srv/jekyll:ro" \
+            --workdir /srv/jekyll \
+            mtics-al-folio:ci \
+            bash -lc '
+              set -euo pipefail
+              python3 -m http.server 8091 --directory _site >/tmp/site-server.log 2>&1 &
+              site_pid=$!
+              cleanup() { kill "$site_pid" 2>/dev/null || true; wait "$site_pid" 2>/dev/null || true; }
+              trap cleanup EXIT
+              ready=false
+              for _attempt in {1..50}; do
+                if ! kill -0 "$site_pid" 2>/dev/null; then cat /tmp/site-server.log >&2; exit 1; fi
+                if (exec 3<>/dev/tcp/127.0.0.1/8091) 2>/dev/null; then ready=true; break; fi
+                sleep 0.1
+              done
+              if [[ "$ready" != true ]]; then cat /tmp/site-server.log >&2; exit 1; fi
+              python3 test/accessibility_browser_test.py
+              python3 test/frontend_theme_browser_interactions_20260712_test.py
+            '
         env:
-          JEKYLL_ENV: production
+          CHROME_EXECUTABLE: /usr/bin/chromium
+
+      - name: Upload browser audit artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-audit-build
+          path: ${{ runner.temp }}/a11y-build
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: _site/
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    if: needs.build.result == 'success' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0

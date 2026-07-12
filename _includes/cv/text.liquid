@@ -1,0 +1,7 @@
+{% comment %}RenderCV TextEntry renderer.{% endcomment %}
+
+<div class="card-text font-weight-light">
+  {% for entry in entries %}
+    <div>{{ entry | markdownify }}</div>
+  {% endfor %}
+</div>

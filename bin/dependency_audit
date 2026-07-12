@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+bundle exec bundler-audit check --update
+pip-audit --strict --requirement requirements-build.txt --no-deps --disable-pip
+pip-audit --strict --requirement requirements-citations.txt --no-deps --disable-pip
+npm audit --audit-level=moderate
