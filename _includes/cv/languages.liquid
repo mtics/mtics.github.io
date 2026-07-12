@@ -1,23 +1,18 @@
 {% comment %}
-  Unified languages entry renderer for both formats
-  - RenderCV uses: name, summary
-  - JSONResume uses: language, fluency
+  Unified languages renderer for RenderCV and JSONResume formats. Language
+  names are inline labels, not document headings.
 {% endcomment %}
 
 <div class="card-text font-weight-light">
   {% for entry in entries %}
-    <div class="language-item">
-      {% if entry.icon %}
-        <i class="{{ entry.icon }}"></i>
-      {% endif %}
-      {%- capture lang_name -%}
-        {%- if entry.name -%}{{ entry.name }}{%- elsif entry.language -%}{{ entry.language }}{%- endif -%}
-      {%- endcapture -%}
-      {%- capture fluency -%}
-        {%- if entry.summary -%}{{ entry.summary }}{%- elsif entry.fluency -%}{{ entry.fluency }}{%- endif -%}
-      {%- endcapture -%}
-      <strong>{{ lang_name }}:</strong> {{ fluency }}
-    </div>
+    {% assign lang_name = entry.name | default: entry.language | default: entry.label %}
+    {% assign fluency = entry.summary | default: entry.fluency | default: entry.details %}
+    {% if lang_name != blank or fluency != blank %}
+      <div class="language-item">
+        {% if entry.icon != blank %}<i class="{{ entry.icon | escape }}" aria-hidden="true"></i>{% endif %}
+        {% if lang_name != blank %}<strong>{{ lang_name }}</strong>{% endif %}{% if lang_name != blank and fluency != blank %}: {% endif %}{% if fluency != blank %}{{ fluency }}{% endif %}
+      </div>
+    {% endif %}
   {% endfor %}
 </div>
 

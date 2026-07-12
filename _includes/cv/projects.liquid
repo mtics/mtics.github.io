@@ -1,31 +1,66 @@
-{% comment %}
-  Unified projects entry renderer for both formats
-{% endcomment %}
+{% comment %}JSON Resume projects, including every standard v1.3 field.{% endcomment %}
 
 <ul class="card-text font-weight-light list-group list-group-flush">
   {% for entry in entries %}
-    <li class="list-group-item">
-      {% if entry.url %}
-        <h6 class="title font-weight-bold">
-          <a href="{{ entry.url }}" target="_blank">{{ entry.name }}</a>
-        </h6>
-      {% else %}
-        <h6 class="title font-weight-bold">{{ entry.name }}</h6>
-      {% endif %}
+    {% assign project_title = entry.name | default: entry.title | default: '' | strip %}
+    {% assign project_description = entry.description | default: entry.summary | default: '' | strip %}
+    {% assign project_start_date = entry.startDate | default: entry.start_date %}
+    {% assign project_end_date = entry.endDate | default: entry.end_date %}
+    {% assign project_date = entry.date %}
+    {% if project_date == blank and project_start_date != blank %}
+      {% assign project_end_display = project_end_date | default: 'Present' %}
+      {% assign project_date = project_start_date | append: ' - ' | append: project_end_display %}
+    {% elsif project_date == blank and project_end_date != blank %}
+      {% assign project_date = project_end_date %}
+    {% endif %}
+    {% assign project_url = entry.url | default: '' | strip %}
+    {% assign project_url_scheme_7 = project_url | slice: 0, 7 | downcase %}
+    {% assign project_url_scheme_8 = project_url | slice: 0, 8 | downcase %}
+    {% unless project_url_scheme_7 == 'http://' or project_url_scheme_8 == 'https://' %}
+      {% assign project_url = '' %}
+    {% endunless %}
 
-      {% if entry.summary %}
-        <p>{{ entry.summary | markdownify | remove: '<p>' | remove: '</p>' }}</p>
-      {% endif %}
-
-      {% if entry.highlights %}
-        <ul class="items">
-          {% for item in entry.highlights %}
-            <li>
-              <span class="item">{{ item | markdownify | remove: '<p>' | remove: '</p>' }}</span>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </li>
+    {% if project_title != blank or project_description != blank or project_date != blank or entry.highlights != blank or entry.keywords != blank or entry.roles != blank or entry.entity != blank or entry.type != blank %}
+      <li class="list-group-item">
+        <div class="row">
+          {% if project_date != blank %}
+            <div class="col-xs-2 col-sm-2 col-md-2 text-center date-column cv-entry-meta">
+              <table class="table-cv"><tbody><tr><td>
+                <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px">{{ project_date }}</span>
+              </td></tr></tbody></table>
+            </div>
+            <div class="col-xs-10 col-sm-10 col-md-10 cv-entry-content">
+          {% else %}
+            <div class="col-xs-12 col-sm-12 col-md-12 cv-entry-content">
+          {% endif %}
+            {% if project_title != blank %}
+              <h3 class="title font-weight-bold ml-1 ml-md-4" data-toc-skip>
+                {% if project_url != blank %}<a href="{{ project_url | escape }}">{{ project_title }}</a>{% else %}{{ project_title }}{% endif %}
+              </h3>
+            {% endif %}
+            {% if entry.entity != blank %}
+              <p class="cv-entry-company ml-1 ml-md-4 mb-1"><strong>Entity:</strong> {{ entry.entity }}</p>
+            {% endif %}
+            {% if entry.type != blank %}
+              <p class="ml-1 ml-md-4 mb-1"><strong>Type:</strong> {{ entry.type }}</p>
+            {% endif %}
+            {% if entry.roles != blank %}
+              <p class="ml-1 ml-md-4 mb-1"><strong>Roles:</strong> {% for role in entry.roles %}{{ role }}{% unless forloop.last %}, {% endunless %}{% endfor %}</p>
+            {% endif %}
+            {% if entry.keywords != blank %}
+              <p class="ml-1 ml-md-4 mb-1"><strong>Keywords:</strong> {% for keyword in entry.keywords %}{{ keyword }}{% unless forloop.last %}, {% endunless %}{% endfor %}</p>
+            {% endif %}
+            {% if project_description != blank %}
+              <div class="cv-entry-summary cv-markdown-block ml-1 ml-md-4 mb-1">{{ project_description | markdownify }}</div>
+            {% endif %}
+            {% if entry.highlights != blank %}
+              <ul class="items">
+                {% for item in entry.highlights %}<li><div class="item cv-markdown-block">{{ item | markdownify }}</div></li>{% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      </li>
+    {% endif %}
   {% endfor %}
 </ul>

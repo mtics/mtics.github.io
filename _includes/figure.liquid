@@ -1,82 +1,69 @@
 {% assign img_path = include.path | remove: '.jpg' | remove: '.jpeg' | remove: '.png' | remove: '.tiff' | remove: '.gif' %}
 {% assign parts = include.path | split: '.' %}
 {% assign ext = parts.last %}
+{% assign figure_min_width = include['min-width'] | safe_css_dimension %}
+{% assign figure_min_height = include['min-height'] | safe_css_dimension %}
+{% assign figure_max_width = include['max-width'] | safe_css_dimension %}
+{% assign figure_max_height = include['max-height'] | safe_css_dimension %}
 
 <figure
   {% if include.slot %}
-    slot="{{ include.slot }}"
+    slot="{{ include.slot | escape }}"
   {% endif %}
->
+  >
   <picture>
-    <!-- Auto scaling with imagemagick -->
-    <!--
-      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
-      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
-    -->
-    {% if site.imagemagick.enabled %}
-      {% unless include.avoid_scaling %}
-        <source
-          class="responsive-img-srcset"
-          {% if ext == 'gif' or ext == 'jpeg' or ext == 'jpg' or ext == 'png' or ext == 'tiff' %}
-            srcset="{% for i in site.imagemagick.widths %}{{ img_path | relative_url }}-{{ i }}.webp {{ i }}w,{% endfor %}"
-            type="image/webp"
-          {% else %}
-            srcset="{{ include.path | relative_url }}"
-          {% endif %}
-          {% if include.sizes %}
-            sizes="{{ include.sizes }}"
-          {% else %}
-            sizes="95vw"
-          {% endif %}
-        >
-      {% endunless %}
-    {% endif %}
     <img
-      src="{% if include.url %}{{ include.url }}{% elsif include.cache_bust %}{{ include.path | relative_url | bust_file_cache }}{% else %}{{ include.path | relative_url }}{% endif %}"
+      src="{% if include.url %}{{ include.url | escape }}{% elsif include.cache_bust %}{{ include.path | relative_url | bust_file_cache | escape }}{% else %}{{ include.path | relative_url | escape }}{% endif %}"
+      {% if site.imagemagick.enabled and include.avoid_scaling != true %}
+        {% if ext == 'gif' or ext == 'jpeg' or ext == 'jpg' or ext == 'png' or ext == 'tiff' %}
+          srcset="{% for i in site.imagemagick.widths %}{{ img_path | relative_url }}-{{ i }}.webp {{ i }}w{% unless forloop.last %}, {% endunless %}{% endfor %}"
+        {% else %}
+          srcset="{{ include.path | relative_url | escape }}"
+        {% endif %}
+        {% if include.sizes %}
+          sizes="{{ include.sizes | escape }}"
+        {% else %}
+          sizes="95vw"
+        {% endif %}
+      {% endif %}
       {% if include.class %}
-        class="{{ include.class }}"
+        class="{{ include.class | escape }}"
       {% endif %}
       {% if include.width %}
-        width="{{ include.width }}"
-      {% else %}
-        width="100%"
+        width="{{ include.width | escape }}"
       {% endif %}
       {% if include.height %}
-        height="{{ include.height }}"
-      {% else %}
-        height="auto"
+        height="{{ include.height | escape }}"
       {% endif %}
-      {% if include['min-width'] or include['min-height'] or include['max-width'] or include['max-height'] %}
+      {% if figure_min_width and figure_min_width != empty or figure_min_height and figure_min_height != empty or figure_max_width and figure_max_width != empty or figure_max_height and figure_max_height != empty %}
         style="
-          {% if include['min-width'] %}
-            min-width: {{ include.min-width }};
+          {% if figure_min_width and figure_min_width != empty %}
+            min-width: {{ figure_min_width | escape }};
           {% endif %}
-          {% if include['min-height'] %}
-            min-height: {{ include.min-height }};
+          {% if figure_min_height and figure_min_height != empty %}
+            min-height: {{ figure_min_height | escape }};
           {% endif %}
-          {% if include['max-width'] %}
-            max-width: {{ include.max-width }};
+          {% if figure_max_width and figure_max_width != empty %}
+            max-width: {{ figure_max_width | escape }};
           {% endif %}
-          {% if include['max-height'] %}
-            max-height: {{ include.max-height }};
+          {% if figure_max_height and figure_max_height != empty %}
+            max-height: {{ figure_max_height | escape }};
           {% endif %}
         "
       {% endif %}
-      {% if include.alt %}
-        alt="{{ include.alt }}"
-      {% endif %}
+      alt="{{ include.alt | default: '' | escape }}"
       {% if include.title %}
-        title="{{ include.title }}"
+        title="{{ include.title | escape }}"
       {% endif %}
       {% if include.zoomable %}
         data-zoomable
       {% endif %}
       {% if include.loading %}
-        loading="{{ include.loading }}"
+        loading="{{ include.loading | escape }}"
       {% elsif site.lazy_loading_images %}
         loading="lazy"
       {% endif %}
-      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+      onerror="this.onerror=null; this.removeAttribute('srcset');"
     >
   </picture>
 

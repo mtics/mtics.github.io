@@ -1,4 +1,3 @@
-nbconvert
-pyyaml
-rendercv[full]
-scholarly
+# Purpose-scoped, hash-locked dependencies for local automation.
+-r requirements-build.txt
+-r requirements-citations.txt

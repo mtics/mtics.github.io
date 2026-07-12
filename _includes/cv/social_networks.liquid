@@ -1,0 +1,83 @@
+{% comment %}
+  RenderCV social rows. Blank identities are omitted, visible values are HTML
+  escaped, and URLs mirror RenderCV 2.8's platform-specific profile rules.
+{% endcomment %}
+
+{% for social in social_networks %}
+  {% assign social_network = social.network | default: '' | strip %}
+  {% assign social_username = social.username | default: '' | strip %}
+  {% if social_network != blank and social_network != empty and social_username != blank and social_username != empty %}
+    {% assign network_slug = social_network | downcase %}
+    {% assign social_url = social.url | default: '' | strip %}
+    {% assign explicit_scheme_7 = social_url | slice: 0, 7 | downcase %}
+    {% assign explicit_scheme_8 = social_url | slice: 0, 8 | downcase %}
+    {% unless explicit_scheme_7 == 'http://' or explicit_scheme_8 == 'https://' %}
+      {% assign social_url = '' %}
+    {% endunless %}
+    {% if social_url == blank or social_url == empty %}
+      {% assign social_username_encoded = social_username | url_encode %}
+      {% if network_slug == 'github' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://github.com/' %}
+      {% elsif network_slug == 'linkedin' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://linkedin.com/in/' %}
+      {% elsif network_slug == 'gitlab' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://gitlab.com/' %}
+      {% elsif network_slug == 'imdb' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://imdb.com/name/' %}
+      {% elsif network_slug == 'instagram' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://instagram.com/' %}
+      {% elsif network_slug == 'orcid' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://orcid.org/' %}
+      {% elsif network_slug == 'mastodon' %}
+        {% assign mastodon_parts = social_username | split: '@' %}
+        {% if mastodon_parts.size == 3 and mastodon_parts[1] != blank and mastodon_parts[2] != blank %}
+          {% assign mastodon_username = mastodon_parts[1] | url_encode %}
+          {% assign mastodon_path = mastodon_username | prepend: '/@' %}
+          {% assign social_url = mastodon_parts[2] | prepend: 'https://' | append: mastodon_path %}
+        {% endif %}
+      {% elsif network_slug == 'stackoverflow' %}
+        {% assign stackoverflow_parts = social_username | split: '/' %}
+        {% if stackoverflow_parts.size == 2 and stackoverflow_parts[0] != blank and stackoverflow_parts[1] != blank %}
+          {% assign stackoverflow_id = stackoverflow_parts[0] | url_encode %}
+          {% assign stackoverflow_name = stackoverflow_parts[1] | url_encode %}
+          {% assign stackoverflow_path = stackoverflow_id | append: '/' | append: stackoverflow_name %}
+          {% assign social_url = stackoverflow_path | prepend: 'https://stackoverflow.com/users/' %}
+        {% endif %}
+      {% elsif network_slug == 'researchgate' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://researchgate.net/profile/' %}
+      {% elsif network_slug == 'youtube' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://youtube.com/@' %}
+      {% elsif network_slug == 'google scholar' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://scholar.google.com/citations?user=' %}
+      {% elsif network_slug == 'telegram' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://t.me/' %}
+      {% elsif network_slug == 'whatsapp' %}
+        {% assign whatsapp_first_character = social_username | slice: 0, 1 %}
+        {% if whatsapp_first_character == '+' %}
+          {% assign whatsapp_number = social_username | remove_first: '+' | url_encode | prepend: '+' %}
+        {% else %}
+          {% assign whatsapp_number = social_username_encoded %}
+        {% endif %}
+        {% assign social_url = whatsapp_number | prepend: 'https://wa.me/' %}
+      {% elsif network_slug == 'leetcode' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://leetcode.com/u/' %}
+      {% elsif network_slug == 'x' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://x.com/' %}
+      {% elsif network_slug == 'bluesky' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://bsky.app/profile/' %}
+      {% elsif network_slug == 'reddit' %}
+        {% assign social_url = social_username_encoded | prepend: 'https://reddit.com/user/' %}
+      {% endif %}
+    {% endif %}
+    <tr>
+      <td class="p-1 pr-2 font-weight-bold"><b>{{ social_network | escape }}</b></td>
+      <td class="p-1 pl-2 font-weight-light">
+        {% if social_url != blank and social_url != empty %}
+          <a href="{{ social_url | escape }}" target="_blank" rel="noopener noreferrer">{{ social_username | escape }}</a>
+        {% else %}
+          {{ social_username | escape }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endif %}
+{% endfor %}

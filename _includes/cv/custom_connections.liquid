@@ -1,0 +1,30 @@
+{% comment %}
+  RenderCV 2.8 custom connections. The icon is decorative because the visible
+  placeholder remains the accessible name. Only schema-valid web URLs become
+  links; URL-less connections remain readable text.
+{% endcomment %}
+
+{% for connection in custom_connections %}
+  {% assign connection_placeholder = connection.placeholder | default: '' | strip %}
+  {% assign connection_icon = connection.fontawesome_icon | default: '' | strip %}
+  {% assign connection_url = connection.url | default: '' | strip %}
+  {% assign connection_scheme_7 = connection_url | slice: 0, 7 | downcase %}
+  {% assign connection_scheme_8 = connection_url | slice: 0, 8 | downcase %}
+  {% unless connection_scheme_7 == 'http://' or connection_scheme_8 == 'https://' %}
+    {% assign connection_url = '' %}
+  {% endunless %}
+  {% if connection_placeholder != blank %}
+    <tr>
+      <td class="p-1 pr-2 font-weight-bold text-center">
+        {% if connection_icon != blank %}<i class="fa-solid fa-{{ connection_icon | escape }}" aria-hidden="true"></i>{% endif %}
+      </td>
+      <td class="p-1 pl-2 font-weight-light">
+        {% if connection_url != blank %}
+          <a href="{{ connection_url | escape }}" target="_blank" rel="noopener noreferrer">{{ connection_placeholder | escape }}</a>
+        {% else %}
+          {{ connection_placeholder | escape }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endif %}
+{% endfor %}

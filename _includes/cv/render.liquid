@@ -1,0 +1,280 @@
+{% comment %}
+  Unified CV layout for RenderCV YAML and JSON Resume JSON. RenderCV sections
+  are dispatched by their entry shape, so authored section labels remain free.
+{% endcomment %}
+
+<div class="post">
+  <div class="post-header">
+    {% assign cv_pdf_value = page.cv_pdf | default: '' | strip %}
+    {% assign cv_pdf_href = '' %}
+    {% assign cv_pdf_scheme_7 = cv_pdf_value | slice: 0, 7 | downcase %}
+    {% assign cv_pdf_scheme_8 = cv_pdf_value | slice: 0, 8 | downcase %}
+    {% assign cv_pdf_scheme_2 = cv_pdf_value | slice: 0, 2 %}
+    {% if cv_pdf_scheme_2 == '//' %}
+      {% assign cv_pdf_href = cv_pdf_value | prepend: 'https:' %}
+    {% elsif cv_pdf_scheme_7 == 'http://' or cv_pdf_scheme_8 == 'https://' %}
+      {% assign cv_pdf_href = cv_pdf_value %}
+    {% elsif cv_pdf_value != blank %}
+      {% unless cv_pdf_value contains '..' or cv_pdf_value contains ':' %}
+        {% assign cv_pdf_href = cv_pdf_value | local_asset_fingerprint | relative_url %}
+      {% endunless %}
+    {% endif %}
+    <h1 class="post-title">
+      {{ page.title }}
+      {% if cv_pdf_href != blank %}
+        <a
+          href="{{ cv_pdf_href | escape }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="float-right"
+          aria-label="Open CV PDF"
+        >
+          <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+        </a>
+      {% endif %}
+    </h1>
+    {% if page.description %}<p class="post-description">{{ page.description }}</p>{% endif %}
+  </div>
+
+  <article>
+    <div class="cv">
+      {% assign render_rendercv = false %}
+      {% assign render_jsonresume = false %}
+      {% if page.cv_format == 'rendercv' %}
+        {% assign render_rendercv = true %}
+      {% elsif page.cv_format == 'jsonresume' %}
+        {% assign render_jsonresume = true %}
+      {% elsif site.data.cv and site.data.cv.cv %}
+        {% assign render_rendercv = true %}
+      {% elsif site.data.resume %}
+        {% assign render_jsonresume = true %}
+      {% endif %}
+
+      {% if render_rendercv and site.data.cv and site.data.cv.cv %}
+        {% assign cv = site.data.cv.cv %}
+        {% assign professional_title = cv.headline | default: cv.label %}
+        {% assign contact_location = cv.location %}
+
+        {% if cv.name or professional_title or contact_location or cv.address or cv.email or cv.phone or cv.website or cv.photo or cv.social_networks or cv.custom_connections %}
+          <div class="card mt-3 p-3">
+            <h2 class="card-title font-weight-medium">Contact Information</h2>
+            {% include cv/photo.liquid %}
+            <table class="table table-cv table-sm table-borderless">
+              {% if cv.name %}
+                <tr><td class="p-1 pr-2 font-weight-bold"><b>Name</b></td><td class="p-1 pl-2 font-weight-light">{{ cv.name }}</td></tr>
+              {% endif %}
+              {% if professional_title %}
+                <tr><td class="p-1 pr-2 font-weight-bold"><b>Professional Title</b></td><td class="p-1 pl-2 font-weight-light">{{ professional_title }}</td></tr>
+              {% endif %}
+              {% for email in cv.email %}
+                {% assign email_value = email | strip %}
+                {% if email_value != blank %}<tr><td class="p-1 pr-2 font-weight-bold"><b>Email</b></td><td class="p-1 pl-2 font-weight-light"><a href="mailto:{{ email_value | escape }}">{{ email_value | escape }}</a></td></tr>{% endif %}
+              {% endfor %}
+              {% for phone in cv.phone %}
+                {% assign phone_value = phone | strip %}
+                {% assign phone_href = phone_value | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.' %}
+                {% if phone_value != blank %}<tr><td class="p-1 pr-2 font-weight-bold"><b>Phone</b></td><td class="p-1 pl-2 font-weight-light"><a href="tel:{{ phone_href | escape }}">{{ phone_value | escape }}</a></td></tr>{% endif %}
+              {% endfor %}
+              {% if contact_location %}
+                <tr><td class="p-1 pr-2 font-weight-bold"><b>Location</b></td><td class="p-1 pl-2 font-weight-light">{{ contact_location }}</td></tr>
+              {% elsif cv.address %}
+                <tr>
+                  <td class="p-1 pr-2 font-weight-bold"><b>Location</b></td>
+                  <td class="p-1 pl-2 font-weight-light">
+                    {% if cv.address.street %}{{ cv.address.street }}, {% endif %}
+                    {% if cv.address.city %}{{ cv.address.city }}{% endif %}
+                    {% if cv.address.region %}{% if cv.address.city %}, {% endif %}{{ cv.address.region }}{% endif %}
+                    {% if cv.address.postalCode %} {{ cv.address.postalCode }}{% endif %}
+                  </td>
+                </tr>
+              {% endif %}
+              {% for website in cv.website %}
+                {% assign website_value = website | default: '' | strip %}
+                {% assign website_scheme_7 = website_value | slice: 0, 7 | downcase %}
+                {% assign website_scheme_8 = website_value | slice: 0, 8 | downcase %}
+                {% if website_value != blank %}
+                  <tr><td class="p-1 pr-2 font-weight-bold"><b>Website</b></td><td class="p-1 pl-2 font-weight-light">{% if website_scheme_7 == 'http://' or website_scheme_8 == 'https://' %}<a href="{{ website_value | escape }}" target="_blank" rel="noopener noreferrer">{{ website_value | escape }}</a>{% else %}{{ website_value | escape }}{% endif %}</td></tr>
+                {% endif %}
+              {% endfor %}
+              {% assign social_networks = cv.social_networks %}
+              {% include cv/social_networks.liquid %}
+              {% assign custom_connections = cv.custom_connections %}
+              {% include cv/custom_connections.liquid %}
+            </table>
+          </div>
+        {% endif %}
+
+        {% comment %}Compatibility with pre-v2 RenderCV-like data files.{% endcomment %}
+        {% if cv.summary != blank %}
+          <div class="card mt-3 p-3">
+            <h2 class="card-title font-weight-medium">Professional Summary</h2>
+            <div class="cv-entry-summary cv-markdown-block">{{ cv.summary | markdownify }}</div>
+          </div>
+        {% endif %}
+
+        {% assign used_section_ids = '' %}
+        {% assign section_suffix_limit = cv.sections | size | plus: 1 %}
+        {% for section_pair in cv.sections %}
+          {% assign section_title = section_pair[0] %}
+          {% assign section_entries = section_pair[1] %}
+          {% if section_entries != blank %}
+            {% assign section_base_id = section_title | slugify %}
+            {% if section_base_id == blank %}{% assign section_base_id = 'section' %}{% endif %}
+            {% assign section_id = section_base_id %}
+            {% assign section_id_token = section_id | prepend: '|' | append: '|' %}
+            {% if used_section_ids contains section_id_token %}
+              {% for suffix in (2..section_suffix_limit) %}
+                {% assign candidate_id = section_base_id | append: '-' | append: suffix %}
+                {% assign candidate_id_token = candidate_id | prepend: '|' | append: '|' %}
+                {% assign candidate_is_reserved = false %}
+                {% for reserved_pair in cv.sections %}
+                  {% assign reserved_id = reserved_pair[0] | slugify %}
+                  {% if reserved_id == blank %}{% assign reserved_id = 'section' %}{% endif %}
+                  {% if reserved_id == candidate_id %}
+                    {% assign candidate_is_reserved = true %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+                {% if candidate_is_reserved == false %}
+                  {% unless used_section_ids contains candidate_id_token %}
+                    {% assign section_id = candidate_id %}
+                    {% assign section_id_token = candidate_id_token %}
+                    {% break %}
+                  {% endunless %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+            {% assign used_section_ids = used_section_ids | append: section_id_token %}
+
+            <div class="card mt-3 p-3">
+              <h2 id="{{ section_id }}" class="card-title font-weight-medium">{{ section_title }}</h2>
+              <div>
+                {% assign entries = section_entries %}
+                {% assign first_entry = entries | first %}
+                {% if first_entry.label and first_entry.details %}
+                  {% include cv/one_line.liquid %}
+                {% elsif first_entry.name %}
+                  {% include cv/normal.liquid %}
+                {% elsif first_entry.company and first_entry.position %}
+                  {% include cv/experience.liquid %}
+                {% elsif first_entry.institution and first_entry.area %}
+                  {% include cv/education.liquid %}
+                {% elsif first_entry.title and first_entry.authors %}
+                  {% include cv/publications.liquid %}
+                {% elsif first_entry.bullet or first_entry.number or first_entry.reversed_number %}
+                  {% include cv/list.liquid %}
+                {% else %}
+                  {% include cv/text.liquid %}
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+      {% elsif render_jsonresume and site.data.resume %}
+        {% assign resume = site.data.resume %}
+        {% assign basics = resume.basics %}
+        {% if basics %}
+          {% assign basics_location = basics.location %}
+          {% assign has_basics_location = false %}
+          {% if basics_location.address != blank or basics_location.city != blank or basics_location.region != blank or basics_location.postalCode != blank or basics_location.countryCode != blank %}
+            {% assign has_basics_location = true %}
+          {% endif %}
+          {% assign basics_url = basics.url | default: '' | strip %}
+          {% assign basics_url_scheme_7 = basics_url | slice: 0, 7 | downcase %}
+          {% assign basics_url_scheme_8 = basics_url | slice: 0, 8 | downcase %}
+          {% unless basics_url_scheme_7 == 'http://' or basics_url_scheme_8 == 'https://' %}
+            {% assign basics_url = '' %}
+          {% endunless %}
+          {% assign has_basics_contact = false %}
+          {% if basics.name != blank or basics.label != blank or basics.image != blank or basics.email != blank or basics.phone != blank or has_basics_location or basics_url != blank or basics.profiles != blank %}
+            {% assign has_basics_contact = true %}
+          {% endif %}
+          {% if has_basics_contact %}<div class="card mt-3 p-3">
+            <h2 class="card-title font-weight-medium">Contact Information</h2>
+            {% include cv/photo.liquid photo=basics.image name=basics.name %}
+            <table class="table table-cv table-sm table-borderless">
+              {% if basics.name %}<tr><td class="p-1 pr-2 font-weight-bold"><b>Name</b></td><td class="p-1 pl-2 font-weight-light">{{ basics.name }}</td></tr>{% endif %}
+              {% if basics.label %}<tr><td class="p-1 pr-2 font-weight-bold"><b>Professional Title</b></td><td class="p-1 pl-2 font-weight-light">{{ basics.label }}</td></tr>{% endif %}
+              {% if basics.email %}<tr><td class="p-1 pr-2 font-weight-bold"><b>Email</b></td><td class="p-1 pl-2 font-weight-light"><a href="mailto:{{ basics.email | escape }}">{{ basics.email | escape }}</a></td></tr>{% endif %}
+              {% if basics.phone %}
+                {% assign phone_href = basics.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | remove: '.' %}
+                <tr><td class="p-1 pr-2 font-weight-bold"><b>Phone</b></td><td class="p-1 pl-2 font-weight-light"><a href="tel:{{ phone_href | escape }}">{{ basics.phone | escape }}</a></td></tr>
+              {% endif %}
+              {% if has_basics_location %}
+                <tr>
+                  <td class="p-1 pr-2 font-weight-bold"><b>Location</b></td>
+                  <td class="p-1 pl-2 font-weight-light">
+                    {% assign location_started = false %}
+                    {% if basics_location.address != blank %}
+                      {{ basics_location.address | escape | newline_to_br }}{% assign location_started = true %}
+                    {% endif %}
+                    {% if basics_location.city != blank %}
+                      {% if location_started %}, {% endif %}{{ basics_location.city | escape }}{% assign location_started = true %}
+                    {% endif %}
+                    {% if basics_location.region != blank %}
+                      {% if location_started %}, {% endif %}{{ basics_location.region | escape }}{% assign location_started = true %}
+                    {% endif %}
+                    {% if basics_location.postalCode != blank %}
+                      {% if location_started %}, {% endif %}{{ basics_location.postalCode | escape }}{% assign location_started = true %}
+                    {% endif %}
+                    {% if basics_location.countryCode != blank %}
+                      {% if location_started %}, {% endif %}{{ basics_location.countryCode | escape }}
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
+              {% if basics_url != blank %}<tr><td class="p-1 pr-2 font-weight-bold"><b>Website</b></td><td class="p-1 pl-2 font-weight-light"><a href="{{ basics_url | escape }}" target="_blank" rel="noopener noreferrer">{{ basics_url | escape }}</a></td></tr>{% endif %}
+              {% assign social_networks = basics.profiles %}
+              {% include cv/social_networks.liquid %}
+            </table>
+          </div>{% endif %}
+        {% endif %}
+
+        {% if basics.summary != blank %}
+          <div class="card mt-3 p-3">
+            <h2 class="card-title font-weight-medium">Professional Summary</h2>
+            <div class="cv-entry-summary cv-markdown-block">{{ basics.summary | markdownify }}</div>
+          </div>
+        {% endif %}
+
+        {% assign empty_array = '' | split: ',' %}
+        {% assign work = resume.work | default: empty_array %}
+        {% assign volunteer = resume.volunteer | default: empty_array %}
+        {% assign combined_experience = work | concat: volunteer %}
+        {% if combined_experience.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="experience" class="card-title font-weight-medium">Experience</h2><div>{% assign entries = combined_experience %}{% include cv/experience.liquid %}</div></div>
+        {% endif %}
+        {% if resume.education.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="education" class="card-title font-weight-medium">Education</h2><div>{% assign entries = resume.education %}{% include cv/education.liquid %}</div></div>
+        {% endif %}
+        {% if resume.awards.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="awards" class="card-title font-weight-medium">Awards</h2><div>{% assign entries = resume.awards %}{% include cv/awards.liquid jsonresume=true %}</div></div>
+        {% endif %}
+        {% if resume.publications.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="publications" class="card-title font-weight-medium">Publications</h2><div>{% assign entries = resume.publications %}{% include cv/publications.liquid %}</div></div>
+        {% endif %}
+        {% if resume.skills.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="skills" class="card-title font-weight-medium">Skills</h2><div>{% assign entries = resume.skills %}{% include cv/skills.liquid %}</div></div>
+        {% endif %}
+        {% if resume.languages.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="languages" class="card-title font-weight-medium">Languages</h2><div>{% assign entries = resume.languages %}{% include cv/languages.liquid %}</div></div>
+        {% endif %}
+        {% if resume.interests.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="interests" class="card-title font-weight-medium">Interests</h2><div>{% assign entries = resume.interests %}{% include cv/interests.liquid %}</div></div>
+        {% endif %}
+        {% if resume.certificates.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="certificates" class="card-title font-weight-medium">Certificates</h2><div>{% assign entries = resume.certificates %}{% include cv/certificates.liquid %}</div></div>
+        {% endif %}
+        {% if resume.projects.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="projects" class="card-title font-weight-medium">Projects</h2><div>{% assign entries = resume.projects %}{% include cv/projects.liquid %}</div></div>
+        {% endif %}
+        {% if resume.references.size > 0 %}
+          <div class="card mt-3 p-3"><h2 id="references" class="card-title font-weight-medium">References</h2><div>{% assign entries = resume.references %}{% include cv/references.liquid %}</div></div>
+        {% endif %}
+      {% else %}
+        <p>No CV data found. Please configure either RenderCV (cv.yml) or JSON Resume data.</p>
+      {% endif %}
+    </div>
+  </article>
+</div>

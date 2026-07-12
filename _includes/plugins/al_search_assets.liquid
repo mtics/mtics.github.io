@@ -1,0 +1,6 @@
+{% comment %}
+  Parse-safe wrapper for al_search custom tag.
+  Kept in an include so templates without the plugin can still render.
+{% endcomment %}
+{% al_search_assets %}
+<script src="{{ '/assets/js/search-result-filter.js' | relative_url | bust_file_cache }}"></script>

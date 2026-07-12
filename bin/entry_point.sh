@@ -1,37 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "Entry point script running"
+CONFIG_FILE="${CONFIG_FILE:-_config.yml}"
+DOCKER_DESTINATION="${DOCKER_DESTINATION:-/tmp/_site}"
 
-CONFIG_FILE=_config.yml
-
-# Function to manage Gemfile.lock
-manage_gemfile_lock() {
-    git config --global --add safe.directory '*'
-    if command -v git &> /dev/null && [ -f Gemfile.lock ]; then
-        if git ls-files --error-unmatch Gemfile.lock &> /dev/null; then
-            echo "Gemfile.lock is tracked by git, keeping it intact"
-            git restore Gemfile.lock 2>/dev/null || true
-        else
-            echo "Gemfile.lock is not tracked by git, removing it"
-            rm Gemfile.lock
-        fi
+verify_bundle_deps() {
+    if ! bundle _2.6.9_ check; then
+        echo "Locked dependencies are missing; rebuild the image instead of mutating it at runtime." >&2
+        exit 1
     fi
 }
 
-start_jekyll() {
-    manage_gemfile_lock
-    bundle exec jekyll serve --watch --port=8080 --host=0.0.0.0 --livereload --verbose --trace --force_polling &
-}
+verify_bundle_deps
+mkdir -p "$DOCKER_DESTINATION"
 
-start_jekyll
-
-while true; do
-    inotifywait -q -e modify,move,create,delete $CONFIG_FILE
-    if [ $? -eq 0 ]; then
-        echo "Change detected to $CONFIG_FILE, restarting Jekyll"
-        jekyll_pid=$(pgrep -f jekyll)
-        kill -KILL $jekyll_pid
-        start_jekyll
-    fi
-done
+exec bundle _2.6.9_ exec jekyll serve --watch --port=8080 --host=0.0.0.0 --livereload --verbose --trace --force_polling --disable-disk-cache --destination "$DOCKER_DESTINATION" --config "$CONFIG_FILE"

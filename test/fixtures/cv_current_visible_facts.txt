@@ -1,0 +1,54 @@
+Contact Information
+Name Zhiwei Li
+Professional Title PhD Candidate
+Email lizhw.cs@outlook.com
+Location Sydney, Australia
+GitHub mtics
+LinkedIn lizhiwi
+
+Professional Summary
+PhD candidate at UTS AAII researching privacy-preserving personalized recommender systems under federated, multimodal, and foundation-model settings.
+
+Education
+2023 - present Sydney, Australia PhD Candidate University of Technology Sydney Analytics (Australian Artificial Intelligence Institute)
+Advisor — Prof. Guodong Long.
+Research focus — privacy-preserving personalized recommender systems under federated, multimodal, and foundation-model settings.
+2020 - 2023 Shanghai, China M.S. ShanghaiTech University Computer Science and Technology
+Advisor — Prof. Lu Sun.
+Research focus — multi-view / multi-label learning.
+2016 - 2020 Zhengzhou, China B.E. Zhengzhou University Computer Science and Technology
+Member of the ZZU-DROID bipedal-robot team (2017–2020).
+RoboCup Asia-Pacific / China Open competitions, 2017–2019.
+
+Experience
+2023 - 2023 Shanghai, China Research Assistant ShanghaiTech University
+Continued research with Prof. Lu Sun on multi-view multi-label learning.
+2022 - 2022 Shanghai, China Teaching Assistant — Machine Learning ShanghaiTech University
+Instructor — Prof. Sibei Yang (Fall 2022).
+2022 - 2022 Shanghai, China Teaching Assistant — Machine Learning ShanghaiTech University
+Instructor — Prof. Hao Wang (Spring 2022).
+
+Awards
+2025 Best Reviewer AISTATS 2025
+Recognized as one of the Best Reviewers at the 28th International Conference on Artificial Intelligence and Statistics.
+2024 AAII Student Best Paper Award 2024 Australian Artificial Intelligence Institute, UTS
+Top student award in the AI Application category at AAII, UTS.
+2022 Merit Student ShanghaiTech University
+Awarded for outstanding academic performance during M.S. studies.
+2018 Outstanding Student Cadre Zhengzhou University (School of Information Engineering)
+2019 2nd Place RoboCup Asia-Pacific Tianjin Invitational Tournament 2019
+With the ZZU-DROID bipedal-robot team.
+2019 3rd Place RoboCup China Open 2019, Standard Platform League (NAO)
+With the ZZU-DROID bipedal-robot team.
+2017 2nd Prize Softbank Robot Cup — 2017 China Robot Skills Competition
+With the ZZU-DROID bipedal-robot team.
+
+Service
+Conference Reviewer / PC Member: ICLR, NeurIPS, AAAI, IJCAI, WWW, ECAI, AISTATS
+Journal Reviewer: IEEE TPAMI, IEEE TNNLS, IEEE TKDE, IEEE TAFFC, IEEE TAI
+Tutorial Speaker: Personalized Federated Recommender Systems @ WWW 2025
+Invited Speaker / Workshop Host: FL@FM-AJCAI 2024 — Federated Learning for Foundation Models
+
+Languages
+Chinese (Mandarin): Native speaker
+English: Fluent

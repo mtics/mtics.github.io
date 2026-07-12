@@ -1,0 +1,8 @@
+cv:
+  name: Grace Hopper
+  headline: Computer Scientist
+  location: New York, USA
+  email: grace@rendercv.com
+  phone: "+14155551234"
+  website: https://grace.example.test
+  sections: {}

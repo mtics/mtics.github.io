@@ -1,0 +1,137 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/packages/schema/schema.json",
+  "basics": {
+    "name": "Ada Lovelace",
+    "label": "Research Engineer",
+    "image": "https://images.example.test/ada-lovelace.png",
+    "email": "ada@example.test",
+    "phone": "+61 2 0000 0000",
+    "url": "https://ada.example.test",
+    "summary": "Builds reliable and accessible analytical systems.",
+    "location": {
+      "address": "1 Analytical Engine Way",
+      "postalCode": "2000",
+      "city": "Sydney",
+      "countryCode": "AU",
+      "region": "NSW"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "ada-lovelace",
+        "url": "https://profiles.example.test/ada"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Example Labs",
+      "location": "Sydney, Australia",
+      "description": "An analytical systems laboratory.",
+      "position": "Research Engineer",
+      "url": "https://example.test/labs",
+      "startDate": "2024-01",
+      "endDate": "2026-01",
+      "summary": "Built production analytical systems.",
+      "highlights": ["Led reliability reviews."]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Open Knowledge Foundation",
+      "position": "Volunteer Maintainer",
+      "url": "https://example.test/open-knowledge",
+      "startDate": "2023-01",
+      "endDate": "2023-12",
+      "summary": "Maintained accessible research tooling.",
+      "highlights": ["Improved keyboard navigation."]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Example University",
+      "url": "https://example.test/university",
+      "studyType": "PhD",
+      "area": "Computer Science",
+      "startDate": "2020",
+      "endDate": "2024",
+      "score": "4.0/4.0",
+      "courses": ["Reliable Systems", "Inclusive Design"]
+    }
+  ],
+  "awards": [
+    {
+      "title": "JSON Resume Community Award",
+      "date": "2025-06",
+      "awarder": "Example Foundation",
+      "summary": "Recognized for open-source service."
+    }
+  ],
+  "publications": [
+    {
+      "name": "A URL-less JSON Resume paper",
+      "publisher": "Example Journal",
+      "releaseDate": "2026-01-01",
+      "summary": "Publication summary remains visible."
+    },
+    {
+      "name": "A linked JSON Resume paper",
+      "publisher": "Example Proceedings",
+      "releaseDate": "2025-11",
+      "url": "https://example.test/publications/linked-paper",
+      "summary": "All standard publication fields remain visible."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Reliability Engineering",
+      "level": "Advanced",
+      "keywords": ["Testing", "Accessibility"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Fluent"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Human-centered Systems",
+      "keywords": ["Inclusive Design", "Reproducibility"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Accessible Web Practitioner",
+      "date": "2025-03",
+      "issuer": "Example Standards Body",
+      "url": "https://example.test/certificates/accessible-web"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Schema Project",
+      "description": "The standard project description should remain visible.",
+      "url": "https://example.test/schema-project",
+      "startDate": "2024-02",
+      "endDate": "2026-07",
+      "highlights": ["Preserved standard JSON Resume project fields."],
+      "keywords": ["JSON Schema", "Liquid"],
+      "roles": ["Team Lead", "Reviewer"],
+      "entity": "Open Standards Lab",
+      "type": "application"
+    }
+  ],
+  "references": [
+    {
+      "name": "Grace Hopper",
+      "reference": "Ada builds dependable systems."
+    }
+  ],
+  "meta": {
+    "canonical": "https://example.test/resume.json",
+    "version": "v1.3.0",
+    "lastModified": "2026-07-12T00:00:00Z"
+  }
+}

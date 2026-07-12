@@ -1,28 +1,37 @@
-{% comment %}
-  Unified certificates entry renderer for both formats
-{% endcomment %}
+{% comment %}JSON Resume certificates with semantic entry headings and safe links.{% endcomment %}
 
 <ul class="card-text font-weight-light list-group list-group-flush">
   {% for entry in entries %}
-    <li class="list-group-item">
-      {% if entry.icon %}
-        <i class="{{ entry.icon }}"></i>
-      {% endif %}
-      {% if entry.url %}
-        <strong
-          ><a href="{{ entry.url }}" target="_blank">{{ entry.name }}</a></strong
-        >
-      {% else %}
-        <strong>{{ entry.name }}</strong>
-      {% endif %}
-
-      {% if entry.issuer %}
-        - <em>{{ entry.issuer }}</em>
-      {% endif %}
-
-      {% if entry.date %}
-        ({{ entry.date | split: '-' | slice: 0, 1 | join: '' }})
-      {% endif %}
-    </li>
+    {% assign certificate_name = entry.name | default: '' | strip %}
+    {% assign certificate_issuer = entry.issuer | default: '' | strip %}
+    {% assign certificate_date = entry.date | default: '' | strip %}
+    {% assign certificate_url = entry.url | default: '' | strip %}
+    {% assign certificate_scheme_7 = certificate_url | slice: 0, 7 | downcase %}
+    {% assign certificate_scheme_8 = certificate_url | slice: 0, 8 | downcase %}
+    {% unless certificate_scheme_7 == 'http://' or certificate_scheme_8 == 'https://' %}
+      {% assign certificate_url = '' %}
+    {% endunless %}
+    {% if certificate_name != blank or certificate_issuer != blank or certificate_date != blank %}
+      <li class="list-group-item">
+        <div class="cv-entry-content">
+          {% if entry.icon %}<i class="{{ entry.icon | escape }}" aria-hidden="true"></i>{% endif %}
+          {% if certificate_name != blank %}
+            <h3 class="title font-weight-bold ml-1 ml-md-4" data-toc-skip>
+              {% if certificate_url != blank %}
+                <a href="{{ certificate_url | escape }}" target="_blank" rel="noopener noreferrer">{{ certificate_name | escape }}</a>
+              {% else %}
+                {{ certificate_name | escape }}
+              {% endif %}
+            </h3>
+          {% endif %}
+          {% if certificate_issuer != blank %}
+            <p class="cv-entry-awarder ml-1 ml-md-4 mb-1">{{ certificate_issuer | escape }}</p>
+          {% endif %}
+          {% if certificate_date != blank %}
+            <p class="ml-1 ml-md-4 mb-1"><span class="sr-only">Date: </span>{{ certificate_date | escape }}</p>
+          {% endif %}
+        </div>
+      </li>
+    {% endif %}
   {% endfor %}
 </ul>

@@ -1,88 +1,98 @@
 {% comment %}
-  Unified education entry renderer for both RenderCV and JSONResume formats
-  Handles both:
-  - RenderCV: institution, area, studyType (or degree), start_date, end_date, location, courses, highlights
-  - JSONResume: institution, area, studyType, startDate, endDate, location, courses, highlights
+  Unified education entry renderer for RenderCV and JSON Resume. Empty dates
+  and locations do not reserve a metadata column.
 {% endcomment %}
 
 <ul class="card-text font-weight-light list-group list-group-flush">
   {% for entry in entries %}
+    {% assign start_date = entry.start_date | default: entry.startDate %}
+    {% assign end_date = entry.end_date | default: entry.endDate %}
+    {% assign date = entry.date %}
+    {% if date == blank and entry.startDate != blank %}
+      {% assign jsonresume_end_date = entry.endDate | default: 'Present' %}
+      {% assign date = entry.startDate | append: ' - ' | append: jsonresume_end_date %}
+    {% elsif date == blank and entry.endDate != blank %}
+      {% assign date = entry.endDate %}
+    {% elsif date == blank and start_date != blank %}
+      {% assign start_year = start_date | split: '-' | first %}
+      {% assign end_year = end_date | split: '-' | first | default: 'Present' %}
+      {% assign date = start_year | append: ' - ' | append: end_year %}
+    {% elsif date == blank and end_date != blank %}
+      {% assign date = end_date %}
+    {% endif %}
+    {% assign location = entry.location | default: '' | strip %}
+    {% assign has_metadata = false %}
+    {% if date != blank or location != blank %}{% assign has_metadata = true %}{% endif %}
+    {% assign study_type = entry.degree | default: entry.studyType %}
+    {% assign entry_title = study_type | default: entry.area | default: entry.institution %}
+    {% assign entry_url = entry.url | default: '' | strip %}
+    {% assign entry_url_scheme_7 = entry_url | slice: 0, 7 | downcase %}
+    {% assign entry_url_scheme_8 = entry_url | slice: 0, 8 | downcase %}
+    {% unless entry_url_scheme_7 == 'http://' or entry_url_scheme_8 == 'https://' %}
+      {% assign entry_url = '' %}
+    {% endunless %}
+
     <li class="list-group-item">
       <div class="row">
-        <div class="col-xs-2 col-sm-2 col-md-2 text-center date-column">
-          {% capture start_date %}
-            {% if entry.start_date %}{{ entry.start_date }}{% elsif entry.startDate %}{{ entry.startDate }}{% endif %}
-          {% endcapture %}
-          {% capture end_date %}
-            {% if entry.end_date %}{{ entry.end_date }}{% elsif entry.endDate %}{{ entry.endDate }}{% endif %}
-          {% endcapture %}
-
-          {% if start_date != '' %}
-            {% comment %} Extract year only from dates like "1933-01-01" or just use "1933" as is {% endcomment %}
-            {% assign startDate = start_date | split: '-' | first %}
-            {% assign endDate = end_date | split: '-' | first | default: 'Present' %}
-            {% assign date = startDate | append: ' - ' | append: endDate %}
-          {% else %}
-            {% assign date = null %}
+        {% if has_metadata %}
+          <div class="col-xs-2 col-sm-2 col-md-2 text-center date-column cv-entry-meta">
+            <table class="table-cv">
+              <tbody>
+                {% if date != blank %}
+                  <tr>
+                    <td>
+                      <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px">{{ date }}</span>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if location != blank %}
+                  <tr>
+                    <td>
+                      <p class="location">
+                        <i class="fa-solid fa-location-dot iconlocation" aria-hidden="true"></i>
+                        {{ location }}
+                      </p>
+                    </td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <div class="col-xs-10 col-sm-10 col-md-10 cv-entry-content">
+        {% else %}
+          <div class="col-xs-12 col-sm-12 col-md-12 cv-entry-content">
+        {% endif %}
+          {% if entry_title != blank %}
+            <h3 class="title font-weight-bold ml-1 ml-md-4" data-toc-skip>
+              {% if entry_url != blank %}<a href="{{ entry_url | escape }}">{{ entry_title }}</a>{% else %}{{ entry_title }}{% endif %}
+            </h3>
           {% endif %}
 
-          <table class="table-cv">
-            <tbody>
-              <tr>
-                <td>
-                  {% if date %}
-                    <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px">{{ date }}</span>
-                  {% endif %}
-                </td>
-              </tr>
-              {% capture location %}
-                {% if entry.location %}{{ entry.location }}{% endif %}
-              {% endcapture %}
-              {% if location != '' %}
-                <tr>
-                  <td>
-                    <p class="location">
-                      <i class="fa-solid fa-location-dot iconlocation"></i>
-                      {{ location }}
-                    </p>
-                  </td>
-                </tr>
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
-        <div class="col-xs-10 col-sm-10 col-md-10 mt-2 mt-md-0">
-          {% capture study_type %}
-            {% if entry.studyType %}{{ entry.studyType }}{% elsif entry.degree %}{{ entry.degree }}{% endif %}
-          {% endcapture %}
-
-          {% if entry.url %}
-            <h6 class="title font-weight-bold ml-1 ml-md-4">
-              <a href="{{ entry.url }}">{{ study_type }}</a>
-            </h6>
-          {% elsif study_type != '' %}
-            <h6 class="title font-weight-bold ml-1 ml-md-4">{{ study_type }}</h6>
+          {% if entry.institution != blank and entry.institution != entry_title %}
+            <p class="cv-entry-institution ml-1 ml-md-4 mb-1" style="font-size: 0.95rem">{{ entry.institution }}</p>
           {% endif %}
 
-          {% if entry.institution %}
-            <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem">{{ entry.institution }}</h6>
+          {% if entry.area != blank and entry.area != entry_title %}
+            <p class="cv-entry-area ml-1 ml-md-4 mb-1" style="font-size: 0.95rem; font-style: italic">{{ entry.area }}</p>
           {% endif %}
 
-          {% if entry.area %}
-            <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem; font-style: italic">{{ entry.area }}</h6>
+          {% if entry.score != blank %}
+            <p class="cv-entry-score ml-1 ml-md-4 mb-1" style="font-size: 0.95rem"><strong>Score:</strong> {{ entry.score }}</p>
           {% endif %}
 
-          {% if entry.courses or entry.highlights %}
+          {% if entry.summary != blank %}
+            <div class="cv-entry-summary cv-markdown-block ml-1 ml-md-4 mb-1" style="font-size: 0.95rem; font-style: italic">
+              {{ entry.summary | markdownify }}
+            </div>
+          {% endif %}
+
+          {% if entry.courses != blank or entry.highlights != blank %}
             <ul class="items">
               {% for item in entry.courses %}
-                <li>
-                  <span class="item">{{ item }}</span>
-                </li>
+                <li><span class="item">{{ item }}</span></li>
               {% endfor %}
               {% for item in entry.highlights %}
-                <li>
-                  <span class="item">{{ item | markdownify | remove: '<p>' | remove: '</p>' }}</span>
-                </li>
+                <li><div class="item cv-markdown-block">{{ item | markdownify }}</div></li>
               {% endfor %}
             </ul>
           {% endif %}

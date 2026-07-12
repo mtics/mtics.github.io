@@ -1,0 +1,87 @@
+{% comment %}RenderCV NormalEntry renderer, also suitable for award-like entries.{% endcomment %}
+
+<ul class="card-text font-weight-light list-group list-group-flush">
+  {% for entry in entries %}
+    {% assign start_date = entry.start_date | default: entry.startDate %}
+    {% assign end_date = entry.end_date | default: entry.endDate %}
+    {% assign date = entry.date %}
+    {% if date == blank and start_date != blank %}
+      {% assign start_year = start_date | split: '-' | first %}
+      {% assign end_year = end_date | split: '-' | first | default: 'Present' %}
+      {% assign date = start_year | append: ' - ' | append: end_year %}
+    {% elsif date == blank and end_date != blank %}
+      {% assign date = end_date %}
+    {% elsif date != blank %}
+      {% assign date = date | split: '-' | first %}
+    {% endif %}
+    {% assign location = entry.location | default: '' | strip %}
+    {% assign has_metadata = false %}
+    {% if date != blank or location != blank %}{% assign has_metadata = true %}{% endif %}
+    {% assign entry_title = entry.name | default: entry.title %}
+    {% assign entry_url = entry.url | default: '' | strip %}
+    {% assign entry_url_scheme_7 = entry_url | slice: 0, 7 | downcase %}
+    {% assign entry_url_scheme_8 = entry_url | slice: 0, 8 | downcase %}
+    {% unless entry_url_scheme_7 == 'http://' or entry_url_scheme_8 == 'https://' %}
+      {% assign entry_url = '' %}
+    {% endunless %}
+
+    <li class="list-group-item">
+      <div class="row">
+        {% if has_metadata %}
+          <div class="col-xs-2 col-sm-2 col-md-2 text-center date-column cv-entry-meta">
+            <table class="table-cv">
+              <tbody>
+                {% if date != blank %}
+                  <tr>
+                    <td>
+                      <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px">{{ date }}</span>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if location != blank %}
+                  <tr>
+                    <td>
+                      <p class="location">
+                        <i class="fa-solid fa-location-dot iconlocation" aria-hidden="true"></i>
+                        {{ location }}
+                      </p>
+                    </td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <div class="col-xs-10 col-sm-10 col-md-10 cv-entry-content">
+        {% else %}
+          <div class="col-xs-12 col-sm-12 col-md-12 cv-entry-content">
+        {% endif %}
+          {% if entry_title != blank %}
+            <h3 class="title font-weight-bold ml-1 ml-md-4" data-toc-skip>
+              {% if entry_url != blank %}<a href="{{ entry_url | escape }}">{{ entry_title }}</a>{% else %}{{ entry_title }}{% endif %}
+            </h3>
+          {% endif %}
+
+          {% assign organization = entry.awarder | default: entry.publisher | default: entry.journal %}
+          {% if organization != blank %}
+            <p class="cv-entry-awarder ml-1 ml-md-4 mb-1" style="font-size: 0.95rem">{{ organization }}</p>
+          {% endif %}
+
+          {% assign description = entry.summary | default: entry.description | default: entry.reference %}
+          {% if description != blank %}
+            <div class="cv-entry-summary cv-markdown-block ml-1 ml-md-4 mb-1" style="font-size: 0.95rem; font-style: italic">
+              {{ description | markdownify }}
+            </div>
+          {% endif %}
+
+          {% if entry.highlights != blank %}
+            <ul class="items">
+              {% for item in entry.highlights %}
+                <li><div class="item cv-markdown-block">{{ item | markdownify }}</div></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,40 @@
+cv:
+  name: Ada Lovelace
+  headline: Research Engineer
+  location: Sydney, Australia
+  email:
+    - ada@rendercv.com
+    - ada.work@rendercv.com
+  phone:
+    - "+61 2 0000 0000"
+    - "+44 20 0000 0000"
+  website:
+    - https://ada.example.test
+    - https://work.example.test/ada
+  social_networks:
+    - network: GitHub
+      username: ada-lovelace
+  sections:
+    education:
+      - institution: Example University
+        area: Computer Science
+        degree: PhD
+        start_date: 2020-01
+        end_date: 2024-12
+    Employment History:
+      - company: Example Labs
+        position: Research Engineer
+        start_date: 2025-01
+        end_date: present
+        summary: Built reliable analytical systems.
+    Selected Work:
+      - name: Analytical Engine
+        institution: Arbitrary metadata must not change this NormalEntry's type
+        area: This extra field completes an EducationEntry-like shape
+        date: 2026
+        summary: A normal RenderCV entry under an arbitrary section title.
+        highlights:
+          - Preserved the authored entry instead of dropping it.
+    Notes:
+      - bullet: Visible bullet content survives arbitrary metadata.
+        number: Arbitrary number metadata must not change this BulletEntry's type.
