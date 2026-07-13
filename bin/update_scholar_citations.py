@@ -78,8 +78,35 @@ def validate_existing_papers(papers: Mapping) -> None:
             )
 
 
+def fsync_directory(directory: Path) -> None:
+    directory_fd = os.open(
+        directory,
+        os.O_RDONLY | getattr(os, "O_DIRECTORY", 0),
+    )
+    fsync_error: OSError | None = None
+    try:
+        os.fsync(directory_fd)
+    except OSError as e:
+        fsync_error = e
+
+    try:
+        os.close(directory_fd)
+    except OSError as close_error:
+        if fsync_error is not None:
+            raise OSError(
+                f"{fsync_error}; additionally failed to close directory: {close_error}"
+            ) from fsync_error
+        raise
+
+    if fsync_error is not None:
+        raise fsync_error
+
+
 def write_citations_atomically(citation_data: Mapping) -> None:
     temp_path: Path | None = None
+    replaced = False
+    primary_error: OSError | yaml.YAMLError | None = None
+    cleanup_error: OSError | None = None
     try:
         serialized = yaml.safe_dump(
             citation_data,
@@ -99,15 +126,36 @@ def write_citations_atomically(citation_data: Mapping) -> None:
             temp_path = Path(temp_file.name)
             temp_file.write(serialized)
             temp_file.flush()
+            os.fchmod(temp_file.fileno(), 0o644)
             os.fsync(temp_file.fileno())
-        temp_path.chmod(0o644)
         os.replace(temp_path, OUTPUT_FILE)
+        replaced = True
+        fsync_directory(OUTPUT_FILE.parent)
     except (OSError, yaml.YAMLError) as e:
-        sys.exit(f"Error writing citations atomically: {e}")
+        primary_error = e
     finally:
-        if temp_path is not None:
-            with suppress(OSError):
-                temp_path.unlink()
+        if temp_path is not None and not replaced:
+            try:
+                with suppress(FileNotFoundError):
+                    temp_path.unlink()
+            except OSError as e:
+                cleanup_error = e
+
+    if primary_error is None:
+        return
+    if replaced:
+        sys.exit(
+            "Citation file was replaced, but directory durability could not be "
+            f"confirmed: {primary_error}"
+        )
+
+    message = f"Error writing citations atomically: {primary_error}"
+    if cleanup_error is not None:
+        message += (
+            "; additionally failed to clean up temporary citation file: "
+            f"{cleanup_error}"
+        )
+    sys.exit(message)
 
 
 def is_wrapped_connect_timeout(exc: serpapi.HTTPError) -> bool:

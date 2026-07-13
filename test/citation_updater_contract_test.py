@@ -785,6 +785,58 @@ class CitationUpdaterContractTest(unittest.TestCase):
             self.assertEqual(before, output.read_bytes())
             self.assertEqual([], self._citation_temp_files(output))
 
+    def test_temp_cleanup_failure_reports_primary_and_cleanup_errors(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Existing paper",
+            "year": "2024",
+            "cited_by": {"value": 8},
+        }
+        real_unlink = Path.unlink
+
+        def unlink_then_report_failure(path: Path, *args: object, **kwargs: object) -> None:
+            real_unlink(path, *args, **kwargs)
+            raise OSError("unlink failed")
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+            before = output.read_bytes()
+
+            with (
+                mock.patch.object(
+                    UPDATER.os,
+                    "replace",
+                    side_effect=OSError("replace failed"),
+                ),
+                mock.patch.object(
+                    UPDATER.Path,
+                    "unlink",
+                    autospec=True,
+                    side_effect=unlink_then_report_failure,
+                ) as unlink,
+                self.assertRaises(SystemExit) as raised,
+            ):
+                self._run_main(output, [article])
+
+            self.assertEqual(
+                "Error writing citations atomically: replace failed; "
+                "additionally failed to clean up temporary citation file: unlink failed",
+                str(raised.exception),
+            )
+            unlink.assert_called_once()
+            self.assertEqual(before, output.read_bytes())
+            self.assertEqual([], self._citation_temp_files(output))
+
     def test_yaml_serialization_failure_preserves_existing_bytes(self) -> None:
         existing = {
             "metadata": {"last_updated": "2000-01-01"},
@@ -964,24 +1016,57 @@ class CitationUpdaterContractTest(unittest.TestCase):
                 "cited_by": {"value": 1},
             },
         ]
+        events: list[str] = []
+        real_fchmod = os.fchmod
         real_fsync = os.fsync
         real_replace = os.replace
+
+        def recording_fchmod(file_descriptor: int, mode: int) -> None:
+            events.append("fchmod")
+            real_fchmod(file_descriptor, mode)
+
+        def recording_fsync(file_descriptor: int) -> None:
+            descriptor_mode = os.fstat(file_descriptor).st_mode
+            events.append(
+                "directory fsync" if stat.S_ISDIR(descriptor_mode) else "file fsync"
+            )
+            real_fsync(file_descriptor)
+
+        def recording_replace(source: object, destination: object) -> None:
+            events.append("replace")
+            real_replace(source, destination)
+
         with tempfile.TemporaryDirectory() as directory:
             output = self._prepare_files(Path(directory), existing)
 
             with (
-                mock.patch.object(UPDATER.os, "fsync", wraps=real_fsync) as fsync,
+                mock.patch.object(
+                    UPDATER.os,
+                    "fchmod",
+                    side_effect=recording_fchmod,
+                ) as fchmod,
+                mock.patch.object(
+                    UPDATER.os,
+                    "fsync",
+                    side_effect=recording_fsync,
+                ) as fsync,
                 mock.patch.object(
                     UPDATER.os,
                     "replace",
-                    wraps=real_replace,
+                    side_effect=recording_replace,
                 ) as replace,
             ):
                 self._run_main(output, articles)
 
-            fsync.assert_called_once()
+            fchmod.assert_called_once()
+            self.assertEqual(0o644, fchmod.call_args.args[1])
+            self.assertEqual(2, fsync.call_count)
             replace.assert_called_once()
             self.assertEqual(output, Path(replace.call_args.args[1]))
+            self.assertEqual(
+                ["fchmod", "file fsync", "replace", "directory fsync"],
+                events,
+            )
             serialized = output.read_text(encoding="utf-8")
             parsed = yaml.safe_load(serialized)
             self.assertEqual(
@@ -998,6 +1083,54 @@ class CitationUpdaterContractTest(unittest.TestCase):
                 serialized.index("scholar-id:z-paper"),
             )
             self.assertEqual(0o644, stat.S_IMODE(output.stat().st_mode))
+            self.assertEqual([], self._citation_temp_files(output))
+
+    def test_directory_fsync_failure_reports_uncertain_durability_after_replace(self) -> None:
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+        article = {
+            "citation_id": "scholar-id:paper",
+            "title": "Existing paper",
+            "year": "2024",
+            "cited_by": {"value": 8},
+        }
+        real_fsync = os.fsync
+        real_close = os.close
+
+        def fail_directory_fsync(file_descriptor: int) -> None:
+            if stat.S_ISDIR(os.fstat(file_descriptor).st_mode):
+                raise OSError("directory fsync failed")
+            real_fsync(file_descriptor)
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._prepare_files(Path(directory), existing)
+
+            with (
+                mock.patch.object(
+                    UPDATER.os,
+                    "fsync",
+                    side_effect=fail_directory_fsync,
+                ),
+                mock.patch.object(UPDATER.os, "close", wraps=real_close) as close,
+                self.assertRaisesRegex(
+                    SystemExit,
+                    "Citation file was replaced, but directory durability could not "
+                    "be confirmed: directory fsync failed",
+                ),
+            ):
+                self._run_main(output, [article])
+
+            close.assert_called_once()
+            updated = yaml.safe_load(output.read_text(encoding="utf-8"))
+            self.assertEqual(8, updated["papers"]["scholar-id:paper"]["citations"])
             self.assertEqual([], self._citation_temp_files(output))
 
     def test_unchanged_papers_do_not_replace_or_change_existing_bytes(self) -> None:
