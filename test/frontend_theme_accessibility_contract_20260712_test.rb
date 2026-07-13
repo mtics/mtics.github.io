@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
+require "bibtex"
 require "liquid"
 require "nokogiri"
+require "uri"
+require "yaml"
 require_relative "../_plugins/publication_security_filters"
 
 class FixtureSocialLinksTag20260712 < Liquid::Tag
@@ -92,6 +95,55 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
 
   def document(relative_path)
     Nokogiri::HTML5(File.read(File.join(SITE_DIR, relative_path)))
+  end
+
+  def scholar_contract_data
+    socials = YAML.safe_load_file(File.join(ROOT, "_data/socials.yml"))
+    citations = YAML.safe_load_file(File.join(ROOT, "_data/citations.yml"))
+    entries = BibTeX.open(File.join(ROOT, "_bibliography/papers.bib")).entries.values.filter_map do |entry|
+      publication_id = entry[:google_scholar_id].to_s.strip
+      next if publication_id.empty?
+
+      {
+        publication_id: publication_id,
+        selected: entry[:selected].to_s.strip.casecmp?("true"),
+      }
+    end
+
+    {
+      user: socials.fetch("scholar_userid"),
+      papers: citations.fetch("papers"),
+      entries: entries,
+    }
+  end
+
+  def rendered_scholar_badges(path, user)
+    document(path).css("a.scholar-citations").map do |badge|
+      href = badge["href"].to_s
+      refute_empty href, "#{path} Scholar badge must have an href"
+      uri = URI.parse(href)
+      query = URI.decode_www_form(uri.query.to_s)
+      values_for = ->(name) { query.filter_map { |key, value| value if key == name } }
+
+      assert_equal "https", uri.scheme, "#{path} Scholar badge must use HTTPS"
+      assert_equal "scholar.google.com", uri.host, "#{path} Scholar badge must use the Scholar host"
+      assert_equal "/citations", uri.path, "#{path} Scholar badge must use the citations endpoint"
+      assert_equal ["view_citation"], values_for.call("view_op"), "#{path} must request a citation view"
+      assert_equal [user], values_for.call("user"), "#{path} must use the configured Scholar user"
+
+      citation_keys = values_for.call("citation_for_view")
+      assert_equal 1, citation_keys.length, "#{path} must have exactly one citation_for_view"
+      citation_key = citation_keys.fetch(0)
+      assert citation_key.start_with?("#{user}:"),
+             "#{path} citation_for_view must start with the exact configured Scholar user"
+
+      {
+        key: citation_key,
+        publication_id: citation_key.delete_prefix("#{user}:"),
+        count: badge.at_css(".scholar-citation-count")&.text,
+        aria: badge["aria-label"],
+      }
+    end
   end
 
   def render_header(pages)
@@ -499,6 +551,56 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
     )
 
     assert_equal "7", fragment.at_css(".scholar-citation-count")&.text
+  end
+
+  def test_every_bibtex_scholar_id_has_an_exact_committed_citation_key
+    data = scholar_contract_data
+    publication_ids = data.fetch(:entries).map { |entry| entry.fetch(:publication_id) }
+
+    assert_equal 5, publication_ids.length
+    assert_equal publication_ids.length, publication_ids.uniq.length
+    assert_equal 4, data.fetch(:entries).count { |entry| entry.fetch(:selected) }
+
+    publication_ids.each do |publication_id|
+      citation_key = "#{data.fetch(:user)}:#{publication_id}"
+      assert data.fetch(:papers).key?(citation_key),
+             "_data/citations.yml must contain the exact key #{citation_key.inspect}"
+      citation_count = data.fetch(:papers).fetch(citation_key).fetch("citations")
+      assert_instance_of Integer, citation_count, "#{citation_key} citations must be an Integer"
+      assert_operator citation_count, :>=, 0, "#{citation_key} citations must be non-negative"
+    end
+  end
+
+  def test_fresh_pages_render_exact_scholar_counts_links_and_labels
+    data = scholar_contract_data
+    all_badges = []
+    expected_entries_by_page = {
+      "index.html" => data.fetch(:entries).select { |entry| entry.fetch(:selected) },
+      "publications/index.html" => data.fetch(:entries),
+    }
+
+    expected_entries_by_page.each do |path, expected_entries|
+      badges = rendered_scholar_badges(path, data.fetch(:user))
+      expected_ids = expected_entries.map { |entry| entry.fetch(:publication_id) }
+
+      assert_equal expected_ids.length, badges.length, "#{path} must render one badge per expected publication"
+      assert_equal expected_ids.sort, badges.map { |badge| badge.fetch(:publication_id) }.sort,
+                   "#{path} must render exactly the expected Scholar publication IDs"
+
+      badges.each do |badge|
+        citation_count = data.fetch(:papers).fetch(badge.fetch(:key)).fetch("citations")
+        expected_count = citation_count.to_s.encode(Encoding::UTF_8)
+        assert_equal expected_count, badge.fetch(:count),
+                     "#{path} must render the exact committed count for #{badge.fetch(:key)}"
+        assert_equal "#{citation_count} Google Scholar citations", badge.fetch(:aria),
+                     "#{path} must label the exact committed count for #{badge.fetch(:key)}"
+      end
+
+      all_badges.concat(badges)
+    end
+
+    assert_equal 9, all_badges.length
+    assert_equal 5, all_badges.map { |badge| badge.fetch(:publication_id) }.uniq.length
   end
 
   def test_publication_panel_disclosures_do_not_use_inline_javascript
