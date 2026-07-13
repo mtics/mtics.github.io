@@ -97,6 +97,10 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
     Nokogiri::HTML5(File.read(File.join(SITE_DIR, relative_path)))
   end
 
+  def normalize_scholar_badge_text(value)
+    value.to_s.gsub(/\s+/, " ").strip
+  end
+
   def scholar_contract_data
     socials = YAML.safe_load_file(File.join(ROOT, "_data/socials.yml"))
     citations = YAML.safe_load_file(File.join(ROOT, "_data/citations.yml"))
@@ -127,7 +131,10 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
 
       assert_equal "https", uri.scheme, "#{path} Scholar badge must use HTTPS"
       assert_equal "scholar.google.com", uri.host, "#{path} Scholar badge must use the Scholar host"
+      assert_nil uri.userinfo, "#{path} Scholar badge must not include URL credentials"
+      assert_equal 443, uri.port, "#{path} Scholar badge must use the default HTTPS port"
       assert_equal "/citations", uri.path, "#{path} Scholar badge must use the citations endpoint"
+      assert_nil uri.fragment, "#{path} Scholar badge must not include a fragment"
       assert_equal ["view_citation"], values_for.call("view_op"), "#{path} must request a citation view"
       assert_equal [user], values_for.call("user"), "#{path} must use the configured Scholar user"
 
@@ -140,8 +147,8 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
       {
         key: citation_key,
         publication_id: citation_key.delete_prefix("#{user}:"),
-        count: badge.at_css(".scholar-citation-count")&.text,
-        aria: badge["aria-label"],
+        count: normalize_scholar_badge_text(badge.at_css(".scholar-citation-count")&.text),
+        aria: normalize_scholar_badge_text(badge["aria-label"]),
       }
     end
   end
@@ -569,6 +576,11 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
       assert_instance_of Integer, citation_count, "#{citation_key} citations must be an Integer"
       assert_operator citation_count, :>=, 0, "#{citation_key} citations must be non-negative"
     end
+  end
+
+  def test_scholar_badge_text_normalization_collapses_semantic_whitespace
+    assert_equal "17 Google Scholar citations",
+                 normalize_scholar_badge_text(" \n17\t  Google Scholar\r\n citations ")
   end
 
   def test_fresh_pages_render_exact_scholar_counts_links_and_labels
