@@ -1704,11 +1704,27 @@ class ReleaseContractTest < Minitest::Test
     refute triggers.key?("schedule"), "deploy must not race citation refresh on a clock"
 
     workflow_run = triggers.fetch("workflow_run")
-    assert_includes Array(workflow_run.fetch("workflows")), citation_workflow.fetch("name")
-    assert_includes Array(workflow_run.fetch("types")), "completed"
+    assert_equal [citation_workflow.fetch("name")], Array(workflow_run.fetch("workflows"))
+    assert_equal ["completed"], Array(workflow_run.fetch("types"))
+    assert_equal ["main"], Array(workflow_run.fetch("branches"))
 
-    build_condition = deploy_workflow.fetch("jobs").fetch("build").fetch("if")
+    build = deploy_workflow.fetch("jobs").fetch("build")
+    build_condition = build.fetch("if")
     assert_includes build_condition, "github.event.workflow_run.conclusion == 'success'"
+    assert_includes build_condition,
+                    "github.event.workflow_run.head_branch == github.event.repository.default_branch"
+    assert_includes build_condition,
+                    "github.event.workflow_run.head_repository.full_name == github.repository"
+
+    checkout = build.fetch("steps").find do |step|
+      step.fetch("name", "") == "Checkout refreshed citations"
+    end
+    refute_nil checkout, "workflow_run builds must have a dedicated checkout"
+    assert checkout.fetch("uses", "").start_with?("actions/checkout@")
+    assert_equal "github.event_name == 'workflow_run'", checkout.fetch("if")
+    assert_equal "${{ github.event.repository.default_branch }}", checkout.dig("with", "ref")
+    assert_equal 0, checkout.dig("with", "fetch-depth")
+    assert_equal false, checkout.dig("with", "persist-credentials")
   end
 
   def test_legacy_deploy_script_is_non_destructive

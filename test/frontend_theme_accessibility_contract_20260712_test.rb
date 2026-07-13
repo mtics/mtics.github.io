@@ -121,28 +121,43 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
     }
   end
 
+  def scholar_citation_key_from_badge_href(path, href, user)
+    uri = URI.parse(href)
+    query = URI.decode_www_form(uri.query.to_s).group_by(&:first).transform_values do |pairs|
+      pairs.map(&:last)
+    end
+
+    assert_equal "https", uri.scheme, "#{path} Scholar badge must use HTTPS"
+    assert_equal "scholar.google.com", uri.host, "#{path} Scholar badge must use the Scholar host"
+    assert_nil uri.userinfo, "#{path} Scholar badge must not include URL credentials"
+    assert_equal 443, uri.port, "#{path} Scholar badge must use the default HTTPS port"
+    assert_equal "/citations", uri.path, "#{path} Scholar badge must use the citations endpoint"
+    assert_nil uri.fragment, "#{path} Scholar badge must not include a fragment"
+
+    citation_keys = query.fetch("citation_for_view", [])
+    assert_equal 1, citation_keys.length, "#{path} must have exactly one citation_for_view"
+    citation_key = citation_keys.fetch(0)
+    assert citation_key.start_with?("#{user}:"),
+           "#{path} citation_for_view must start with the exact configured Scholar user"
+    assert_equal(
+      {
+        "view_op" => ["view_citation"],
+        "hl" => ["en"],
+        "user" => [user],
+        "citation_for_view" => [citation_key],
+      },
+      query,
+      "#{path} Scholar badge query must contain exactly the supported parameters",
+    )
+
+    citation_key
+  end
+
   def rendered_scholar_badges(path, user)
     document(path).css("a.scholar-citations").map do |badge|
       href = badge["href"].to_s
       refute_empty href, "#{path} Scholar badge must have an href"
-      uri = URI.parse(href)
-      query = URI.decode_www_form(uri.query.to_s)
-      values_for = ->(name) { query.filter_map { |key, value| value if key == name } }
-
-      assert_equal "https", uri.scheme, "#{path} Scholar badge must use HTTPS"
-      assert_equal "scholar.google.com", uri.host, "#{path} Scholar badge must use the Scholar host"
-      assert_nil uri.userinfo, "#{path} Scholar badge must not include URL credentials"
-      assert_equal 443, uri.port, "#{path} Scholar badge must use the default HTTPS port"
-      assert_equal "/citations", uri.path, "#{path} Scholar badge must use the citations endpoint"
-      assert_nil uri.fragment, "#{path} Scholar badge must not include a fragment"
-      assert_equal ["view_citation"], values_for.call("view_op"), "#{path} must request a citation view"
-      assert_equal [user], values_for.call("user"), "#{path} must use the configured Scholar user"
-
-      citation_keys = values_for.call("citation_for_view")
-      assert_equal 1, citation_keys.length, "#{path} must have exactly one citation_for_view"
-      citation_key = citation_keys.fetch(0)
-      assert citation_key.start_with?("#{user}:"),
-             "#{path} citation_for_view must start with the exact configured Scholar user"
+      citation_key = scholar_citation_key_from_badge_href(path, href, user)
 
       {
         key: citation_key,
@@ -560,6 +575,38 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
     assert_equal "7", fragment.at_css(".scholar-citation-count")&.text
   end
 
+  def test_scholar_citation_exact_user_key_takes_precedence_over_fallbacks
+    publication_id = "Target42"
+    fragment = render_bibliography_entry(
+      {
+        "key" => "citation-exact-precedence-fixture",
+        "type" => "misc",
+        "title" => "Citation exact precedence fixture",
+        "google_scholar_id" => publication_id,
+        "author_array" => [{ "first" => "Alice", "last" => "Safe" }],
+      },
+      {
+        "enable_publication_badges" => { "google_scholar" => true },
+        "data" => {
+          "coauthors" => {},
+          "venues" => {},
+          "socials" => { "scholar_userid" => "current-user" },
+          "citations" => {
+            "papers" => {
+              publication_id => { "citations" => 3 },
+              "legacy-user:#{publication_id}" => { "citations" => 7 },
+              "current-user:#{publication_id}" => { "citations" => 11 },
+            },
+          },
+        },
+      },
+    )
+
+    badge = fragment.at_css("a.scholar-citations")
+    assert_equal "11", badge&.at_css(".scholar-citation-count")&.text
+    assert_equal "11 Google Scholar citations", badge&.[]("aria-label")
+  end
+
   def test_every_bibtex_scholar_id_has_an_exact_committed_citation_key
     data = scholar_contract_data
     publication_ids = data.fetch(:entries).map { |entry| entry.fetch(:publication_id) }
@@ -581,6 +628,23 @@ class FrontendThemeAccessibilityContract20260712Test < Minitest::Test
   def test_scholar_badge_text_normalization_collapses_semantic_whitespace
     assert_equal "17 Google Scholar citations",
                  normalize_scholar_badge_text(" \n17\t  Google Scholar\r\n citations ")
+  end
+
+  def test_scholar_badge_query_contract_rejects_missing_language_and_extra_parameters
+    href = "https://scholar.google.com/citations?view_op=view_citation&hl=en&" \
+           "user=current-user&citation_for_view=current-user%3ATarget42"
+
+    assert_equal "current-user:Target42",
+                 scholar_citation_key_from_badge_href("query fixture", href, "current-user")
+
+    {
+      "missing hl" => href.sub("&hl=en", ""),
+      "extra parameter" => "#{href}&source=unexpected",
+    }.each do |name, mutated_href|
+      assert_raises(Minitest::Assertion, name) do
+        scholar_citation_key_from_badge_href("#{name} fixture", mutated_href, "current-user")
+      end
+    end
   end
 
   def test_fresh_pages_render_exact_scholar_counts_links_and_labels
