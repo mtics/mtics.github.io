@@ -374,5 +374,5 @@ if __name__ == "__main__":
         main()
     except SystemExit:
         raise
-    except Exception as e:
-        sys.exit(f"Unexpected error: {e}")
+    except Exception:
+        sys.exit("Unexpected error while updating citations.")

@@ -9,6 +9,7 @@ import importlib.util
 import io
 import os
 from pathlib import Path
+import runpy
 import stat
 import tempfile
 import unittest
@@ -60,6 +61,70 @@ def _http_error(status_code: int, detail: str = "request failed") -> BaseExcepti
 
 
 class CitationUpdaterContractTest(unittest.TestCase):
+    def test_unexpected_error_is_redacted_without_retry_or_file_changes(
+        self,
+    ) -> None:
+        secret = "sentinel-unexpected-api-key"
+        request_url = f"https://serpapi.com/search?api_key={secret}"
+        remote_body = "sentinel-unexpected-remote-body"
+        client = _SearchClient([RuntimeError(f"{request_url} {remote_body}")])
+        existing = {
+            "metadata": {"last_updated": "2000-01-01"},
+            "papers": {
+                "scholar-id:paper": {
+                    "title": "Existing paper",
+                    "year": "2024",
+                    "citations": 7,
+                }
+            },
+        }
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data_directory = root / "_data"
+            data_directory.mkdir()
+            (data_directory / "socials.yml").write_text(
+                "scholar_userid: scholar-id\n",
+                encoding="utf-8",
+            )
+            output = data_directory / "citations.yml"
+            output.write_text(
+                yaml.safe_dump(existing, sort_keys=True),
+                encoding="utf-8",
+            )
+            before = output.read_bytes()
+            previous_directory = Path.cwd()
+
+            try:
+                os.chdir(root)
+                with (
+                    mock.patch.dict(
+                        os.environ,
+                        {"SERPAPI_API_KEY": secret},
+                        clear=True,
+                    ),
+                    mock.patch.object(
+                        UPDATER.serpapi,
+                        "Client",
+                        return_value=client,
+                    ),
+                    self.assertRaises(SystemExit) as raised,
+                ):
+                    runpy.run_path(str(UPDATER_PATH), run_name="__main__")
+            finally:
+                os.chdir(previous_directory)
+
+            message = str(raised.exception)
+            self.assertEqual(
+                "Unexpected error while updating citations.",
+                message,
+            )
+            for sentinel in (request_url, secret, remote_body):
+                self.assertNotIn(sentinel, message)
+            self.assertEqual(1, len(client.params))
+            self.assertEqual(before, output.read_bytes())
+            self.assertEqual([], self._citation_temp_files(output))
+
     def test_socials_root_must_be_an_object(self) -> None:
         for name, root in (("list", []), ("scalar", "not-an-object")):
             with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
