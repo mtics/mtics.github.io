@@ -803,39 +803,58 @@ class CitationUpdaterContractTest(unittest.TestCase):
             "cited_by": {"value": 8},
         }
         real_unlink = Path.unlink
+        captured_temp_paths: list[Path] = []
 
-        def unlink_then_report_failure(path: Path, *args: object, **kwargs: object) -> None:
-            real_unlink(path, *args, **kwargs)
+        def capture_and_fail_unlink(
+            path: Path,
+            *args: object,
+            **kwargs: object,
+        ) -> None:
+            captured_temp_paths.append(path)
             raise OSError("unlink failed")
 
         with tempfile.TemporaryDirectory() as directory:
             output = self._prepare_files(Path(directory), existing)
             before = output.read_bytes()
 
-            with (
-                mock.patch.object(
-                    UPDATER.os,
-                    "replace",
-                    side_effect=OSError("replace failed"),
-                ),
-                mock.patch.object(
-                    UPDATER.Path,
-                    "unlink",
-                    autospec=True,
-                    side_effect=unlink_then_report_failure,
-                ) as unlink,
-                self.assertRaises(SystemExit) as raised,
-            ):
-                self._run_main(output, [article])
+            try:
+                with (
+                    mock.patch.object(
+                        UPDATER.os,
+                        "replace",
+                        side_effect=OSError("replace failed"),
+                    ),
+                    mock.patch.object(
+                        UPDATER.Path,
+                        "unlink",
+                        autospec=True,
+                        side_effect=capture_and_fail_unlink,
+                    ) as unlink,
+                    self.assertRaises(SystemExit) as raised,
+                ):
+                    self._run_main(output, [article])
 
-            self.assertEqual(
-                "Error writing citations atomically: replace failed; "
-                "additionally failed to clean up temporary citation file: unlink failed",
-                str(raised.exception),
-            )
-            unlink.assert_called_once()
-            self.assertEqual(before, output.read_bytes())
-            self.assertEqual([], self._citation_temp_files(output))
+                self.assertEqual(
+                    "Error writing citations atomically: replace failed; "
+                    "additionally failed to clean up temporary citation file: "
+                    "unlink failed",
+                    str(raised.exception),
+                )
+                unlink.assert_called_once()
+                self.assertEqual(before, output.read_bytes())
+                self.assertEqual(1, len(captured_temp_paths))
+                self.assertTrue(captured_temp_paths[0].exists())
+                self.assertEqual(
+                    captured_temp_paths,
+                    self._citation_temp_files(output),
+                )
+            finally:
+                for temp_path in captured_temp_paths:
+                    try:
+                        real_unlink(temp_path)
+                    except FileNotFoundError:
+                        pass
+                self.assertEqual([], self._citation_temp_files(output))
 
     def test_yaml_serialization_failure_preserves_existing_bytes(self) -> None:
         existing = {
