@@ -29,8 +29,8 @@ fetch or update them.
 - Continue using Google Scholar citation counts through SerpApi.
 - Replace the legacy Python integration with SerpApi's maintained client.
 - Bound network and job execution time.
-- Retry only transient failures and preserve the last known-good data on all
-  failures.
+- Retry only transient failures, preserve the last known-good bytes before
+  replacement, and surface any uncertainty after replacement.
 - Prove that every displayed publication resolves to the exact citation record
   for the configured Scholar user.
 - Prove that the built home and publications pages contain the expected badge
@@ -146,11 +146,19 @@ be tested without weakening schema validation.
 
 ### Atomic output
 
-The complete YAML payload is serialized before publication. It is written to a
-temporary file in `_data`, flushed, and atomically replaced over
-`_data/citations.yml`. Temporary files are removed after an error. A failed
-request, validation, serialization, or filesystem operation leaves the last
-known-good citation file unchanged.
+The complete YAML payload is serialized before publication. It is then written
+as UTF-8 to a same-directory temporary file in `_data`, flushed, changed to mode
+`0644`, and file-synced before it is atomically replaced over
+`_data/citations.yml`. The parent `_data` directory is synced after the replace
+so the rename is crash durable.
+
+Request, validation, serialization, and filesystem failures before the replace
+preserve the previous output bytes. Pre-replace temporary-file cleanup is
+best-effort: cleanup failures are reported together with the primary failure and
+may leave the temporary file for diagnosis. A parent-directory sync failure is
+different because replacement has already occurred: the new, fully written YAML
+may be visible, rollback is not attempted, and the updater reports that its
+durability across a crash is uncertain.
 
 ## Publication Mapping Contract
 
@@ -205,7 +213,8 @@ Static workflow tests must lock down:
 ## Test Strategy
 
 1. Extend Python updater contracts for the maintained client, timeout, retry
-   classification, retry limits, and atomic output rollback.
+   classification, retry limits, pre-replace rollback, cleanup reporting, and
+   post-replace durability uncertainty.
 2. Extend release contracts for dependency replacement, workflow permissions,
    cron, timeouts, concurrency, and deployment handoff.
 3. Add a cross-layer source-data contract for exact BibTeX-to-citation keys.
@@ -232,8 +241,11 @@ Static workflow tests must lock down:
 
 - The daily workflow is active on `main` with the non-hourly schedule.
 - The maintained SerpApi client is hash-locked and the legacy client is absent.
-- Transient failures retry within strict time limits; permanent or malformed
-  failures never change the citation file.
+- Transient failures retry within strict time limits; permanent, malformed, and
+  pre-replace publication failures preserve the previous citation bytes.
+- Successful publication sets mode `0644` and syncs both the file and parent
+  directory; a post-replace directory-sync failure surfaces uncertain durability
+  even though the new valid file may already be visible.
 - All five displayed publications have exact citation keys.
 - Freshly built pages render the correct four/home and five/publications badges.
 - A manual production dispatch and its downstream Pages deployment succeed.

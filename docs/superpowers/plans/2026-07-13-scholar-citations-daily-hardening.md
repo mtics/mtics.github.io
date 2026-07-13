@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Harden the existing daily Google Scholar citation pipeline so it uses the maintained SerpApi client, retries only transient failures, preserves the last known-good data atomically, and proves that every rendered badge uses the exact committed citation record.
+**Goal:** Harden the existing daily Google Scholar citation pipeline so it uses the maintained SerpApi client, retries only transient failures, preserves old bytes before atomic replacement, reports any post-replace durability uncertainty, and proves that every rendered badge uses the exact committed citation record.
 
 **Architecture:** Keep the current least-privilege two-job citation workflow and the existing `workflow_run` deployment handoff. Strengthen the workflow's schedule and time bounds, isolate request retry logic from response validation, publish citation YAML with an atomic replace, and add source-to-built-site contracts that connect BibTeX IDs, committed YAML keys, and rendered badge metadata.
 
@@ -572,110 +572,42 @@ git commit -m "fix: retry transient Scholar requests"
 - Modify: `bin/update_scholar_citations.py`
 - Modify: `test/citation_updater_contract_test.py`
 
-- [ ] **Step 1: Add a failing rollback contract**
+- [ ] **Step 1: Add failing rollback and durability contracts**
 
-Add a test that creates an old valid citation file, returns changed citation data, forces `os.replace` to raise `OSError`, and then asserts byte-for-byte preservation plus removal of temporary files:
+Add contracts for each side of the replace boundary:
 
-```python
-def test_atomic_replace_failure_preserves_the_last_known_good_file(self) -> None:
-    existing = {
-        "metadata": {"last_updated": "2000-01-01"},
-        "papers": {
-            "scholar-id:paper": {
-                "title": "Paper",
-                "year": "2025",
-                "citations": 1,
-            }
-        },
-    }
-    changed = {
-        "citation_id": "scholar-id:paper",
-        "title": "Paper",
-        "year": "2025",
-        "cited_by": {"value": 2},
-    }
-    with tempfile.TemporaryDirectory() as directory:
-        output = self._prepare_files(Path(directory), existing)
-        before = output.read_bytes()
-        with (
-            mock.patch.dict(os.environ, {"SERPAPI_API_KEY": "api-key"}, clear=True),
-            mock.patch.object(UPDATER, "fetch_author_articles", return_value=[changed]),
-            mock.patch.object(UPDATER.os, "replace", side_effect=OSError("replace failed")),
-        ):
-            with self.assertRaisesRegex(SystemExit, "writing citations atomically"):
-                UPDATER.main()
+- serialization, temporary-file write, file-sync, and replace failures preserve
+  the old bytes;
+- pre-replace cleanup removes the real temporary file when possible, while a
+  cleanup failure reports both the primary and cleanup errors and may leave the
+  temporary file behind;
+- a successful changed write produces sorted UTF-8 YAML with mode `0644` in the
+  order `fchmod`, file sync, replace, directory sync;
+- a directory-sync failure after replace reports uncertain durability and leaves
+  the new valid YAML visible rather than claiming rollback;
+- an unchanged paper mapping does not replace the file or change its bytes.
 
-        self.assertEqual(before, output.read_bytes())
-        self.assertEqual([], list(output.parent.glob(f".{output.name}.*.tmp")))
-```
-
-Add the serialization rollback and no-op preservation contracts explicitly:
+Representative assertions from the final contracts are:
 
 ```python
-def test_atomic_serialization_failure_preserves_the_last_known_good_file(self) -> None:
-    existing = {
-        "metadata": {"last_updated": "2000-01-01"},
-        "papers": {
-            "scholar-id:paper": {
-                "title": "Paper",
-                "year": "2025",
-                "citations": 1,
-            }
-        },
-    }
-    changed = {
-        "citation_id": "scholar-id:paper",
-        "title": "Paper",
-        "year": "2025",
-        "cited_by": {"value": 2},
-    }
-    with tempfile.TemporaryDirectory() as directory:
-        output = self._prepare_files(Path(directory), existing)
-        before = output.read_bytes()
-        with (
-            mock.patch.dict(os.environ, {"SERPAPI_API_KEY": "api-key"}, clear=True),
-            mock.patch.object(UPDATER, "fetch_author_articles", return_value=[changed]),
-            mock.patch.object(
-                UPDATER.yaml,
-                "safe_dump",
-                side_effect=yaml.YAMLError("serialization failed"),
-            ),
-        ):
-            with self.assertRaisesRegex(SystemExit, "writing citations atomically"):
-                UPDATER.main()
+self.assertEqual(before, output.read_bytes())
+self.assertEqual([], self._citation_temp_files(output))
 
-        self.assertEqual(before, output.read_bytes())
-        self.assertEqual([], list(output.parent.glob(f".{output.name}.*.tmp")))
+self.assertEqual(
+    "Error writing citations atomically: replace failed; "
+    "additionally failed to clean up temporary citation file: unlink failed",
+    str(raised.exception),
+)
+self.assertTrue(captured_temp_paths[0].exists())
 
-def test_unchanged_papers_do_not_replace_the_file_or_advance_the_date(self) -> None:
-    existing = {
-        "metadata": {"last_updated": "2000-01-01"},
-        "papers": {
-            "scholar-id:paper": {
-                "title": "Paper",
-                "year": "2025",
-                "citations": 1,
-            }
-        },
-    }
-    unchanged = {
-        "citation_id": "scholar-id:paper",
-        "title": "Paper",
-        "year": "2025",
-        "cited_by": {"value": 1},
-    }
-    with tempfile.TemporaryDirectory() as directory:
-        output = self._prepare_files(Path(directory), existing)
-        before = output.read_bytes()
-        with (
-            mock.patch.dict(os.environ, {"SERPAPI_API_KEY": "api-key"}, clear=True),
-            mock.patch.object(UPDATER, "fetch_author_articles", return_value=[unchanged]),
-            mock.patch.object(UPDATER.os, "replace") as replace,
-        ):
-            UPDATER.main()
+self.assertEqual(
+    ["fchmod", "file fsync", "replace", "directory fsync"],
+    events,
+)
+self.assertEqual(0o644, stat.S_IMODE(output.stat().st_mode))
 
-        replace.assert_not_called()
-        self.assertEqual(before, output.read_bytes())
+updated = yaml.safe_load(output.read_text(encoding="utf-8"))
+self.assertEqual(8, updated["papers"]["scholar-id:paper"]["citations"])
 ```
 
 - [ ] **Step 2: Verify RED**
@@ -701,8 +633,35 @@ from contextlib import suppress
 Add:
 
 ```python
+def fsync_directory(directory: Path) -> None:
+    directory_fd = os.open(
+        directory,
+        os.O_RDONLY | getattr(os, "O_DIRECTORY", 0),
+    )
+    fsync_error: OSError | None = None
+    try:
+        os.fsync(directory_fd)
+    except OSError as e:
+        fsync_error = e
+
+    try:
+        os.close(directory_fd)
+    except OSError as close_error:
+        if fsync_error is not None:
+            raise OSError(
+                f"{fsync_error}; additionally failed to close directory: {close_error}"
+            ) from fsync_error
+        raise
+
+    if fsync_error is not None:
+        raise fsync_error
+
+
 def write_citations_atomically(citation_data: Mapping) -> None:
-    temporary_path: Path | None = None
+    temp_path: Path | None = None
+    replaced = False
+    primary_error: OSError | yaml.YAMLError | None = None
+    cleanup_error: OSError | None = None
     try:
         serialized = yaml.safe_dump(
             citation_data,
@@ -718,20 +677,40 @@ def write_citations_atomically(citation_data: Mapping) -> None:
             prefix=f".{OUTPUT_FILE.name}.",
             suffix=".tmp",
             delete=False,
-        ) as temporary:
-            temporary_path = Path(temporary.name)
-            temporary.write(serialized)
-            temporary.flush()
-            os.fsync(temporary.fileno())
-
-        os.replace(temporary_path, OUTPUT_FILE)
-        temporary_path = None
-    except (OSError, yaml.YAMLError) as exc:
-        sys.exit(f"Error writing citations atomically: {exc}")
+        ) as temp_file:
+            temp_path = Path(temp_file.name)
+            temp_file.write(serialized)
+            temp_file.flush()
+            os.fchmod(temp_file.fileno(), 0o644)
+            os.fsync(temp_file.fileno())
+        os.replace(temp_path, OUTPUT_FILE)
+        replaced = True
+        fsync_directory(OUTPUT_FILE.parent)
+    except (OSError, yaml.YAMLError) as e:
+        primary_error = e
     finally:
-        if temporary_path is not None:
-            with suppress(OSError):
-                temporary_path.unlink()
+        if temp_path is not None and not replaced:
+            try:
+                with suppress(FileNotFoundError):
+                    temp_path.unlink()
+            except OSError as e:
+                cleanup_error = e
+
+    if primary_error is None:
+        return
+    if replaced:
+        sys.exit(
+            "Citation file was replaced, but directory durability could not be "
+            f"confirmed: {primary_error}"
+        )
+
+    message = f"Error writing citations atomically: {primary_error}"
+    if cleanup_error is not None:
+        message += (
+            "; additionally failed to clean up temporary citation file: "
+            f"{cleanup_error}"
+        )
+    sys.exit(message)
 ```
 
 Replace the direct `OUTPUT_FILE.open("w")` block with `write_citations_atomically(citation_data)`. Call it only after all schema, deletion, and no-op comparisons succeed.
@@ -746,7 +725,12 @@ docker run --rm --env PYTHONPYCACHEPREFIX=/tmp/pycache --volume "$PWD:/workspace
 git diff --check
 ```
 
-Expected: every failure path preserves the old file, and successful writes still produce safe, sorted YAML.
+Expected: pre-replace failures preserve the old bytes and normally clean up the
+temporary file; cleanup failures are surfaced and may leave that file behind.
+Successful writes produce sorted UTF-8 YAML with mode `0644`, sync the temporary
+file before replacement, and sync the parent directory afterward. A
+post-replace directory-sync failure exits with an explicit durability-uncertain
+message while the newly replaced valid file may remain visible.
 
 - [ ] **Step 5: Commit atomic publication**
 
@@ -1129,7 +1113,10 @@ After the manual run, downstream deploy, live badge comparison, and next schedul
 The implementation is complete only when all of the following evidence exists:
 
 - the legacy dependency and client are absent;
-- the updater tests prove timeout and HTTP classification, bounded attempts, per-page budgets, parameter secrecy, UTC dates, deletion refusal, no-op preservation, and atomic rollback;
+- the updater tests prove timeout and HTTP classification, bounded attempts,
+  per-page budgets, parameter secrecy, UTC dates, deletion refusal, no-op
+  preservation, pre-replace rollback and cleanup reporting, `0644` file and
+  directory sync ordering, and explicit post-replace durability uncertainty;
 - the release contracts prove `08:17 UTC`, manual dispatch, fixed concurrency, job timeouts, least privilege, artifact isolation, conflict-safe pushes, and the guarded deployment handoff;
 - the fresh-build contracts prove five exact source keys and four/home plus five/publications rendered badges with matching counts, links, and accessible labels;
 - local and pull-request gates pass;
