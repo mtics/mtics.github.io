@@ -108,41 +108,76 @@ CI currently rebuilds and scans amd64. The committed arm64 evidence comes from
 the four-report review manifest; it is not presented as a per-run arm64 CI
 scan.
 
-### Reviewed Debian classification changes
+### 2026-07-14 four-architecture review
 
-The 2026-07-12 DB changed 12 distinct Bookworm CVEs from `affected` to
-`fix_deferred` (12 normalized rows in the delivery image and 52 in the
-development image). The corresponding Debian source-package trackers classify
-them as postponed, and those report rows contain no `FixedVersion`, so this is
-a reviewed status change rather than evidence of a package fix:
+The review rebuilt both images for amd64 and arm64 from Debian snapshot
+`20260714T000000Z`, froze one Trivy vulnerability/Java DB pair, and compared
+every all-severity row with the previous retained reports. The delivery
+all-severity findings and both images' HIGH/CRITICAL findings are identical
+across architectures. Development LOW inventories retain expected
+architecture-specific binutils rows. None of the remaining HIGH/CRITICAL
+findings has `Status=fixed` or a `FixedVersion`.
 
-- `acl`: CVE-2026-54369
-  ([Debian tracker](https://security-tracker.debian.org/tracker/source-package/acl));
-- `curl`: CVE-2026-12064, CVE-2026-8286, CVE-2026-8927, and CVE-2026-8932
-  ([Debian tracker](https://security-tracker.debian.org/tracker/source-package/curl));
-- `glib2.0`: CVE-2026-58010 through CVE-2026-58016
-  ([Debian tracker](https://security-tracker.debian.org/tracker/source-package/glib2.0)).
+| Image | Previous counts (C/H/M/L/U) | Current counts (C/H/M/L/U) | Fixable C/H |
+| --- | --- | --- | --- |
+| delivery | 17 / 89 / 260 / 353 / 79 | 17 / 84 / 199 / 324 / 31 | 0 |
+| development | 27 / 324 / 1111 / 1109 / 33 | 26 / 319 / 1039 / 1083 / 43 | 0 |
 
-`CVE-2026-9547` was removed after the fresh DB stopped reporting it. The
-[Debian security tracker](https://security-tracker.debian.org/tracker/CVE-2026-9547)
-marks Bookworm not affected because Debian builds curl with `libssh2` and
-without the affected `libssh` backend. The
-[tracker change](https://salsa.debian.org/security-tracker-team/security-tracker/-/commit/78e637f1bc72f7e6f59c35fa4a89ac61f675f96b),
-[curl advisory](https://curl.se/docs/CVE-2026-9547.html), and Debian
+The snapshot upgrade installs ImageMagick
+`8:6.9.11.60+dfsg-1.6+deb12u12`. Debian
+[DLA-4680-1](https://lists.debian.org/debian-lts-announce/2026/07/msg00023.html)
+fixes 19 CVEs in that version. This removes the five previously reviewed
+HIGH/CRITICAL ImageMagick CVEs (CVE-2026-56361, CVE-2026-56367,
+CVE-2026-56368, CVE-2026-56370, and CVE-2026-56378) across all five installed
+ImageMagick binary packages.
+
+The same current DB classifies CVE-2026-56372 as CRITICAL and CVE-2026-61857,
+CVE-2026-61861, and CVE-2026-61870 as HIGH for those packages. The Bookworm
+tracker entries still have no fixed version, so these 20 rows remain explicit
+unfixed baseline entries. ImageMagick is used only during the build against
+repository-controlled inputs; that limits exposure but is not treated as a
+substitute for a vendor fix.
+
+The current DB also changes the following HIGH/CRITICAL rows from `affected`
+to Debian's `fix_deferred` classification, without adding a `FixedVersion`:
+
+- gzip CVE-2026-41992 in both images;
+- wget CVE-2026-58471 and CVE-2026-58472 in the development image;
+- openssh-client CVE-2026-59999, CVE-2026-60000, and CVE-2026-60002 in the
+  development image;
+- python3-jwt CVE-2026-48526 in the development image.
+
+CVE-2026-56123 disappears from socat because Debian Bookworm is not affected.
+The fresh DB also removes rows now resolved as fixed or not affected for XZ,
+FreeType, Python, and PyJWT. The 27 Chromium CVEs previously reported as
+`UNKNOWN` disappear because Debian's
+installed `150.0.7871.114-1~deb12u1` package contains the fixes recorded in
+[DLA-4677-1](https://lists.debian.org/debian-lts-announce/2026/07/msg00019.html).
+These removals were reviewed as vendor-data corrections, not silently accepted
+as risk reductions.
+
+At lower severities, the refresh adds current Perl and gawk `UNKNOWN` records
+and reintroduces curl CVE-2026-9547 as `LOW`. All additions, removals, severity
+changes, and status changes are committed by the architecture-specific counts
+and inventory hashes, so later drift still fails closed.
+
+## Known curl build-configuration scanner gap
+
+Trivy reports CVE-2026-9547 for one delivery package row and four development
+package rows on each architecture. The
+[Debian tracker](https://security-tracker.debian.org/tracker/CVE-2026-9547)
+currently labels Bookworm vulnerable but also records that Debian builds curl
+with `--without-libssh --with-libssh2`. The
+[curl advisory](https://curl.se/docs/CVE-2026-9547.html) states that the flaw
+requires the libssh backend, does not affect libssh2, and does not affect the
+curl command-line tool. Debian's pinned
 [Bookworm build rules](https://sources.debian.org/src/curl/7.88.1-10%2Bdeb12u15/debian/rules/#L19)
-agree with that classification.
+confirm that configuration.
 
-## Known Chromium severity-classification gap
-
-The all-severity reports contain CVE-2026-15107 through CVE-2026-15133 for both
-`chromium` and `chromium-common`: 27 unique CVEs and 54 package rows on each
-architecture. Trivy classifies every row as `UNKNOWN`, while the
-[Debian tracker](https://security-tracker.debian.org/tracker/source-package/chromium)
-lists the issues for releases before 150.0.7871.115. The image uses the newest
-package available in the pinned Debian snapshot, 150.0.7871.114-1~deb12u1.
-
-This unresolved severity classification is recorded in
-`.security-scanner-gaps.yml`; it is not hidden in the HIGH/CRITICAL baseline.
-Until Debian publishes 150.0.7871.115 or later, browser checks receive a
-read-only site workspace and write evidence only to runner-temporary storage.
-The record expires within 30 days so the containment cannot become indefinite.
+This is therefore a conservative package-level false positive for the exact
+installed build, not a claim that the source-package tracker is wrong. The
+evidence, affected package rows, and verification conditions are recorded in
+`.security-scanner-gaps.yml` and bound to the same DB timestamp and review
+window as the generated baseline. The record expires within 14 days and must be
+removed if Trivy stops reporting it or if the package build configuration
+changes.

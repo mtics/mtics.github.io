@@ -1,10 +1,10 @@
 {
   "schema_version": 4,
-  "reviewed_at": "2026-07-12",
-  "review_before": "2026-07-26",
+  "reviewed_at": "2026-07-14",
+  "review_before": "2026-07-28",
   "minimum_db_updated_at": {
-    "vulnerability": "2026-07-12T07:28:36.403115102Z",
-    "java": "2026-07-12T01:45:25.736113622Z"
+    "vulnerability": "2026-07-14T00:59:06.814946057Z",
+    "java": "2026-07-13T01:50:41.35432825Z"
   },
   "images": {
     "delivery": [
@@ -26,155 +26,125 @@
         "VulnerabilityID": "CVE-2026-41992",
         "InstalledVersion": "1.12-1",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
@@ -581,100 +551,80 @@
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
@@ -1148,155 +1098,125 @@
         "VulnerabilityID": "CVE-2026-41992",
         "InstalledVersion": "1.12-1",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6-common@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6-common",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick-6.q16@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick-6.q16",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "imagemagick@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "imagemagick",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
@@ -2143,100 +2063,80 @@
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickcore-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickcore-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56361",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
-        "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
-        "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56367",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-56372",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56368",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61857",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56370",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61861",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
       {
         "Class": "os-pkgs",
         "Type": "debian",
-        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u11",
+        "PkgID": "libmagickwand-6.q16-6@8:6.9.11.60+dfsg-1.6+deb12u12",
         "PkgName": "libmagickwand-6.q16-6",
-        "VulnerabilityID": "CVE-2026-56378",
-        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u11",
+        "VulnerabilityID": "CVE-2026-61870",
+        "InstalledVersion": "8:6.9.11.60+dfsg-1.6+deb12u12",
         "Severity": "HIGH",
         "Status": "affected"
       },
@@ -3848,7 +3748,7 @@
         "VulnerabilityID": "CVE-2026-59999",
         "InstalledVersion": "1:9.2p1-2+deb12u10",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -3858,7 +3758,7 @@
         "VulnerabilityID": "CVE-2026-60000",
         "InstalledVersion": "1:9.2p1-2+deb12u10",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -3868,7 +3768,7 @@
         "VulnerabilityID": "CVE-2026-60002",
         "InstalledVersion": "1:9.2p1-2+deb12u10",
         "Severity": "CRITICAL",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -4048,7 +3948,7 @@
         "VulnerabilityID": "CVE-2026-48526",
         "InstalledVersion": "2.6.0-1+deb12u1",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -4128,16 +4028,6 @@
         "VulnerabilityID": "CVE-2026-7210",
         "InstalledVersion": "3.11.2-6+deb12u8",
         "Severity": "HIGH",
-        "Status": "affected"
-      },
-      {
-        "Class": "os-pkgs",
-        "Type": "debian",
-        "PkgID": "socat@1.7.4.4-2",
-        "PkgName": "socat",
-        "VulnerabilityID": "CVE-2026-56123",
-        "InstalledVersion": "1.7.4.4-2",
-        "Severity": "CRITICAL",
         "Status": "affected"
       },
       {
@@ -4548,7 +4438,7 @@
         "VulnerabilityID": "CVE-2026-58471",
         "InstalledVersion": "1.21.3-1+deb12u1",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -4558,7 +4448,7 @@
         "VulnerabilityID": "CVE-2026-58472",
         "InstalledVersion": "1.21.3-1+deb12u1",
         "Severity": "HIGH",
-        "Status": "affected"
+        "Status": "fix_deferred"
       },
       {
         "Class": "os-pkgs",
@@ -4607,7 +4497,7 @@
           "Class": "os-pkgs",
           "Type": "debian",
           "PackageCount": 301,
-          "PackageInventorySHA256": "e00ac9040ce4eee6d9f1f6614e265d9778d536f5e3cf639e9e37bf8f34095fe5"
+          "PackageInventorySHA256": "4a505227911d41f598ca9eebdef19b632bb7f1fb218644140f6fbdff042caad3"
         }
       ],
       "arm64": [
@@ -4633,7 +4523,7 @@
           "Class": "os-pkgs",
           "Type": "debian",
           "PackageCount": 299,
-          "PackageInventorySHA256": "7620b9a893e30976a11f73c187e9602769b7196e717a85b54342e32e40e08be5"
+          "PackageInventorySHA256": "191e5989e9fbc5aef8ed74843e70464fc830bfbbdc328788c3da8c4d36d36227"
         }
       ]
     },
@@ -4661,7 +4551,7 @@
           "Class": "os-pkgs",
           "Type": "debian",
           "PackageCount": 454,
-          "PackageInventorySHA256": "4a9402e8fd90299d139ebba423c9faa172fa597acb19fff22337aaa24a1d93a1"
+          "PackageInventorySHA256": "92263043cf0b9d9b26300e331ed6a0a0e1738756ea48bb56d524b64feca81777"
         }
       ],
       "arm64": [
@@ -4687,7 +4577,7 @@
           "Class": "os-pkgs",
           "Type": "debian",
           "PackageCount": 454,
-          "PackageInventorySHA256": "e063693c509a49f632d2e52511564db43d28007f2f810018a634301a17db7dd8"
+          "PackageInventorySHA256": "4d447967546b7b6eb44428102220859e89fbab76acf4f3293bc3349fab54e0f4"
         }
       ]
     }
@@ -4698,54 +4588,54 @@
         {
           "Severity": "CRITICAL",
           "FindingCount": 17,
-          "FindingInventorySHA256": "5884367fb793bf7785cbeaa0b6f2c5b78558b4fcb4885d38f08190b9ac72d4a0"
+          "FindingInventorySHA256": "31606392c8396b9badc86bebd4ed7167cd44ad3a1c07150658a8b23320dce593"
         },
         {
           "Severity": "HIGH",
-          "FindingCount": 89,
-          "FindingInventorySHA256": "ab45f18b3b87d198bc365086f06ab97f5740479b98bc7f7ddbce1f0354cd74f2"
+          "FindingCount": 84,
+          "FindingInventorySHA256": "cd3b16e04ba2b594e1956bb721ce152e897097f8f1d7d09b74e1c621d4527c57"
         },
         {
           "Severity": "LOW",
-          "FindingCount": 353,
-          "FindingInventorySHA256": "34644ad2b06c26ae2b6f79b4054e78a195f028c66025b5c7434fafdb86b92db1"
+          "FindingCount": 324,
+          "FindingInventorySHA256": "a7d3bd072c6ce33c0575a5f56362b05493dd0272571de4359a4ac101228451c2"
         },
         {
           "Severity": "MEDIUM",
-          "FindingCount": 260,
-          "FindingInventorySHA256": "79ccec58f9c080947b08bb7ad55f31be5b626cdb41a34a7fd14020158a430a5e"
+          "FindingCount": 199,
+          "FindingInventorySHA256": "9bf26da24ca2c29876116d51ad6cf4b6cd15388b2d377db601e0aaf73dd36d51"
         },
         {
           "Severity": "UNKNOWN",
-          "FindingCount": 79,
-          "FindingInventorySHA256": "aa233acf603c47cf6a5c9d1ef9fe1cffae62409c100e6908a8a464e1d483974d"
+          "FindingCount": 31,
+          "FindingInventorySHA256": "676cd8c1536aca4c5c5613797baeff0a3968e1f895eeeabb093a52c790a87e4f"
         }
       ],
       "arm64": [
         {
           "Severity": "CRITICAL",
           "FindingCount": 17,
-          "FindingInventorySHA256": "5884367fb793bf7785cbeaa0b6f2c5b78558b4fcb4885d38f08190b9ac72d4a0"
+          "FindingInventorySHA256": "31606392c8396b9badc86bebd4ed7167cd44ad3a1c07150658a8b23320dce593"
         },
         {
           "Severity": "HIGH",
-          "FindingCount": 89,
-          "FindingInventorySHA256": "ab45f18b3b87d198bc365086f06ab97f5740479b98bc7f7ddbce1f0354cd74f2"
+          "FindingCount": 84,
+          "FindingInventorySHA256": "cd3b16e04ba2b594e1956bb721ce152e897097f8f1d7d09b74e1c621d4527c57"
         },
         {
           "Severity": "LOW",
-          "FindingCount": 353,
-          "FindingInventorySHA256": "34644ad2b06c26ae2b6f79b4054e78a195f028c66025b5c7434fafdb86b92db1"
+          "FindingCount": 324,
+          "FindingInventorySHA256": "a7d3bd072c6ce33c0575a5f56362b05493dd0272571de4359a4ac101228451c2"
         },
         {
           "Severity": "MEDIUM",
-          "FindingCount": 260,
-          "FindingInventorySHA256": "79ccec58f9c080947b08bb7ad55f31be5b626cdb41a34a7fd14020158a430a5e"
+          "FindingCount": 199,
+          "FindingInventorySHA256": "9bf26da24ca2c29876116d51ad6cf4b6cd15388b2d377db601e0aaf73dd36d51"
         },
         {
           "Severity": "UNKNOWN",
-          "FindingCount": 79,
-          "FindingInventorySHA256": "aa233acf603c47cf6a5c9d1ef9fe1cffae62409c100e6908a8a464e1d483974d"
+          "FindingCount": 31,
+          "FindingInventorySHA256": "676cd8c1536aca4c5c5613797baeff0a3968e1f895eeeabb093a52c790a87e4f"
         }
       ]
     },
@@ -4753,55 +4643,55 @@
       "amd64": [
         {
           "Severity": "CRITICAL",
-          "FindingCount": 27,
-          "FindingInventorySHA256": "e2cdb6774095edd839ea64f1580590de7cda3db05087baac2e1ccede756a18d9"
+          "FindingCount": 26,
+          "FindingInventorySHA256": "48cbcb2816fbba9d9ba5bd6d557568d419a4911f29d324c743c977af06e437a2"
         },
         {
           "Severity": "HIGH",
-          "FindingCount": 324,
-          "FindingInventorySHA256": "bb661cc244cef07aef4598da3145229411e27c8668a6e58cb2ab22cfbd6829cf"
+          "FindingCount": 319,
+          "FindingInventorySHA256": "559634a444ab6d55ec30f81a7419445d9b422cc55d69bf82982b0e9d14e4e4d0"
         },
         {
           "Severity": "LOW",
-          "FindingCount": 1109,
-          "FindingInventorySHA256": "39e442d20ccab5840086b503beba135bcba4899c1daabf8020fb52c3febc06cb"
+          "FindingCount": 1083,
+          "FindingInventorySHA256": "4b714490ab92b70fa6ef0721a0ce4d7edd612bcd6fd234be6036cfca715c50ab"
         },
         {
           "Severity": "MEDIUM",
-          "FindingCount": 1111,
-          "FindingInventorySHA256": "383a663292364c91d02797355249bbbc9ca7fa1bb24949fea13e06394e92b00d"
+          "FindingCount": 1039,
+          "FindingInventorySHA256": "12ffdd1a515565d5ef76f9389665cdb4f7a1414e4cd621fa88c154a976a36a73"
         },
         {
           "Severity": "UNKNOWN",
-          "FindingCount": 33,
-          "FindingInventorySHA256": "3cdbc3ce4ca09cbbe0295a898ea178d55c807ce253b62bd8699d51dbfed9fc6a"
+          "FindingCount": 43,
+          "FindingInventorySHA256": "fae01416a5566ebab50ea96ce07af85bd8740681122f6624f4285ad284fb7c90"
         }
       ],
       "arm64": [
         {
           "Severity": "CRITICAL",
-          "FindingCount": 27,
-          "FindingInventorySHA256": "e2cdb6774095edd839ea64f1580590de7cda3db05087baac2e1ccede756a18d9"
+          "FindingCount": 26,
+          "FindingInventorySHA256": "48cbcb2816fbba9d9ba5bd6d557568d419a4911f29d324c743c977af06e437a2"
         },
         {
           "Severity": "HIGH",
-          "FindingCount": 324,
-          "FindingInventorySHA256": "bb661cc244cef07aef4598da3145229411e27c8668a6e58cb2ab22cfbd6829cf"
+          "FindingCount": 319,
+          "FindingInventorySHA256": "559634a444ab6d55ec30f81a7419445d9b422cc55d69bf82982b0e9d14e4e4d0"
         },
         {
           "Severity": "LOW",
-          "FindingCount": 1109,
-          "FindingInventorySHA256": "3cd83d43752b1eef937140a239bb69342a834ae8ca489013bced5f46ce5130be"
+          "FindingCount": 1083,
+          "FindingInventorySHA256": "74771259b21fe6180d75e6c005cdf3bd1f513fdd32da71119f1e7febc6f10f1e"
         },
         {
           "Severity": "MEDIUM",
-          "FindingCount": 1111,
-          "FindingInventorySHA256": "383a663292364c91d02797355249bbbc9ca7fa1bb24949fea13e06394e92b00d"
+          "FindingCount": 1039,
+          "FindingInventorySHA256": "12ffdd1a515565d5ef76f9389665cdb4f7a1414e4cd621fa88c154a976a36a73"
         },
         {
           "Severity": "UNKNOWN",
-          "FindingCount": 33,
-          "FindingInventorySHA256": "3cdbc3ce4ca09cbbe0295a898ea178d55c807ce253b62bd8699d51dbfed9fc6a"
+          "FindingCount": 43,
+          "FindingInventorySHA256": "fae01416a5566ebab50ea96ce07af85bd8740681122f6624f4285ad284fb7c90"
         }
       ]
     }

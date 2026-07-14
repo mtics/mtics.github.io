@@ -675,7 +675,7 @@ class ReleaseContractTest < Minitest::Test
   def test_container_os_is_fully_upgraded_inside_the_fresh_immutable_debian_snapshot
     %w[Dockerfile .devcontainer/Dockerfile].each do |path|
       dockerfile = read(path)
-      assert_match(/^ARG DEBIAN_SNAPSHOT=20260712T043000Z$/, dockerfile)
+      assert_match(/^ARG DEBIAN_SNAPSHOT=20260714T000000Z$/, dockerfile)
       apt_stages = dockerfile
                    .split(/^FROM /)
                    .drop(1)
@@ -1114,8 +1114,9 @@ class ReleaseContractTest < Minitest::Test
     end
   end
 
-  def test_chromium_scanner_gap_is_explicit_short_lived_and_bound_to_the_image
+  def test_curl_scanner_gap_is_explicit_short_lived_and_bound_to_the_baseline
     gap_document = YAML.load_file(File.join(ROOT, ".security-scanner-gaps.yml"))
+    baseline = JSON.parse(read(".trivy-unfixed-baseline.json"))
     assert_equal 1, gap_document.fetch("schema_version")
     assert_equal %w[gaps scanner schema_version], gap_document.keys.sort
     assert_equal(
@@ -1124,55 +1125,69 @@ class ReleaseContractTest < Minitest::Test
         "version" => "0.70.0",
         "severities" => %w[UNKNOWN LOW MEDIUM HIGH CRITICAL],
         "package_types" => %w[os library],
-        "vulnerability_db_updated_at" => "2026-07-12T07:28:36.403115102Z"
+        "vulnerability_db_updated_at" => baseline
+          .fetch("minimum_db_updated_at")
+          .fetch("vulnerability")
       },
       gap_document.fetch("scanner")
     )
     assert_equal 1, gap_document.fetch("gaps").length
     gap = gap_document.fetch("gaps").then { |gaps| gaps.fetch(0) }
     assert_equal %w[
-      containment cves gap_type image installed_version official_source_url package
-      review_before reviewed_at scanner_evidence status upstream_fixed_version
+      cve gap_type installed_version official_sources package remediation review_before
+      reviewed_at scanner_evidence status upstream_fixed_version verification
     ], gap.keys.sort
 
-    assert_equal "chromium", gap.fetch("package")
-    assert_equal "150.0.7871.114-1~deb12u1", gap.fetch("installed_version")
-    assert_equal "150.0.7871.115", gap.fetch("upstream_fixed_version")
-    assert_equal "delivery", gap.fetch("image")
-    assert_equal "unresolved_severity_classification", gap.fetch("gap_type")
+    assert_equal "curl", gap.fetch("package")
+    assert_equal "CVE-2026-9547", gap.fetch("cve")
+    assert_equal "7.88.1-10+deb12u15", gap.fetch("installed_version")
+    assert_equal "8.21.0", gap.fetch("upstream_fixed_version")
+    assert_equal "build_configuration_false_positive", gap.fetch("gap_type")
     assert_equal(
       {
-        "severity" => "UNKNOWN",
+        "severity" => "LOW",
         "status" => "affected",
         "fixed_version" => nil,
-        "packages" => %w[chromium chromium-common],
-        "unique_cves" => 27,
-        "package_rows" => {"amd64" => 54, "arm64" => 54}
+        "images" => {
+          "delivery" => {
+            "packages" => ["libcurl3-gnutls"],
+            "package_rows" => {"amd64" => 1, "arm64" => 1}
+          },
+          "development" => {
+            "packages" => %w[curl libcurl3-gnutls libcurl4 libcurl4-openssl-dev],
+            "package_rows" => {"amd64" => 4, "arm64" => 4}
+          }
+        }
       },
       gap.fetch("scanner_evidence")
     )
-    assert_equal "https://security-tracker.debian.org/tracker/source-package/chromium",
-                 gap.fetch("official_source_url")
-
-    cves = gap.fetch("cves")
-    expected_cves = (15_107..15_133).map { |number| "CVE-2026-#{number}" }
-    assert_equal expected_cves, cves
-    assert_equal cves.sort, cves
-    assert_equal cves.uniq, cves
+    assert_equal(
+      {
+        "debian_tracker" => "https://security-tracker.debian.org/tracker/CVE-2026-9547",
+        "curl_advisory" => "https://curl.se/docs/CVE-2026-9547.html",
+        "debian_build_rules" => "https://sources.debian.org/src/curl/7.88.1-10%2Bdeb12u15/debian/rules/#L19"
+      },
+      gap.fetch("official_sources")
+    )
+    assert_equal(
+      {
+        "vulnerable_backend" => "libssh",
+        "debian_backend" => "libssh2",
+        "debian_build_flags" => "--without-libssh --with-libssh2",
+        "curl_cli_affected" => false
+      },
+      gap.fetch("verification")
+    )
+    assert_equal "not_exploitable_with_pinned_debian_build_configuration",
+                 gap.fetch("status")
 
     reviewed_at = Date.iso8601(gap.fetch("reviewed_at"))
     review_before = Date.iso8601(gap.fetch("review_before"))
+    assert_equal baseline.fetch("reviewed_at"), gap.fetch("reviewed_at")
+    assert_equal baseline.fetch("review_before"), gap.fetch("review_before")
     assert_operator reviewed_at, :<=, Date.today
     assert_operator review_before, :>, Date.today
     assert_operator (review_before - reviewed_at).to_i, :<=, 30
-    assert_equal "read_only", gap.dig("containment", "browser_workspace")
-    assert_equal "runner_temp", gap.dig("containment", "browser_artifacts")
-
-    dockerfile = read("Dockerfile")
-    assert_match(
-      /^ARG CHROMIUM_VERSION=#{Regexp.escape(gap.fetch("installed_version"))}$/,
-      dockerfile
-    )
     workflow = read(".github/workflows/deploy.yml")
     assert_includes workflow,
                     "TRIVY_IMAGE: aquasec/trivy@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e # v#{gap_document.dig('scanner', 'version')}"

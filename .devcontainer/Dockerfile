@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/devcontainers/jekyll:3.4-bookworm@sha256:6866df1504c0f345
 
 RUN rm -rf /usr/local/lib/ruby /usr/local/rvm
 
-ARG DEBIAN_SNAPSHOT=20260712T043000Z
+ARG DEBIAN_SNAPSHOT=20260714T000000Z
 ARG BUNDLER_VERSION=2.6.9
 ARG NODE_VERSION=24.18.0
 ARG NPM_VERSION=11.18.0

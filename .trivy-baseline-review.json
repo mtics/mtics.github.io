@@ -3,7 +3,7 @@
   "baseline": {
     "path": ".trivy-unfixed-baseline.json",
     "schema_version": 4,
-    "sha256": "def9dd4f53d83a97924690fbdd5fffc800200871854cf40aca1c52a98fa15d84"
+    "sha256": "24bc174823e7a36d1024979c96a2402ae95598943126cf208f14ca9d03bc3038"
   },
   "scanner": {
     "name": "Trivy",
@@ -30,38 +30,38 @@
       "skip_java_db_update": true
     }
   },
-  "trivy_version_json_sha256": "a362d645b687f7a3e1a1f4d844e7176c9245f975adc5736bcfea9f8db12ee484",
+  "trivy_version_json_sha256": "ad94ac3b5a594be3d55a6c99a3d433b27f71b91e973685e724649f992f31a647",
   "databases": {
     "vulnerability": {
       "schema_version": 2,
-      "updated_at": "2026-07-12T07:28:36.403115102Z",
-      "next_update": "2026-07-13T07:28:36.403114842Z",
-      "downloaded_at": "2026-07-12T09:41:44.210288044Z",
-      "sha256": "62e6d0f22c9f1c50fe394225ccfe2f9a207335fd99befc5d01856fad072e709e",
-      "metadata_sha256": "aeb27114f930e6fc30150ec7b00efd6d2e05f5fdf8e613040e385a1f6150c4b0",
+      "updated_at": "2026-07-14T00:59:06.814946057Z",
+      "next_update": "2026-07-15T00:59:06.814945796Z",
+      "downloaded_at": "2026-07-14T01:12:49.632979169Z",
+      "sha256": "0837c40e1a80fc78891d333d0c8f9184ebd205e62f9c524aff5f6827b5f36a8c",
+      "metadata_sha256": "69db6b3509ce370b0b50d5806c8fca70c0269fefefea7b1c1422334819ab9e1f",
       "oci": {
         "repository": "ghcr.io/aquasecurity/trivy-db",
         "resolved_from": "ghcr.io/aquasecurity/trivy-db:2",
-        "manifest_digest": "sha256:c24924e21bffea290ee0696feaa696e54a2c158dfbcbe674b3c690e3072cfd2e",
-        "layer_digest": "sha256:b27122619190be0337d26c4c52a3e0a37af01fd0bd35ec3eee982f1805372186",
+        "manifest_digest": "sha256:a707a7ded3a7558748785ed711886d3983354d781e107b582b457d8c2da5f219",
+        "layer_digest": "sha256:3a4047df69079bd63a2598bd88aee607b4f9e69ae4a26ed0192ee33c91434a5a",
         "layer_media_type": "application/vnd.aquasec.trivy.db.layer.v1.tar+gzip",
-        "layer_size": 104742230
+        "layer_size": 104996277
       }
     },
     "java": {
       "schema_version": 1,
-      "updated_at": "2026-07-12T01:45:25.736113622Z",
-      "next_update": "2026-07-15T01:45:25.736113502Z",
-      "downloaded_at": "2026-07-12T09:42:41.896898501Z",
-      "sha256": "150c266a372a458c8cbb9c8099263ef13856300146c59aa3398da610790b8d8c",
-      "metadata_sha256": "b6e3424460140291d2e62e886a1f7c3f132bd4819c87f2d4e86037ffaffd0b27",
+      "updated_at": "2026-07-13T01:50:41.35432825Z",
+      "next_update": "2026-07-16T01:50:41.35432813Z",
+      "downloaded_at": "2026-07-14T01:13:17.235679584Z",
+      "sha256": "eb2747d0a6938b7426c3df7072565e4ff870f74ea129ede6539eac21e9821bc6",
+      "metadata_sha256": "5488b51066b40ba84d27bc883127f6a05018e3938f06a20cc024a1c84668bd6e",
       "oci": {
         "repository": "ghcr.io/aquasecurity/trivy-java-db",
         "resolved_from": "ghcr.io/aquasecurity/trivy-java-db:1",
-        "manifest_digest": "sha256:4f3a5919519a9b5a3bd7bf1f55f24e97405d17e8213d1420281f0d4e78f52084",
-        "layer_digest": "sha256:cb9030f319b138c53ca3ab3615c72bc9688837d17546b56db39a68155e6dc669",
+        "manifest_digest": "sha256:a0a98e8138f3ff47a4e376e41604774bad3d49b6e421459eaddae2ebe97e7056",
+        "layer_digest": "sha256:b6a02ce5e110f9b665f8cf2452f2c29ad79a640fe105e10deea5d0db57904ff9",
         "layer_media_type": "application/vnd.aquasec.trivy.javadb.layer.v1.tar+gzip",
-        "layer_size": 934805735
+        "layer_size": 935149887
       }
     }
   },
@@ -70,30 +70,30 @@
       "amd64": {
         "artifact_name": "mtics-al-folio:ci",
         "architecture": "amd64",
-        "created_at": "2026-07-12T09:42:42.094399835Z",
-        "image_id": "sha256:906aed690ed2d60eec78eca88c0d7f7c0f86c532f8577eb743e5f5cdf6000a90",
-        "sha256": "7bdc4e123078464b955e47b212d4e789ce1cf84895ada932253bad0054a7803f",
+        "created_at": "2026-07-14T01:26:10.041525053Z",
+        "image_id": "sha256:29f15adfcb2c8bddf9d8c7328ad79d1fc50c7fd8ffb55813b300c1da196fc064",
+        "sha256": "7ca302eec0917ecdd3b11c557cded1356c40f561d30fff69a1a714e05671069e",
         "severity_counts": {
           "CRITICAL": 17,
-          "HIGH": 89,
-          "LOW": 353,
-          "MEDIUM": 260,
-          "UNKNOWN": 79
+          "HIGH": 84,
+          "LOW": 324,
+          "MEDIUM": 199,
+          "UNKNOWN": 31
         },
         "fixable_high_critical_count": 0
       },
       "arm64": {
         "artifact_name": "mtics-al-folio:release-arm64",
         "architecture": "arm64",
-        "created_at": "2026-07-12T09:57:11.352635542Z",
-        "image_id": "sha256:67bd9fcc01b0ad2f028192c05489145ac84622139713fe0c403e684ae7238019",
-        "sha256": "f45852d009a65bc20576c303eb7b0d41a2f144516165196481b3e36411f3fd9e",
+        "created_at": "2026-07-14T01:26:09.858525637Z",
+        "image_id": "sha256:0b42dcb6419df60f90753b9417c41b16c96768d7d3a83720478b7794235f3c15",
+        "sha256": "d14b17364a01904a967d1de1055a06007ce24b86a189e67ba183e4f4192dbdc1",
         "severity_counts": {
           "CRITICAL": 17,
-          "HIGH": 89,
-          "LOW": 353,
-          "MEDIUM": 260,
-          "UNKNOWN": 79
+          "HIGH": 84,
+          "LOW": 324,
+          "MEDIUM": 199,
+          "UNKNOWN": 31
         },
         "fixable_high_critical_count": 0
       }
@@ -102,37 +102,37 @@
       "amd64": {
         "artifact_name": "mtics-devcontainer:ci",
         "architecture": "amd64",
-        "created_at": "2026-07-12T09:43:07.447451097Z",
-        "image_id": "sha256:0a007e6b0addc6de4a38358bc88975cc4f44989d411a7fac7d2fa2522a12989f",
-        "sha256": "0e755aef9ea8fd9da0f01564cd730ac6e2758bfab2163f7109f6189422a017a8",
+        "created_at": "2026-07-14T01:26:12.881803055Z",
+        "image_id": "sha256:be1e6b58405ca273e9ca7dab9823cb6c7b86086d40e388d2853a1c8aa74e1fad",
+        "sha256": "00eb34d56532c8e68cec3c38c17a07e37382c510dfd614e4f49061ffa6b92767",
         "severity_counts": {
-          "CRITICAL": 27,
-          "HIGH": 324,
-          "LOW": 1109,
-          "MEDIUM": 1111,
-          "UNKNOWN": 33
+          "CRITICAL": 26,
+          "HIGH": 319,
+          "LOW": 1083,
+          "MEDIUM": 1039,
+          "UNKNOWN": 43
         },
         "fixable_high_critical_count": 0
       },
       "arm64": {
         "artifact_name": "mtics-devcontainer:release-arm64",
         "architecture": "arm64",
-        "created_at": "2026-07-12T09:57:25.790680966Z",
-        "image_id": "sha256:c07fc3fd2f11eaa28b5aa58133cb0da37299f8f82ebd1ad495eea3096a6e764f",
-        "sha256": "55d07bd6dad7f68706d0da006baee66519b8a7ba12990622d4cd9f1160c84e46",
+        "created_at": "2026-07-14T01:26:12.881803055Z",
+        "image_id": "sha256:064e2a18816a4cd5b34a132b78e9a123fdaf02e3a11ae3f07453b197474e9256",
+        "sha256": "66c913a285f0ea12b1e8dcc6fbea4d874b3c7d1c3449d4e50a999652ad1d574e",
         "severity_counts": {
-          "CRITICAL": 27,
-          "HIGH": 324,
-          "LOW": 1109,
-          "MEDIUM": 1111,
-          "UNKNOWN": 33
+          "CRITICAL": 26,
+          "HIGH": 319,
+          "LOW": 1083,
+          "MEDIUM": 1039,
+          "UNKNOWN": 43
         },
         "fixable_high_critical_count": 0
       }
     }
   },
   "high_critical_inventory_sha256": {
-    "delivery": "68354775355e0470f0fecfef82bc3670f5a87503a0646259cee64d1dab80fe1b",
-    "development": "a572dd163025d6d2a78c382a7df05e5a821eb40074de89be0992c35fe6c1557d"
+    "delivery": "b7d14daf3b86060282302ad93e54acfa6f492521418bb26b01afa7a15f35c580",
+    "development": "1865fcbed86084455b31fee267b0fe98f13398719f9528c3ba34a74f486536f6"
   }
 }

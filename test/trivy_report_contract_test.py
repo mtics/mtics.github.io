@@ -1271,12 +1271,13 @@ class TrivyProvenanceBuilderContractTest(unittest.TestCase):
 
             vulnerability_db.write_bytes(b"vulnerability database fixture")
             java_db.write_bytes(b"Java database fixture")
-            created_at = rfc3339(utc_now() - dt.timedelta(minutes=1))
+            now = utc_now()
+            created_at = rfc3339(now - dt.timedelta(minutes=1))
             vulnerability_metadata_document = {
                 "Version": 2,
-                "UpdatedAt": "2026-07-12T07:28:36Z",
-                "NextUpdate": "2026-07-13T07:28:36Z",
-                "DownloadedAt": "2026-07-12T08:00:00Z",
+                "UpdatedAt": rfc3339(now - dt.timedelta(hours=2)),
+                "NextUpdate": rfc3339(now + dt.timedelta(hours=22)),
+                "DownloadedAt": rfc3339(now - dt.timedelta(hours=1)),
             }
             vulnerability_metadata.write_text(
                 json.dumps(vulnerability_metadata_document), encoding="utf-8"
