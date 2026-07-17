@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-07-12'
+  last_updated: '2026-07-17'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -46,7 +46,7 @@ papers:
     title: 'AlignFedRec: Dual structural alignment for item representation learning in federated recommendation'
     year: '2026'
   b3glA2AAAAAJ:u-x6o8ySG0sC:
-    citations: 93
+    citations: 94
     title: Federated recommendation with additive personalization
     year: '2024'
   b3glA2AAAAAJ:ufrVoPGSRksC:
