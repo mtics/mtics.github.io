@@ -1,12 +1,12 @@
 metadata:
-  last_updated: '2026-07-26'
+  last_updated: '2026-07-27'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
     title: Incomplete multi-view weak-label learning with noisy features and imbalanced labels
     year: '2023'
   b3glA2AAAAAJ:IjCSPb-OGe4C:
-    citations: 12
+    citations: 13
     title: Federated Vision-Language-Recommendation with Personalized Fusion
     year: '2026'
   b3glA2AAAAAJ:LkGwnXOMwfcC:
@@ -14,7 +14,7 @@ papers:
     title: 'Learning to Collaborate via Structures: Cluster-Guided Item Alignment for Federated Recommendation'
     year: '2026'
   b3glA2AAAAAJ:UeHWp8X0CEIC:
-    citations: 41
+    citations: 42
     title: 'Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach'
     year: '2024'
   b3glA2AAAAAJ:WF5omc3nYNoC:
@@ -46,7 +46,7 @@ papers:
     title: 'AlignFedRec: Dual structural alignment for item representation learning in federated recommendation'
     year: '2026'
   b3glA2AAAAAJ:u-x6o8ySG0sC:
-    citations: 95
+    citations: 96
     title: Federated recommendation with additive personalization
     year: '2024'
   b3glA2AAAAAJ:ufrVoPGSRksC:
