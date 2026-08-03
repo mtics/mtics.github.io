@@ -1,12 +1,12 @@
 metadata:
-  last_updated: '2026-07-27'
+  last_updated: '2026-08-03'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
     title: Incomplete multi-view weak-label learning with noisy features and imbalanced labels
     year: '2023'
   b3glA2AAAAAJ:IjCSPb-OGe4C:
-    citations: 13
+    citations: 14
     title: Federated Vision-Language-Recommendation with Personalized Fusion
     year: '2026'
   b3glA2AAAAAJ:LkGwnXOMwfcC:
@@ -19,15 +19,15 @@ papers:
     year: '2024'
   b3glA2AAAAAJ:WF5omc3nYNoC:
     citations: 1
-    title: 'Learn to Preserve Personality: Federated Foundation Models in Recommendations'
+    title: 'Learn to preserve personality: Federated foundation models in recommendations'
     year: '2025'
   b3glA2AAAAAJ:Y0pCki6q_DkC:
-    citations: 17
+    citations: 19
     title: 'Personalized recommendation models in federated settings: A survey'
     year: '2025'
   b3glA2AAAAAJ:YsMSGLbcyi4C:
-    citations: 11
-    title: 'AI ethics in smart homes: progress, user requirements and challenges'
+    citations: 10
+    title: 'AI ethics in smart homes: Progress, user requirements and challenges'
     year: '2024'
   b3glA2AAAAAJ:_FxGoFyzp5QC:
     citations: 29
@@ -46,7 +46,7 @@ papers:
     title: 'AlignFedRec: Dual structural alignment for item representation learning in federated recommendation'
     year: '2026'
   b3glA2AAAAAJ:u-x6o8ySG0sC:
-    citations: 96
+    citations: 97
     title: Federated recommendation with additive personalization
     year: '2024'
   b3glA2AAAAAJ:ufrVoPGSRksC:
