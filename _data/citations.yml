@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-08-03'
+  last_updated: '2026-08-04'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -54,6 +54,6 @@ papers:
     title: 'Beyond personalization: Federated recommendation with calibration via low-rank decomposition'
     year: '2025'
   b3glA2AAAAAJ:zYLM7Y9cAGgC:
-    citations: 16
+    citations: 17
     title: 'A Tutorial of Personalized Federated Recommender Systems: Recent Advances and Future Directions'
     year: '2024'
