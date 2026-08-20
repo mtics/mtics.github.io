@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-08-17'
+  last_updated: '2026-08-20'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
@@ -17,10 +17,14 @@ papers:
     citations: 42
     title: 'Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach'
     year: '2024'
+  b3glA2AAAAAJ:UebtZRa9Y70C:
+    citations: 0
+    title: 'Content Depth Matters in Short-Video Recommendation: Rethinking the Attention Economy'
+    year: '2026'
   b3glA2AAAAAJ:WF5omc3nYNoC:
     citations: 1
-    title: 'Learn to preserve personality: Federated foundation models in recommendations'
-    year: '2025'
+    title: A Survey of Personalized Federated Foundation Models for Privacy-Preserving Recommendation
+    year: '2026'
   b3glA2AAAAAJ:Y0pCki6q_DkC:
     citations: 19
     title: 'Personalized recommendation models in federated settings: A survey'
