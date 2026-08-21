@@ -1,12 +1,12 @@
 metadata:
-  last_updated: '2026-08-20'
+  last_updated: '2026-08-21'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
     title: Incomplete multi-view weak-label learning with noisy features and imbalanced labels
     year: '2023'
   b3glA2AAAAAJ:IjCSPb-OGe4C:
-    citations: 14
+    citations: 15
     title: Federated Vision-Language-Recommendation with Personalized Fusion
     year: '2026'
   b3glA2AAAAAJ:LkGwnXOMwfcC:
