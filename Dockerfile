@@ -1,7 +1,7 @@
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766 AS bundle-builder
 
 ARG BUNDLER_VERSION=2.6.9
-ARG DEBIAN_SNAPSHOT=20260831T000000Z
+ARG DEBIAN_SNAPSHOT=20260831T211327Z
 
 ENV BUNDLE_DEPLOYMENT=true \
     BUNDLE_PATH=/usr/local/bundle \
@@ -35,7 +35,7 @@ FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8
 
 ARG BUNDLER_VERSION=2.6.9
 ARG CHROMIUM_VERSION=151.0.7922.173-1~deb12u1
-ARG DEBIAN_SNAPSHOT=20260831T000000Z
+ARG DEBIAN_SNAPSHOT=20260831T211327Z
 ARG NODE_VERSION=24.18.0
 ARG NPM_VERSION=11.19.1
 ARG PYTHON_VERSION=3.13.14
@@ -97,6 +97,16 @@ COPY requirements-build.txt /tmp/requirements-build.txt
 RUN test "$(python3 --version)" = "Python ${PYTHON_VERSION}" && \
     test "$(node --version)" = "v${NODE_VERSION}" && \
     python3 -m pip uninstall --yes msgpack setuptools && \
+    for site_packages in /usr/local/lib/*/site-packages /usr/lib/*/site-packages /usr/lib/*/dist-packages; do \
+        if [ -d "${site_packages}" ]; then \
+            rm -rf "${site_packages}"/msgpack \
+                "${site_packages}"/msgpack-*.dist-info \
+                "${site_packages}"/msgpack-*.egg-info \
+                "${site_packages}"/setuptools \
+                "${site_packages}"/setuptools-*.dist-info \
+                "${site_packages}"/setuptools-*.egg-info; \
+        fi; \
+    done && \
     python3 -m pip install --no-cache-dir --break-system-packages --require-hashes -r /tmp/requirements-build.txt && \
     rm /tmp/requirements-build.txt
 
