@@ -1,0 +1,125 @@
+name: Trivy baseline review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_IMAGE: aquasec/trivy@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e # v0.70.0
+
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Resolve locked gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler: "2.6.9"
+          bundler-cache: false
+
+      - name: Regenerate locked gem metadata
+        run: bundle lock --update css_parser jekyll-3rd-party-libraries
+
+      - name: Upload resolved lockfile
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: resolved-gemfile-lock
+          path: Gemfile.lock
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Build reviewed images
+        run: |
+          set -euo pipefail
+          docker buildx build --platform linux/amd64 --tag mtics-al-folio:ci --load .
+          docker buildx build --platform linux/arm64 --tag mtics-al-folio:release-arm64 --load .
+          docker buildx build --platform linux/amd64 --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile --load .
+          docker buildx build --platform linux/arm64 --tag mtics-devcontainer:release-arm64 --file .devcontainer/Dockerfile --load .
+
+      - name: Prepare frozen Trivy databases
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+          mkdir -p "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+          vulnerability_manifest="$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json"
+          java_manifest="$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json"
+          docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-db:2 > "$vulnerability_manifest"
+          docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-java-db:1 > "$java_manifest"
+          vulnerability_db_digest="$(python3 bin/validate_trivy_oci_manifest.py --database vulnerability --manifest "$vulnerability_manifest")"
+          java_db_digest="$(python3 bin/validate_trivy_oci_manifest.py --database java --manifest "$java_manifest")"
+          docker run --rm --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache" "$TRIVY_IMAGE" image \
+            --cache-dir /trivy-cache --db-repository "ghcr.io/aquasecurity/trivy-db@$vulnerability_db_digest" \
+            --download-db-only --disable-telemetry --no-progress --skip-version-check
+          docker run --rm --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache" "$TRIVY_IMAGE" image \
+            --cache-dir /trivy-cache --java-db-repository "ghcr.io/aquasecurity/trivy-java-db@$java_db_digest" \
+            --download-java-db-only --disable-telemetry --no-progress --skip-version-check
+          docker run --rm --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" "$TRIVY_IMAGE" version \
+            --cache-dir /trivy-cache --format json > "$RUNNER_TEMP/trivy-version.json"
+
+      - name: Scan all reviewed image architectures
+        run: |
+          set -euo pipefail
+          scan() {
+            local image="$1"
+            local output="$2"
+            docker run --rm \
+              --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+              --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
+              --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+              "$TRIVY_IMAGE" image \
+                --cache-dir /trivy-cache --cache-backend memory \
+                --skip-db-update --skip-java-db-update --skip-version-check \
+                --offline-scan --disable-telemetry --image-src docker --no-progress \
+                --scanners vuln --pkg-types os,library \
+                --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL --list-all-pkgs \
+                --format json --output "/trivy-reports/$output" --exit-code 0 "$image"
+          }
+          scan mtics-al-folio:ci trivy-delivery-amd64.json
+          scan mtics-al-folio:release-arm64 trivy-delivery-arm64.json
+          scan mtics-devcontainer:ci trivy-development-amd64.json
+          scan mtics-devcontainer:release-arm64 trivy-development-arm64.json
+
+      - name: Generate reviewed baseline artifact
+        run: |
+          set -euo pipefail
+          python3 bin/create_trivy_baseline.py \
+            --trivy-version-json "$RUNNER_TEMP/trivy-version.json" \
+            --vulnerability-db "$RUNNER_TEMP/trivy-cache/db/trivy.db" \
+            --vulnerability-db-metadata "$RUNNER_TEMP/trivy-cache/db/metadata.json" \
+            --java-db "$RUNNER_TEMP/trivy-cache/java-db/trivy-java.db" \
+            --java-db-metadata "$RUNNER_TEMP/trivy-cache/java-db/metadata.json" \
+            --vulnerability-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json" \
+            --java-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json" \
+            --delivery-amd64-report "$RUNNER_TEMP/trivy-reports/trivy-delivery-amd64.json" \
+            --delivery-arm64-report "$RUNNER_TEMP/trivy-reports/trivy-delivery-arm64.json" \
+            --development-amd64-report "$RUNNER_TEMP/trivy-reports/trivy-development-amd64.json" \
+            --development-arm64-report "$RUNNER_TEMP/trivy-reports/trivy-development-arm64.json" \
+            --reviewed-at "$(date -u +%F)" \
+            --review-before "$(date -u -d '+14 days' +%F)" \
+            --baseline-output "$RUNNER_TEMP/trivy-reports/.trivy-unfixed-baseline.json" \
+            --manifest-output "$RUNNER_TEMP/trivy-reports/.trivy-baseline-review.json"
+
+      - name: Upload baseline review evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-baseline-review
+          path: ${{ runner.temp }}/trivy-reports
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 30
