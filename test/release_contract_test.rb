@@ -542,7 +542,7 @@ class ReleaseContractTest < Minitest::Test
       /^FROM mcr\.microsoft\.com\/devcontainers\/jekyll:3\.4-bookworm@sha256:[0-9a-f]{64}$/,
       devcontainer_dockerfile
     )
-    assert_match(/^FROM python:3\.13\.14-slim-bookworm@sha256:[0-9a-f]{64} AS python-runtime$/,
+    assert_match(/^FROM python:3\.13\.15-slim-bookworm@sha256:[0-9a-f]{64} AS python-runtime$/,
                  devcontainer_dockerfile)
     assert_match(/^FROM node:24\.18\.0-bookworm-slim@sha256:[0-9a-f]{64} AS node-runtime$/,
                  devcontainer_dockerfile)
@@ -675,7 +675,7 @@ class ReleaseContractTest < Minitest::Test
   def test_container_os_is_fully_upgraded_inside_the_fresh_immutable_debian_snapshot
     %w[Dockerfile .devcontainer/Dockerfile].each do |path|
       dockerfile = read(path)
-      assert_match(/^ARG DEBIAN_SNAPSHOT=20260831T000000Z$/, dockerfile)
+      assert_match(/^ARG DEBIAN_SNAPSHOT=20260831T211327Z$/, dockerfile)
       apt_stages = dockerfile
                    .split(/^FROM /)
                    .drop(1)

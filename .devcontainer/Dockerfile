@@ -1,5 +1,12 @@
 FROM node:24.18.0-bookworm-slim@sha256:cb4e8f7c443347358b7875e717c29e27bf9befc8f5a26cf18af3c3dec80e58c5 AS node-runtime
 FROM python:3.13.15-slim-bookworm@sha256:ed86c82274b3c69b52fb5820f358f0bd7df0b603332063cb5c6e32bd220c3e6e AS python-runtime
+COPY bin/refresh_python_vendor.py /tmp/refresh_python_vendor.py
+RUN python3 -m pip install --no-cache-dir --break-system-packages --upgrade \
+        pip==26.2 \
+        setuptools==83.0.0 \
+        msgpack==1.2.1 && \
+    python3 /tmp/refresh_python_vendor.py && \
+    rm -rf /usr/local/lib/python3.13/ensurepip/_bundled /tmp/refresh_python_vendor.py
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766 AS ruby-runtime
 FROM mcr.microsoft.com/devcontainers/jekyll:3.4-bookworm@sha256:6866df1504c0f3450dd1569e9f9a30e80d9f0a26a3e047a7a7e479f6c6376f0b
 
