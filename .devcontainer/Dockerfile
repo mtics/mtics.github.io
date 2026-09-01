@@ -1,5 +1,5 @@
 FROM node:24.18.0-bookworm-slim@sha256:cb4e8f7c443347358b7875e717c29e27bf9befc8f5a26cf18af3c3dec80e58c5 AS node-runtime
-FROM python:3.13.14-slim-bookworm@sha256:fcbd8dfc2605ba7c2eca646846c5e892b2931e41f6227985154a596f26ab8ed7 AS python-runtime
+FROM python:3.13.14-slim-bookworm@sha256:67a1e1f215ccda113cfc024e8639049257e88f273898f595b61476d128d387e8 AS python-runtime
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766 AS ruby-runtime
 FROM mcr.microsoft.com/devcontainers/jekyll:3.4-bookworm@sha256:6866df1504c0f3450dd1569e9f9a30e80d9f0a26a3e047a7a7e479f6c6376f0b
 
