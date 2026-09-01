@@ -108,6 +108,7 @@ RUN test "$(python3 --version)" = "Python ${PYTHON_VERSION}" && \
         fi; \
     done && \
     python3 -m pip install --no-cache-dir --break-system-packages --require-hashes -r /tmp/requirements-build.txt && \
+    rm -rf /usr/local/lib/python3.13/ensurepip/_bundled && \
     rm /tmp/requirements-build.txt
 
 ENV HOME=/home/jekyll \

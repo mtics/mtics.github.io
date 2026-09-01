@@ -47,6 +47,7 @@ RUN rm -f /etc/apt/sources.list.d/yarn.list && \
     test "$(ruby --disable-gems -e 'print RUBY_VERSION')" = "${RUBY_VERSION}" && \
     test "$(node --version)" = "v${NODE_VERSION}" && \
     chown -R vscode:vscode /usr/local/bundle && \
+    rm -rf /usr/local/lib/python3.13/ensurepip/_bundled && \
     apt-get -s dist-upgrade > /tmp/apt-upgrade-plan && \
     ! grep -q '^Inst ' /tmp/apt-upgrade-plan && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
