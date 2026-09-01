@@ -11,7 +11,7 @@ scanner:
   package_types:
     - os
     - library
-  vulnerability_db_updated_at: "2026-07-14T00:59:06.814946057Z"
+  vulnerability_db_updated_at: "2026-09-01T01:14:10.330329814Z"
 gaps:
   - package: curl
     cve: CVE-2026-9547
@@ -48,6 +48,6 @@ gaps:
       debian_backend: libssh2
       debian_build_flags: --without-libssh --with-libssh2
       curl_cli_affected: false
-    reviewed_at: "2026-07-14"
-    review_before: "2026-07-28"
+    reviewed_at: "2026-09-01"
+    review_before: "2026-09-15"
     remediation: remove_when_scanner_stops_reporting_or_package_build_configuration_changes
