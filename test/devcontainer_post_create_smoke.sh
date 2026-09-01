@@ -54,8 +54,8 @@ docker run --rm \
         test "$(cd /tmp && bundle --version)" = "Bundler version 2.6.9"
         test "$(bundle _2.6.9_ --version)" = "Bundler version 2.6.9"
         test "$(node --version)" = "v24.18.0"
-        test "$(npm --version)" = "11.18.0"
-        test "$(python3 --version)" = "Python 3.13.14"
+        test "$(npm --version)" = "11.19.1"
+        test "$(python3 --version)" = "Python 3.13.15"
         bundle _2.6.9_ install --jobs 4 --retry 3
         npm ci
         python3 -m pip install --user --break-system-packages --require-hashes -r requirements-build.txt

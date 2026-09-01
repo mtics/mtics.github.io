@@ -317,13 +317,13 @@ class ReleaseContractTest < Minitest::Test
                  ruby_builder_image)
     assert_match(/\AFROM node:24\.18\.0-bookworm-slim@sha256:[0-9a-f]{64}\s+AS\s+node-runtime\s*\z/i,
                  node_image)
-    assert_match(/\AFROM python:3\.13\.14-slim-bookworm@sha256:[0-9a-f]{64}\s+AS\s+python-runtime\s*\z/i,
+    assert_match(/\AFROM python:3\.13\.15-slim-bookworm@sha256:[0-9a-f]{64}\s+AS\s+python-runtime\s*\z/i,
                  python_image)
 
     expected_versions = {
       "BUNDLER_VERSION" => "2.6.9",
       "NPM_VERSION" => "11.19.1",
-      "PYTHON_VERSION" => "3.13.14"
+      "PYTHON_VERSION" => "3.13.15"
     }
     expected_versions.each do |name, version|
       assert_match(/^ARG #{name}=#{Regexp.escape(version)}$/, dockerfile)
