@@ -108,6 +108,7 @@ WORKDIR /srv/jekyll
 
 # Keep dependency installation cacheable and fail if the manifest and lock drift.
 COPY Gemfile Gemfile.lock ./
+COPY gems/jekyll-3rd-party-libraries gems/jekyll-3rd-party-libraries
 COPY --from=bundle-builder /usr/local/bundle /usr/local/bundle
 RUN bundle _${BUNDLER_VERSION}_ check && \
     chown -R jekyll:jekyll /usr/local/bundle /home/jekyll /srv/jekyll
