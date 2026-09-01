@@ -1,12 +1,12 @@
 metadata:
-  last_updated: '2026-08-21'
+  last_updated: '2026-09-01'
 papers:
   b3glA2AAAAAJ:2osOgNQ5qMEC:
     citations: 3
     title: Incomplete multi-view weak-label learning with noisy features and imbalanced labels
     year: '2023'
   b3glA2AAAAAJ:IjCSPb-OGe4C:
-    citations: 15
+    citations: 16
     title: Federated Vision-Language-Recommendation with Personalized Fusion
     year: '2026'
   b3glA2AAAAAJ:LkGwnXOMwfcC:
@@ -14,7 +14,7 @@ papers:
     title: 'Learning to Collaborate via Structures: Cluster-Guided Item Alignment for Federated Recommendation'
     year: '2026'
   b3glA2AAAAAJ:UeHWp8X0CEIC:
-    citations: 42
+    citations: 44
     title: 'Personalized Federated Collaborative Filtering: A Variational AutoEncoder Approach'
     year: '2024'
   b3glA2AAAAAJ:UebtZRa9Y70C:
@@ -22,11 +22,11 @@ papers:
     title: 'Content Depth Matters in Short-Video Recommendation: Rethinking the Attention Economy'
     year: '2026'
   b3glA2AAAAAJ:WF5omc3nYNoC:
-    citations: 1
+    citations: 2
     title: A Survey of Personalized Federated Foundation Models for Privacy-Preserving Recommendation
     year: '2026'
   b3glA2AAAAAJ:Y0pCki6q_DkC:
-    citations: 19
+    citations: 20
     title: 'Personalized recommendation models in federated settings: A survey'
     year: '2025'
   b3glA2AAAAAJ:YsMSGLbcyi4C:
@@ -34,7 +34,7 @@ papers:
     title: 'AI ethics in smart homes: Progress, user requirements and challenges'
     year: '2024'
   b3glA2AAAAAJ:_FxGoFyzp5QC:
-    citations: 29
+    citations: 31
     title: 'TransFR: Transferable Federated Recommendation with Adapter Tuning on Pre-trained Language Models'
     year: '2026'
   b3glA2AAAAAJ:d1gkVwhDpl0C:
@@ -42,7 +42,7 @@ papers:
     title: Generalized Discriminative Deep Non-Negative Matrix Factorization Based on Latent Feature and Basis Learning.
     year: '2023'
   b3glA2AAAAAJ:qjMakFHDy7sC:
-    citations: 15
+    citations: 16
     title: Navigating the Future of Federated Recommendation Systems with Foundation Models
     year: '2024'
   b3glA2AAAAAJ:roLk4NBRz8UC:
@@ -50,7 +50,7 @@ papers:
     title: 'AlignFedRec: Dual structural alignment for item representation learning in federated recommendation'
     year: '2026'
   b3glA2AAAAAJ:u-x6o8ySG0sC:
-    citations: 99
+    citations: 101
     title: Federated recommendation with additive personalization
     year: '2024'
   b3glA2AAAAAJ:ufrVoPGSRksC:
