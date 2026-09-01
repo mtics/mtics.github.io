@@ -900,7 +900,7 @@ class ReleaseContractTest < Minitest::Test
       assert_includes dockerfile, 'test "$(npm --version)" = "${NPM_VERSION}"'
       assert_includes dockerfile,
                       'require("/usr/local/lib/node_modules/npm/node_modules/undici/package.json").version'
-      assert_includes dockerfile, '"6.27.0"'
+      assert_includes dockerfile, '"6.28.0"'
       assert_operator dockerfile.index(checksum_add), :<, dockerfile.index("rm -rf /usr/local/lib/node_modules/npm")
     end
   end

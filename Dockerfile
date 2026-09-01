@@ -88,7 +88,7 @@ RUN rm -rf /usr/local/lib/node_modules/npm && \
     ln -sfn ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
     ln -sfn ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx && \
     test "$(npm --version)" = "${NPM_VERSION}" && \
-    test "$(node -p 'require("/usr/local/lib/node_modules/npm/node_modules/undici/package.json").version')" = "6.27.0" && \
+    test "$(node -p 'require("/usr/local/lib/node_modules/npm/node_modules/undici/package.json").version')" = "6.28.0" && \
     rm /tmp/npm.tgz
 
 RUN groupadd --gid "${APP_GID}" "${APP_USER}" && \
