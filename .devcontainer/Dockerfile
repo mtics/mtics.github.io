@@ -5,10 +5,10 @@ FROM mcr.microsoft.com/devcontainers/jekyll:3.4-bookworm@sha256:6866df1504c0f345
 
 RUN rm -rf /usr/local/lib/ruby /usr/local/rvm
 
-ARG DEBIAN_SNAPSHOT=20260714T000000Z
+ARG DEBIAN_SNAPSHOT=20260831T000000Z
 ARG BUNDLER_VERSION=2.6.9
 ARG NODE_VERSION=24.18.0
-ARG NPM_VERSION=11.18.0
+ARG NPM_VERSION=11.19.1
 ARG RUBY_VERSION=3.4.10
 
 COPY --from=ruby-runtime /usr/local /usr/local
@@ -51,7 +51,7 @@ RUN rm -f /etc/apt/sources.list.d/yarn.list && \
     ! grep -q '^Inst ' /tmp/apt-upgrade-plan && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
 
-ADD --checksum=sha256:73f6155215ebabf4ed96dca1f567c2372cc713c33af2e5b9b62fde4e92373e2e https://registry.npmjs.org/npm/-/npm-11.18.0.tgz /tmp/npm.tgz
+ADD --checksum=sha256:9f58bff01604cb1b14008fef14dceb14d836a49225e45c6c2e37de3be3e707f0 https://registry.npmjs.org/npm/-/npm-11.19.1.tgz /tmp/npm.tgz
 RUN rm -rf /usr/local/lib/node_modules/npm && \
     mkdir -p /usr/local/lib/node_modules/npm && \
     tar -xzf /tmp/npm.tgz --strip-components=1 -C /usr/local/lib/node_modules/npm && \

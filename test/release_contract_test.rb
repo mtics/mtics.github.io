@@ -322,7 +322,7 @@ class ReleaseContractTest < Minitest::Test
 
     expected_versions = {
       "BUNDLER_VERSION" => "2.6.9",
-      "NPM_VERSION" => "11.18.0",
+      "NPM_VERSION" => "11.19.1",
       "PYTHON_VERSION" => "3.13.14"
     }
     expected_versions.each do |name, version|
@@ -389,7 +389,7 @@ class ReleaseContractTest < Minitest::Test
 
   def test_python_automation_dependencies_are_fully_hashed
     expected_direct_dependencies = {
-      "requirements-build.txt" => %w[nbconvert==7.17.1 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8],
+      "requirements-build.txt" => %w[nbconvert==7.17.1 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8 setuptools==83.0.0],
       "requirements-citations.txt" => %w[serpapi==1.0.2 pyyaml==6.0.3]
     }
 
@@ -413,7 +413,7 @@ class ReleaseContractTest < Minitest::Test
   def test_compiled_requirement_inputs_are_minimal_and_present
     expected_inputs = {
       "requirements-build.in" => [
-        "nbconvert==7.17.1", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0"
+        "nbconvert==7.17.1", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0", "setuptools==83.0.0"
       ],
       "requirements-citations.in" => ["serpapi==1.0.2", "PyYAML==6.0.3"]
     }
@@ -675,7 +675,7 @@ class ReleaseContractTest < Minitest::Test
   def test_container_os_is_fully_upgraded_inside_the_fresh_immutable_debian_snapshot
     %w[Dockerfile .devcontainer/Dockerfile].each do |path|
       dockerfile = read(path)
-      assert_match(/^ARG DEBIAN_SNAPSHOT=20260714T000000Z$/, dockerfile)
+      assert_match(/^ARG DEBIAN_SNAPSHOT=20260831T000000Z$/, dockerfile)
       apt_stages = dockerfile
                    .split(/^FROM /)
                    .drop(1)
@@ -885,12 +885,12 @@ class ReleaseContractTest < Minitest::Test
     %w[Dockerfile .devcontainer/Dockerfile].each do |path|
       dockerfile = read(path)
       checksum_add = <<~DOCKERFILE.strip
-        ADD --checksum=sha256:73f6155215ebabf4ed96dca1f567c2372cc713c33af2e5b9b62fde4e92373e2e https://registry.npmjs.org/npm/-/npm-11.18.0.tgz /tmp/npm.tgz
+        ADD --checksum=sha256:9f58bff01604cb1b14008fef14dceb14d836a49225e45c6c2e37de3be3e707f0 https://registry.npmjs.org/npm/-/npm-11.19.1.tgz /tmp/npm.tgz
       DOCKERFILE
 
       assert_includes dockerfile, checksum_add,
                       "#{path} must authenticate the complete fixed npm distribution"
-      assert_match(/^ARG NPM_VERSION=11\.18\.0$/, dockerfile)
+      assert_match(/^ARG NPM_VERSION=11\.19\.1$/, dockerfile)
       refute_includes dockerfile,
                       "COPY --from=node-runtime /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm"
       assert_includes dockerfile,
@@ -1361,7 +1361,7 @@ class ReleaseContractTest < Minitest::Test
 
   def test_pinned_browser_contracts_run_after_each_site_build
     dockerfile = read("Dockerfile")
-    assert_match(/^ARG CHROMIUM_VERSION=150\.0\.7871\.114-1~deb12u1$/, dockerfile)
+    assert_match(/^ARG CHROMIUM_VERSION=151\.0\.7922\.173-1~deb12u1$/, dockerfile)
     assert_includes dockerfile, 'chromium="${CHROMIUM_VERSION}"'
     assert_match(/^playwright==1\.61\.0\b/, read("requirements-build.txt"))
 

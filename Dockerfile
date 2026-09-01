@@ -1,7 +1,7 @@
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766 AS bundle-builder
 
 ARG BUNDLER_VERSION=2.6.9
-ARG DEBIAN_SNAPSHOT=20260714T000000Z
+ARG DEBIAN_SNAPSHOT=20260831T000000Z
 
 ENV BUNDLE_DEPLOYMENT=true \
     BUNDLE_PATH=/usr/local/bundle \
@@ -33,10 +33,10 @@ FROM python:3.13.14-slim-bookworm@sha256:fcbd8dfc2605ba7c2eca646846c5e892b2931e4
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766
 
 ARG BUNDLER_VERSION=2.6.9
-ARG CHROMIUM_VERSION=150.0.7871.114-1~deb12u1
-ARG DEBIAN_SNAPSHOT=20260714T000000Z
+ARG CHROMIUM_VERSION=151.0.7922.173-1~deb12u1
+ARG DEBIAN_SNAPSHOT=20260831T000000Z
 ARG NODE_VERSION=24.18.0
-ARG NPM_VERSION=11.18.0
+ARG NPM_VERSION=11.19.1
 ARG PYTHON_VERSION=3.13.14
 ARG APP_GID=1000
 ARG APP_UID=1000
@@ -79,7 +79,7 @@ RUN sed -i \
     ! grep -q '^Inst ' /tmp/apt-upgrade-plan && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
 
-ADD --checksum=sha256:73f6155215ebabf4ed96dca1f567c2372cc713c33af2e5b9b62fde4e92373e2e https://registry.npmjs.org/npm/-/npm-11.18.0.tgz /tmp/npm.tgz
+ADD --checksum=sha256:9f58bff01604cb1b14008fef14dceb14d836a49225e45c6c2e37de3be3e707f0 https://registry.npmjs.org/npm/-/npm-11.19.1.tgz /tmp/npm.tgz
 RUN rm -rf /usr/local/lib/node_modules/npm && \
     mkdir -p /usr/local/lib/node_modules/npm && \
     tar -xzf /tmp/npm.tgz --strip-components=1 -C /usr/local/lib/node_modules/npm && \
@@ -95,6 +95,7 @@ RUN groupadd --gid "${APP_GID}" "${APP_USER}" && \
 COPY requirements-build.txt /tmp/requirements-build.txt
 RUN test "$(python3 --version)" = "Python ${PYTHON_VERSION}" && \
     test "$(node --version)" = "v${NODE_VERSION}" && \
+    python3 -m pip uninstall --yes msgpack setuptools && \
     python3 -m pip install --no-cache-dir --break-system-packages --require-hashes -r /tmp/requirements-build.txt && \
     rm /tmp/requirements-build.txt
 
