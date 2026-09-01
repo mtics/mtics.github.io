@@ -121,4 +121,5 @@ jobs:
           name: trivy-baseline-review
           path: ${{ runner.temp }}/trivy-reports
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 30

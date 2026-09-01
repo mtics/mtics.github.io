@@ -11,7 +11,6 @@ WORKDIR /srv/jekyll
 
 COPY Gemfile Gemfile.lock ./
 COPY gems/jekyll-3rd-party-libraries gems/jekyll-3rd-party-libraries
-COPY gems/jekyll-3rd-party-libraries gems/jekyll-3rd-party-libraries
 
 RUN sed -i \
         -e "s|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}|g" \
