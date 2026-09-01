@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Replace pip's vendored msgpack with the pinned, security-fixed package."""
+"""Refresh pip's stale vendored dependency metadata and msgpack implementation."""
 
 from pathlib import Path
 import shutil
 import sysconfig
 
 
-PINNED_VERSION = "1.2.1"
+PINNED_MSGPACK_VERSION = "1.2.1"
+PINNED_SETUPTOOLS_VERSION = "83.0.0"
 site_packages = Path(sysconfig.get_paths()["purelib"])
 source = site_packages / "msgpack"
 vendor = site_packages / "pip" / "_vendor" / "msgpack"
@@ -22,10 +23,27 @@ shutil.rmtree(vendor)
 shutil.copytree(source, vendor)
 
 manifest = vendor_manifest.read_text()
-old_entry = "msgpack==1.1.2"
-new_entry = f"msgpack=={PINNED_VERSION}"
-if old_entry not in manifest:
-    raise SystemExit(f"missing {old_entry!r} in {vendor_manifest}")
-vendor_manifest.write_text(manifest.replace(old_entry, new_entry))
+for old_entry, new_entry in (
+    ("msgpack==1.1.2", f"msgpack=={PINNED_MSGPACK_VERSION}"),
+    ("setuptools==70.3.0", f"setuptools=={PINNED_SETUPTOOLS_VERSION}"),
+):
+    if old_entry not in manifest:
+        raise SystemExit(f"missing {old_entry!r} in {vendor_manifest}")
+    manifest = manifest.replace(old_entry, new_entry)
+vendor_manifest.write_text(manifest)
 
-print(f"updated pip vendored msgpack to {PINNED_VERSION}")
+bom_manifest = site_packages / "pip" / "_vendor" / "bom.cdx.json"
+bom = bom_manifest.read_text()
+for old_entry, new_entry in (
+    ("pkg:pypi/msgpack@1.1.2", f"pkg:pypi/msgpack@{PINNED_MSGPACK_VERSION}"),
+    ("pkg:pypi/setuptools@70.3.0", f"pkg:pypi/setuptools@{PINNED_SETUPTOOLS_VERSION}"),
+):
+    if old_entry not in bom:
+        raise SystemExit(f"missing {old_entry!r} in {bom_manifest}")
+    bom = bom.replace(old_entry, new_entry)
+bom_manifest.write_text(bom)
+
+print(
+    "updated pip vendored msgpack to "
+    f"{PINNED_MSGPACK_VERSION} and setuptools metadata to {PINNED_SETUPTOOLS_VERSION}"
+)
