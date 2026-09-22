@@ -121,7 +121,9 @@ scan.
 
 ### 2026-07-14 four-architecture review
 
-The review rebuilt both images for amd64 and arm64 from Debian snapshot
+Review dates are UTC calendar dates, matching the DB timestamps and GitHub
+runners even when the reviewer is in a different time zone. The review rebuilt
+both images for amd64 and arm64 from Debian snapshot
 `20260714T000000Z`, froze one Trivy vulnerability/Java DB pair, and compared
 every all-severity row with the previous retained reports. The delivery
 all-severity findings and both images' HIGH/CRITICAL findings are identical
@@ -172,7 +174,7 @@ and reintroduces curl CVE-2026-9547 as `LOW`. All additions, removals, severity
 changes, and status changes are committed by the architecture-specific counts
 and inventory hashes, so later drift still fails closed.
 
-### 2026-09-23 four-architecture review
+### 2026-09-22 UTC four-architecture review
 
 The review rebuilt both images for amd64 and arm64 from Debian snapshot
 `20260922T200000Z` and froze the vulnerability DB updated at

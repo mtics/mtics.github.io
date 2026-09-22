@@ -322,7 +322,7 @@ def baseline(
     review_before: str | None = None,
     all_findings: list[dict[str, object]] | None = None,
 ) -> dict[str, object]:
-    today = dt.date.today()
+    today = dt.datetime.now(dt.timezone.utc).date()
     minimum = rfc3339(utc_now() - dt.timedelta(hours=4))
     return {
         "schema_version": 4,
@@ -987,7 +987,7 @@ class TrivyReportContractTest(unittest.TestCase):
             "unsorted": {"baseline_document": baseline([entry_b, entry_a])},
             "expired": {
                 "baseline_document": baseline(
-                    [entry_a], review_before=dt.date.today().isoformat()
+                    [entry_a], review_before=dt.datetime.now(dt.timezone.utc).date().isoformat()
                 )
             },
             "missing coverage": {"baseline_document": missing_coverage},
@@ -1563,6 +1563,13 @@ class TrivyProvenanceBuilderContractTest(unittest.TestCase):
 
 
 class TrivyBaselineBuilderContractTest(unittest.TestCase):
+    def test_review_date_uses_utc_in_generator_and_gate(self) -> None:
+        for path in (BASELINE_BUILDER, GATE):
+            self.assertIn(
+                "dt.datetime.now(dt.timezone.utc).date()",
+                path.read_text(encoding="utf-8"),
+            )
+
     def create_inputs(
         self,
         root: Path,
@@ -1655,7 +1662,7 @@ class TrivyBaselineBuilderContractTest(unittest.TestCase):
     def invoke(
         self, paths: dict[str, Path], *, include_java: bool = True
     ) -> subprocess.CompletedProcess[str]:
-        today = dt.date.today()
+        today = dt.datetime.now(dt.timezone.utc).date()
         return subprocess.run(
             [
                 "python3",

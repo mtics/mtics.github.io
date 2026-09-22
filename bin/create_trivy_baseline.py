@@ -53,7 +53,7 @@ def parse_review_dates(reviewed_text: str, review_before_text: str) -> tuple[dt.
         review_before = dt.date.fromisoformat(review_before_text)
     except ValueError:
         reject("reviewed-at and review-before must be ISO-8601 calendar dates")
-    today = dt.date.today()
+    today = dt.datetime.now(dt.timezone.utc).date()
     if reviewed_at > today:
         reject("reviewed-at cannot be in the future")
     if review_before <= today:

@@ -323,7 +323,7 @@ def load_baseline(
 
     reviewed_at = parse_date(document["reviewed_at"], "reviewed_at")
     review_before = parse_date(document["review_before"], "review_before")
-    today = dt.date.today()
+    today = dt.datetime.now(dt.timezone.utc).date()
     if reviewed_at > today:
         reject("Trivy baseline", "reviewed_at cannot be in the future")
     if review_before <= today:

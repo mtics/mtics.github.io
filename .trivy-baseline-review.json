@@ -3,7 +3,7 @@
   "baseline": {
     "path": ".trivy-unfixed-baseline.json",
     "schema_version": 4,
-    "sha256": "8db1359a6acc09bc9ef2bfb1b13c83146c65a522c8e163948dcf1f9e2164b65e"
+    "sha256": "76618dea4b9bf3ca102fa4523ed23db54b5592fbbf9935dda5d61b62023cd5cf"
   },
   "scanner": {
     "name": "Trivy",
