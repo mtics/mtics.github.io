@@ -337,13 +337,13 @@ def load_baseline(
         )
 
     minimum_db_document = document["minimum_db_updated_at"]
-    if not isinstance(minimum_db_document, dict) or set(minimum_db_document) != {
-        "vulnerability",
-        "java",
-    }:
+    if not isinstance(minimum_db_document, dict) or set(minimum_db_document) not in (
+        {"vulnerability"},
+        {"vulnerability", "java"},
+    ):
         reject(
             "Trivy baseline",
-            "minimum_db_updated_at must contain exactly vulnerability and java",
+            "minimum_db_updated_at must contain vulnerability and optionally java",
         )
     minimum_db_updated_at = {
         database_name: parse_timestamp(
@@ -351,7 +351,7 @@ def load_baseline(
             f"minimum_db_updated_at.{database_name}",
             "Trivy baseline",
         )[1]
-        for database_name in ("vulnerability", "java")
+        for database_name in minimum_db_document
     }
 
     images = document["images"]
@@ -876,10 +876,10 @@ def load_provenance(
     image: str,
     vulnerability_db_path: Path,
     vulnerability_metadata_path: Path,
-    java_db_path: Path,
-    java_metadata_path: Path,
+    java_db_path: Path | None,
+    java_metadata_path: Path | None,
     vulnerability_manifest_path: Path,
-    java_manifest_path: Path,
+    java_manifest_path: Path | None,
     expected_architecture: str,
     minimum_db_updated_at: dict[str, UtcTimestamp],
     report_created_at_text: str,
@@ -921,13 +921,12 @@ def load_provenance(
         )
 
     databases_document = document["databases"]
-    if not isinstance(databases_document, dict) or set(databases_document) != {
-        "vulnerability",
-        "java",
-    }:
+    if not isinstance(databases_document, dict) or set(databases_document) != set(
+        minimum_db_updated_at
+    ):
         reject(
             "Trivy provenance",
-            "databases must contain exactly vulnerability and java",
+            "databases must match the reviewed baseline database set",
         )
     database_specs = {
         "vulnerability": (
@@ -936,8 +935,18 @@ def load_provenance(
             vulnerability_metadata_path,
             vulnerability_manifest_path,
         ),
-        "java": (1, java_db_path, java_metadata_path, java_manifest_path),
     }
+    if "java" in minimum_db_updated_at:
+        if None in (java_db_path, java_metadata_path, java_manifest_path):
+            reject("Trivy provenance", "reviewed Java DB evidence is missing")
+        database_specs["java"] = (
+            1,
+            java_db_path,
+            java_metadata_path,
+            java_manifest_path,
+        )
+    elif any(path is not None for path in (java_db_path, java_metadata_path, java_manifest_path)):
+        reject("Trivy provenance", "unreviewed Java DB evidence was supplied")
     database_times = {
         database_name: validate_provenance_database(
             databases_document[database_name],
@@ -1096,10 +1105,10 @@ def main() -> int:
     parser.add_argument("--provenance", required=True, type=Path)
     parser.add_argument("--vulnerability-db", required=True, type=Path)
     parser.add_argument("--vulnerability-db-metadata", required=True, type=Path)
-    parser.add_argument("--java-db", required=True, type=Path)
-    parser.add_argument("--java-db-metadata", required=True, type=Path)
+    parser.add_argument("--java-db", type=Path)
+    parser.add_argument("--java-db-metadata", type=Path)
     parser.add_argument("--vulnerability-db-manifest", required=True, type=Path)
-    parser.add_argument("--java-db-manifest", required=True, type=Path)
+    parser.add_argument("--java-db-manifest", type=Path)
     parser.add_argument(
         "--expected-architecture", required=True, choices=EXPECTED_ARCHITECTURES
     )

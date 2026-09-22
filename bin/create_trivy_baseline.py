@@ -28,6 +28,18 @@ REPORT_SPECS = {
     ("development", "amd64"): "mtics-devcontainer:ci",
     ("development", "arm64"): "mtics-devcontainer:release-arm64",
 }
+SKIPPED_NONRUNTIME_JARS = {
+    "delivery": [
+        "/usr/local/bundle/ruby/3.4.0/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar",
+        "/usr/local/bundle/ruby/3.4.0/gems/concurrent-ruby-1.3.8/lib/concurrent-ruby/concurrent/concurrent_ruby.jar",
+    ],
+    "development": [
+        "/usr/share/java/libintl-0.21.jar",
+        "/usr/share/java/gettext.jar",
+        "/usr/local/rvm/gems/default/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar",
+        "/usr/local/rvm/gems/default/gems/concurrent-ruby-1.3.7/lib/concurrent-ruby/concurrent/concurrent_ruby.jar",
+    ],
+}
 
 
 def reject(message: str) -> NoReturn:
@@ -178,10 +190,10 @@ def main() -> int:
     parser.add_argument("--trivy-version-json", required=True, type=Path)
     parser.add_argument("--vulnerability-db", required=True, type=Path)
     parser.add_argument("--vulnerability-db-metadata", required=True, type=Path)
-    parser.add_argument("--java-db", required=True, type=Path)
-    parser.add_argument("--java-db-metadata", required=True, type=Path)
+    parser.add_argument("--java-db", type=Path)
+    parser.add_argument("--java-db-metadata", type=Path)
     parser.add_argument("--vulnerability-db-manifest", required=True, type=Path)
-    parser.add_argument("--java-db-manifest", required=True, type=Path)
+    parser.add_argument("--java-db-manifest", type=Path)
     for image in gate.EXPECTED_IMAGES:
         for architecture in gate.EXPECTED_ARCHITECTURES:
             parser.add_argument(
@@ -193,16 +205,25 @@ def main() -> int:
     parser.add_argument("--manifest-output", required=True, type=Path)
     arguments = parser.parse_args()
 
+    java_paths = (
+        arguments.java_db,
+        arguments.java_db_metadata,
+        arguments.java_db_manifest,
+    )
+    if any(path is not None for path in java_paths) and not all(
+        path is not None for path in java_paths
+    ):
+        reject("Java DB, metadata, and manifest must be supplied together")
+    include_java = all(path is not None for path in java_paths)
+
     if paths_alias(arguments.baseline_output, arguments.manifest_output):
         reject("baseline-output and manifest-output must be different files")
     input_paths = (
         arguments.trivy_version_json,
         arguments.vulnerability_db,
         arguments.vulnerability_db_metadata,
-        arguments.java_db,
-        arguments.java_db_metadata,
         arguments.vulnerability_db_manifest,
-        arguments.java_db_manifest,
+        *(java_paths if include_java else ()),
         *(
             getattr(arguments, f"{image}_{architecture}_report")
             for image in gate.EXPECTED_IMAGES
@@ -222,8 +243,11 @@ def main() -> int:
     )
     if not isinstance(version_document, dict):
         reject("Trivy version JSON top level must be an object")
-    if set(version_document) != {"Version", "VulnerabilityDB", "JavaDB"}:
-        reject("Trivy version JSON must contain Version, VulnerabilityDB, and JavaDB")
+    expected_version_fields = {"Version", "VulnerabilityDB"}
+    if include_java:
+        expected_version_fields.add("JavaDB")
+    if set(version_document) != expected_version_fields:
+        reject(f"Trivy version JSON must contain exactly {sorted(expected_version_fields)}")
     if version_document["Version"] != gate.EXPECTED_TRIVY_VERSION:
         reject(f"Trivy version must be {gate.EXPECTED_TRIVY_VERSION}")
 
@@ -235,14 +259,15 @@ def main() -> int:
             arguments.vulnerability_db_metadata,
             arguments.vulnerability_db_manifest,
         ),
-        "java": (
+    }
+    if include_java:
+        database_arguments["java"] = (
             "JavaDB",
             1,
             arguments.java_db,
             arguments.java_db_metadata,
             arguments.java_db_manifest,
-        ),
-    }
+        )
     databases: dict[str, dict[str, object]] = {}
     database_times: dict[str, dict[str, gate.UtcTimestamp]] = {}
     for database_name, (
@@ -332,7 +357,7 @@ def main() -> int:
         "review_before": review_before.isoformat(),
         "minimum_db_updated_at": {
             database_name: databases[database_name]["updated_at"]
-            for database_name in ("vulnerability", "java")
+            for database_name in database_arguments
         },
         "images": {
             image: baseline_entries(observations[(image, "amd64")]["residuals"])
@@ -380,6 +405,7 @@ def main() -> int:
                 "offline_scan": True,
                 "skip_db_update": True,
                 "skip_java_db_update": True,
+                "skip_files": SKIPPED_NONRUNTIME_JARS,
             },
         },
         "trivy_version_json_sha256": hashlib.sha256(version_payload).hexdigest(),

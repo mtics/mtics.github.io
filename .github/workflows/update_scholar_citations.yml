@@ -34,12 +34,9 @@ jobs:
         run: >-
           python -m pip install --require-hashes
           -r requirements-citations.txt
-          -r requirements-build.txt
 
-      - name: Audit citation dependency graphs
-        run: |
-          pip-audit --strict --requirement requirements-build.txt --no-deps --disable-pip
-          pip-audit --strict --requirement requirements-citations.txt --no-deps --disable-pip
+      - name: Audit citation dependencies
+        run: pip-audit --strict --requirement requirements-citations.txt --no-deps --disable-pip
 
       - name: Test scholar citation updater
         run: python test/citation_updater_contract_test.py

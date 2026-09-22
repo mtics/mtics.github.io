@@ -12,7 +12,7 @@ FROM mcr.microsoft.com/devcontainers/jekyll:3.4-bookworm@sha256:6866df1504c0f345
 
 RUN rm -rf /usr/local/lib/ruby /usr/local/rvm
 
-ARG DEBIAN_SNAPSHOT=20260831T211327Z
+ARG DEBIAN_SNAPSHOT=20260922T200000Z
 ARG BUNDLER_VERSION=2.6.9
 ARG NODE_VERSION=24.18.0
 ARG NPM_VERSION=11.19.1
@@ -59,6 +59,16 @@ RUN rm -f /etc/apt/sources.list.d/yarn.list && \
     ! grep -q '^Inst ' /tmp/apt-upgrade-plan && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
 
+ADD --checksum=sha256:626d044d975ab2daac759bf898416f1b51e2cb8dcd6727c2b5b5b28b97ead2e1 https://rubygems.org/downloads/resolv-0.7.2.gem /tmp/resolv-0.7.2.gem
+RUN gem install --local --no-document --install-dir /usr/local/bundle /tmp/resolv-0.7.2.gem && \
+    cp /usr/local/bundle/gems/resolv-0.7.2/lib/resolv.rb /usr/local/lib/ruby/3.4.0/resolv.rb && \
+    rm /usr/local/lib/ruby/gems/3.4.0/specifications/default/resolv-0.7.1.gemspec && \
+    cmp /usr/local/lib/ruby/3.4.0/resolv.rb \
+        /usr/local/bundle/gems/resolv-0.7.2/lib/resolv.rb && \
+    ruby -rresolv -e 'abort unless Gem::Specification.find_by_name("resolv").version.to_s == "0.7.2"' && \
+    chown -R vscode:vscode /usr/local/bundle && \
+    rm /tmp/resolv-0.7.2.gem
+
 ADD --checksum=sha256:9f58bff01604cb1b14008fef14dceb14d836a49225e45c6c2e37de3be3e707f0 https://registry.npmjs.org/npm/-/npm-11.19.1.tgz /tmp/npm.tgz
 RUN rm -rf /usr/local/lib/node_modules/npm && \
     mkdir -p /usr/local/lib/node_modules/npm && \
@@ -72,3 +82,8 @@ RUN rm -rf /usr/local/lib/node_modules/npm && \
 # The MCR base contributes a network-running postCreate hook through this
 # image label. Project-owned devcontainer.json is the sole lifecycle source.
 LABEL devcontainer.metadata="[]"
+
+# The developer image does not run Java; these gettext integration JARs are
+# unused. Fail the build if a future package introduces another JAR.
+RUN rm /usr/share/java/libintl-0.21.jar /usr/share/java/gettext.jar && \
+    test -z "$(find / -xdev -type f -name '*.jar' -print)"

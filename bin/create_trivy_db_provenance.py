@@ -310,10 +310,10 @@ def main() -> int:
     parser.add_argument("--trivy-version-json", required=True, type=Path)
     parser.add_argument("--vulnerability-db", required=True, type=Path)
     parser.add_argument("--vulnerability-db-metadata", required=True, type=Path)
-    parser.add_argument("--java-db", required=True, type=Path)
-    parser.add_argument("--java-db-metadata", required=True, type=Path)
+    parser.add_argument("--java-db", type=Path)
+    parser.add_argument("--java-db-metadata", type=Path)
     parser.add_argument("--vulnerability-db-manifest", required=True, type=Path)
-    parser.add_argument("--java-db-manifest", required=True, type=Path)
+    parser.add_argument("--java-db-manifest", type=Path)
     parser.add_argument(
         "--expected-architecture", required=True, choices=("amd64", "arm64")
     )
@@ -322,14 +322,23 @@ def main() -> int:
     parser.add_argument("--output", required=True, type=Path)
     arguments = parser.parse_args()
 
+    java_paths = (
+        arguments.java_db,
+        arguments.java_db_metadata,
+        arguments.java_db_manifest,
+    )
+    if any(path is not None for path in java_paths) and not all(
+        path is not None for path in java_paths
+    ):
+        reject("Java DB, metadata, and manifest must be supplied together")
+    include_java = all(path is not None for path in java_paths)
+
     input_paths = (
         arguments.trivy_version_json,
         arguments.vulnerability_db,
         arguments.vulnerability_db_metadata,
-        arguments.java_db,
-        arguments.java_db_metadata,
         arguments.vulnerability_db_manifest,
-        arguments.java_db_manifest,
+        *(java_paths if include_java else ()),
         arguments.delivery_report,
         arguments.development_report,
     )
@@ -340,10 +349,11 @@ def main() -> int:
     version_document, _payload = load_json(arguments.trivy_version_json, "Trivy version JSON")
     if not isinstance(version_document, dict):
         reject("Trivy version JSON top level must be an object")
-    if set(version_document) != {"Version", "VulnerabilityDB", "JavaDB"}:
-        reject(
-            "Trivy version JSON must contain exactly Version, VulnerabilityDB, and JavaDB"
-        )
+    expected_version_fields = {"Version", "VulnerabilityDB"}
+    if include_java:
+        expected_version_fields.add("JavaDB")
+    if set(version_document) != expected_version_fields:
+        reject(f"Trivy version JSON must contain exactly {sorted(expected_version_fields)}")
     if version_document["Version"] != EXPECTED_TRIVY_VERSION:
         reject(f"Trivy version must be {EXPECTED_TRIVY_VERSION}")
 
@@ -355,14 +365,15 @@ def main() -> int:
             arguments.vulnerability_db_metadata,
             arguments.vulnerability_db_manifest,
         ),
-        "java": (
+    }
+    if include_java:
+        database_specs["java"] = (
             "JavaDB",
             1,
             arguments.java_db,
             arguments.java_db_metadata,
             arguments.java_db_manifest,
-        ),
-    }
+        )
     databases: dict[str, dict[str, object]] = {}
     database_times: dict[str, dict[str, UtcTimestamp]] = {}
     for database_name, (

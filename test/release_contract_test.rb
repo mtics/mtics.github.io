@@ -390,7 +390,7 @@ class ReleaseContractTest < Minitest::Test
   def test_python_automation_dependencies_are_fully_hashed
     expected_direct_dependencies = {
       "requirements-build.txt" => %w[nbconvert==7.17.1 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8 setuptools==83.0.0],
-      "requirements-citations.txt" => %w[serpapi==1.0.2 pyyaml==6.0.3]
+      "requirements-citations.txt" => %w[serpapi==1.0.2 pyyaml==6.0.3 pip-audit==2.10.1]
     }
 
     expected_direct_dependencies.each do |path, dependencies|
@@ -415,7 +415,7 @@ class ReleaseContractTest < Minitest::Test
       "requirements-build.in" => [
         "nbconvert==7.17.1", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0", "setuptools==83.0.0"
       ],
-      "requirements-citations.in" => ["serpapi==1.0.2", "PyYAML==6.0.3"]
+      "requirements-citations.in" => ["serpapi==1.0.2", "PyYAML==6.0.3", "pip-audit==2.10.1"]
     }
 
     expected_inputs.each do |path, expected|
@@ -435,16 +435,13 @@ class ReleaseContractTest < Minitest::Test
   def test_python_locks_record_the_supported_interpreter_and_cutoff
     %w[build citations].each do |name|
       path = "requirements-#{name}.txt"
-      expected_command = [
-        "uv pip compile requirements-#{name}.in",
-        "--python-version 3.13.14",
-        "--universal",
-        "--generate-hashes",
-        "--exclude-newer 2026-07-12T00:00:00Z",
-        "--output-file #{path}"
-      ].join(" ")
-      assert_includes read(path), expected_command,
-                      "#{path} must document its reproducible lock command"
+      command = read(path).lines.fetch(1).delete_prefix("#    ").strip
+      match = command.match(
+        /\Auv pip compile requirements-#{name}\.in --python-version 3\.13\.14 --universal --generate-hashes --exclude-newer (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z) --output-file #{Regexp.escape(path)}\z/
+      )
+      refute_nil match, "#{path} must document its reproducible lock command"
+      assert_operator DateTime.iso8601(match[1]), :<=, DateTime.now.new_offset(0),
+                      "#{path} must not claim a future dependency cutoff"
     end
   end
 
@@ -675,7 +672,7 @@ class ReleaseContractTest < Minitest::Test
   def test_container_os_is_fully_upgraded_inside_the_fresh_immutable_debian_snapshot
     %w[Dockerfile .devcontainer/Dockerfile].each do |path|
       dockerfile = read(path)
-      assert_match(/^ARG DEBIAN_SNAPSHOT=20260831T211327Z$/, dockerfile)
+      assert_match(/^ARG DEBIAN_SNAPSHOT=20260922T200000Z$/, dockerfile)
       apt_stages = dockerfile
                    .split(/^FROM /)
                    .drop(1)
@@ -745,7 +742,7 @@ class ReleaseContractTest < Minitest::Test
         )
       end
       prepare_index = steps.index do |step|
-        step.fetch("name", "") == "Prepare frozen Trivy databases"
+        step.fetch("name", "") == "Prepare frozen Trivy vulnerability database"
       end
       provenance_index = steps.index do |step|
         step.fetch("name", "") == "Bind Trivy databases and reports"
@@ -763,18 +760,18 @@ class ReleaseContractTest < Minitest::Test
       prepare_command = steps.fetch(prepare_index).fetch("run")
       assert_includes prepare_command, 'rm -rf "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"'
       assert_equal 1, prepare_command.scan("--download-db-only").length
-      assert_equal 1, prepare_command.scan("--download-java-db-only").length
+      refute_includes prepare_command, "--download-java-db-only"
       assert_includes prepare_command, 'mkdir -p "$RUNNER_TEMP/trivy-cache" "$RUNNER_TEMP/trivy-reports"'
       assert_includes prepare_command, "docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-db:2"
-      assert_includes prepare_command, "docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-java-db:1"
-      assert_equal 2, prepare_command.scan("python3 bin/validate_trivy_oci_manifest.py").length
+      refute_includes prepare_command, "trivy-java-db"
+      assert_equal 1, prepare_command.scan("python3 bin/validate_trivy_oci_manifest.py").length
       assert_includes prepare_command, '--database vulnerability'
-      assert_includes prepare_command, '--database java'
+      refute_includes prepare_command, '--database java'
       assert_includes prepare_command, '--db-repository "ghcr.io/aquasecurity/trivy-db@$vulnerability_db_digest"'
-      assert_includes prepare_command, '--java-db-repository "ghcr.io/aquasecurity/trivy-java-db@$java_db_digest"'
+      refute_includes prepare_command, '--java-db-repository'
       assert_includes prepare_command, "--no-progress"
       assert_includes prepare_command, "version --cache-dir /trivy-cache --format json"
-      assert_equal 3, prepare_command.scan('"$TRIVY_IMAGE"').length
+      assert_equal 2, prepare_command.scan('"$TRIVY_IMAGE"').length
       assert_includes prepare_command, "$RUNNER_TEMP/trivy-version.json"
 
       scan_indices = %w[delivery development].map do |label|
@@ -804,6 +801,21 @@ class ReleaseContractTest < Minitest::Test
         assert_includes scan_command, "--pkg-types os,library"
         assert_includes scan_command, "--severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
         assert_includes scan_command, "--list-all-pkgs"
+        skipped_jars = if label == "delivery"
+                         %w[
+                           /usr/local/bundle/ruby/3.4.0/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar
+                           /usr/local/bundle/ruby/3.4.0/gems/concurrent-ruby-1.3.8/lib/concurrent-ruby/concurrent/concurrent_ruby.jar
+                         ]
+                       else
+                         %w[
+                           /usr/share/java/libintl-0.21.jar
+                           /usr/share/java/gettext.jar
+                           /usr/local/rvm/gems/default/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar
+                           /usr/local/rvm/gems/default/gems/concurrent-ruby-1.3.7/lib/concurrent-ruby/concurrent/concurrent_ruby.jar
+                         ]
+                       end
+        assert_equal skipped_jars.length, scan_command.scan("--skip-files").length
+        skipped_jars.each { |path| assert_includes scan_command, "--skip-files #{path}" }
         assert_includes scan_command, "--format json"
         assert_includes scan_command, "--output /trivy-reports/trivy-#{label}.json"
         assert_includes scan_command, image_ref
@@ -819,10 +831,9 @@ class ReleaseContractTest < Minitest::Test
       assert_includes provenance_command, '--trivy-version-json "$RUNNER_TEMP/trivy-version.json"'
       assert_includes provenance_command, '--vulnerability-db "$RUNNER_TEMP/trivy-cache/db/trivy.db"'
       assert_includes provenance_command, '--vulnerability-db-metadata "$RUNNER_TEMP/trivy-cache/db/metadata.json"'
-      assert_includes provenance_command, '--java-db "$RUNNER_TEMP/trivy-cache/java-db/trivy-java.db"'
-      assert_includes provenance_command, '--java-db-metadata "$RUNNER_TEMP/trivy-cache/java-db/metadata.json"'
+      refute_includes provenance_command, '--java-db '
       assert_includes provenance_command, '--vulnerability-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-vulnerability-db-manifest.json"'
-      assert_includes provenance_command, '--java-db-manifest "$RUNNER_TEMP/trivy-reports/trivy-java-db-manifest.json"'
+      refute_includes provenance_command, '--java-db-manifest '
       assert_includes provenance_command, "--expected-architecture amd64"
       assert_includes provenance_command, '--delivery-report "$RUNNER_TEMP/trivy-reports/trivy-delivery.json"'
       assert_includes provenance_command, '--development-report "$RUNNER_TEMP/trivy-reports/trivy-development.json"'
@@ -847,10 +858,9 @@ class ReleaseContractTest < Minitest::Test
         assert_includes gate_command, "--provenance /trivy-reports/trivy-db-provenance.json"
         assert_includes gate_command, "--vulnerability-db /trivy-cache/db/trivy.db"
         assert_includes gate_command, "--vulnerability-db-metadata /trivy-cache/db/metadata.json"
-        assert_includes gate_command, "--java-db /trivy-cache/java-db/trivy-java.db"
-        assert_includes gate_command, "--java-db-metadata /trivy-cache/java-db/metadata.json"
+        refute_includes gate_command, "--java-db "
         assert_includes gate_command, "--vulnerability-db-manifest /trivy-reports/trivy-vulnerability-db-manifest.json"
-        assert_includes gate_command, "--java-db-manifest /trivy-reports/trivy-java-db-manifest.json"
+        refute_includes gate_command, "--java-db-manifest "
         assert_includes gate_command, "--expected-architecture amd64"
         assert_includes gate_command, "--image #{label}"
         assert_operator provenance_index, :<, gate_index
@@ -876,7 +886,7 @@ class ReleaseContractTest < Minitest::Test
       provenance_paths = provenance_upload.dig("with", "path")
       assert_includes provenance_paths, "${{ runner.temp }}/trivy-reports/trivy-db-provenance.json"
       assert_includes provenance_paths, "${{ runner.temp }}/trivy-reports/trivy-vulnerability-db-manifest.json"
-      assert_includes provenance_paths, "${{ runner.temp }}/trivy-reports/trivy-java-db-manifest.json"
+      refute_includes provenance_paths, "trivy-java-db-manifest.json"
       assert_equal "error", provenance_upload.dig("with", "if-no-files-found")
     end
   end
@@ -917,13 +927,24 @@ class ReleaseContractTest < Minitest::Test
     refute_includes dockerfile, "/usr/local/post-create.sh"
   end
 
+  def test_release_images_remove_nonruntime_jars_and_reject_new_java_artifacts
+    delivery = read("Dockerfile")
+    development = read(".devcontainer/Dockerfile")
+    assert_includes delivery, "http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar"
+    assert_includes delivery, "concurrent-ruby-1.3.8/lib/concurrent-ruby/concurrent/concurrent_ruby.jar"
+    assert_includes development, "rm /usr/share/java/libintl-0.21.jar /usr/share/java/gettext.jar"
+    [delivery, development].each do |dockerfile|
+      assert_includes dockerfile, %(test -z "$(find / -xdev -type f -name '*.jar' -print)")
+    end
+  end
+
   def test_trivy_baseline_commits_to_findings_and_multi_arch_package_coverage
     baseline = JSON.parse(read(".trivy-unfixed-baseline.json"))
     assert_equal 4, baseline.fetch("schema_version")
     assert_equal %w[coverage images minimum_db_updated_at review_before reviewed_at schema_version vulnerability_coverage],
                  baseline.keys.sort
     minimum_db_updated_at = baseline.fetch("minimum_db_updated_at")
-    assert_equal %w[java vulnerability], minimum_db_updated_at.keys.sort
+    assert_equal %w[vulnerability], minimum_db_updated_at.keys.sort
     minimum_db_updated_at.each_value do |timestamp|
       assert_match(/\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z\z/, timestamp)
       DateTime.iso8601(timestamp)
@@ -1007,14 +1028,26 @@ class ReleaseContractTest < Minitest::Test
         "list_all_packages" => true,
         "offline_scan" => true,
         "skip_db_update" => true,
-        "skip_java_db_update" => true
+        "skip_java_db_update" => true,
+        "skip_files" => {
+          "delivery" => %w[
+            /usr/local/bundle/ruby/3.4.0/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar
+            /usr/local/bundle/ruby/3.4.0/gems/concurrent-ruby-1.3.8/lib/concurrent-ruby/concurrent/concurrent_ruby.jar
+          ],
+          "development" => %w[
+            /usr/share/java/libintl-0.21.jar
+            /usr/share/java/gettext.jar
+            /usr/local/rvm/gems/default/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar
+            /usr/local/rvm/gems/default/gems/concurrent-ruby-1.3.7/lib/concurrent-ruby/concurrent/concurrent_ruby.jar
+          ]
+        }
       },
       scanner.fetch("scan_profile")
     )
 
     databases = manifest.fetch("databases")
-    assert_equal %w[java vulnerability], databases.keys.sort
-    {"vulnerability" => 2, "java" => 1}.each do |database_name, schema_version|
+    assert_equal %w[vulnerability], databases.keys.sort
+    {"vulnerability" => 2}.each do |database_name, schema_version|
       database = databases.fetch(database_name)
       assert_equal %w[
         downloaded_at metadata_sha256 next_update oci schema_version sha256 updated_at
@@ -1033,19 +1066,11 @@ class ReleaseContractTest < Minitest::Test
       assert_equal %w[
         layer_digest layer_media_type layer_size manifest_digest repository resolved_from
       ], oci.keys.sort
-      expected_oci = if database_name == "vulnerability"
-                       {
-                         "repository" => "ghcr.io/aquasecurity/trivy-db",
-                         "resolved_from" => "ghcr.io/aquasecurity/trivy-db:2",
-                         "layer_media_type" => "application/vnd.aquasec.trivy.db.layer.v1.tar+gzip"
-                       }
-                     else
-                       {
-                         "repository" => "ghcr.io/aquasecurity/trivy-java-db",
-                         "resolved_from" => "ghcr.io/aquasecurity/trivy-java-db:1",
-                         "layer_media_type" => "application/vnd.aquasec.trivy.javadb.layer.v1.tar+gzip"
-                       }
-                     end
+      expected_oci = {
+        "repository" => "ghcr.io/aquasecurity/trivy-db",
+        "resolved_from" => "ghcr.io/aquasecurity/trivy-db:2",
+        "layer_media_type" => "application/vnd.aquasec.trivy.db.layer.v1.tar+gzip"
+      }
       expected_oci.each { |field, value| assert_equal value, oci.fetch(field) }
       assert_match(/\Asha256:[0-9a-f]{64}\z/, oci.fetch("manifest_digest"))
       assert_match(/\Asha256:[0-9a-f]{64}\z/, oci.fetch("layer_digest"))
@@ -1361,7 +1386,7 @@ class ReleaseContractTest < Minitest::Test
 
   def test_pinned_browser_contracts_run_after_each_site_build
     dockerfile = read("Dockerfile")
-    assert_match(/^ARG CHROMIUM_VERSION=151\.0\.7922\.173-1~deb12u1$/, dockerfile)
+    assert_match(/^ARG CHROMIUM_VERSION=153\.0\.8010\.52-1~deb12u1$/, dockerfile)
     assert_includes dockerfile, 'chromium="${CHROMIUM_VERSION}"'
     assert_match(/^playwright==1\.61\.0\b/, read("requirements-build.txt"))
 
@@ -1678,20 +1703,19 @@ class ReleaseContractTest < Minitest::Test
     assert_operator contract_index, :<, update_index
   end
 
-  def test_citation_dependency_graphs_are_strictly_audited_before_secret_injection
+  def test_citation_refresh_installs_only_its_hashed_dependencies_before_secret_injection
     steps = load_workflow(".github/workflows/update_scholar_citations.yml")
             .fetch("jobs").fetch("update").fetch("steps")
     install_index = steps.index do |step|
       run = step.fetch("run", "")
       run.include?("python -m pip install") &&
         run.include?("--require-hashes") &&
-        run.include?("-r requirements-build.txt") &&
         run.include?("-r requirements-citations.txt")
     end
     audit_index = steps.index do |step|
-      run = step.fetch("run", "")
-      run.include?("pip-audit --strict --requirement requirements-build.txt --no-deps --disable-pip") &&
-        run.include?("pip-audit --strict --requirement requirements-citations.txt --no-deps --disable-pip")
+      step.fetch("run", "").include?(
+        "pip-audit --strict --requirement requirements-citations.txt --no-deps --disable-pip"
+      )
     end
     contract_index = steps.index do |step|
       step.fetch("run", "").include?("python test/citation_updater_contract_test.py")
@@ -1700,11 +1724,13 @@ class ReleaseContractTest < Minitest::Test
       step.fetch("run", "").include?("python bin/update_scholar_citations.py")
     end
 
-    refute_nil install_index, "citation automation must hash-install both reviewed dependency graphs"
-    refute_nil audit_index, "citation automation must audit both graphs before exposing its secret"
+    refute_nil install_index, "citation automation must hash-install its own dependency graph"
+    refute_nil audit_index, "citation automation must audit its own dependency graph"
+    refute_includes steps.fetch(install_index).fetch("run"), "requirements-build.txt"
     assert_operator install_index, :<, audit_index
     assert_operator audit_index, :<, contract_index
-    assert_operator audit_index, :<, update_index
+    assert_operator contract_index, :<, update_index
+    refute_includes steps.fetch(install_index).to_s, "SERPAPI_API_KEY"
     refute_includes steps.fetch(audit_index).to_s, "SERPAPI_API_KEY"
     assert_includes steps.fetch(update_index).to_s, "SERPAPI_API_KEY"
   end

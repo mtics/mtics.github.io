@@ -1,7 +1,7 @@
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766 AS bundle-builder
 
 ARG BUNDLER_VERSION=2.6.9
-ARG DEBIAN_SNAPSHOT=20260831T211327Z
+ARG DEBIAN_SNAPSHOT=20260922T200000Z
 
 ENV BUNDLE_DEPLOYMENT=true \
     BUNDLE_PATH=/usr/local/bundle \
@@ -29,6 +29,10 @@ RUN sed -i \
     ! grep -q '^Inst ' /tmp/apt-upgrade-plan && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
 
+ADD --checksum=sha256:626d044d975ab2daac759bf898416f1b51e2cb8dcd6727c2b5b5b28b97ead2e1 https://rubygems.org/downloads/resolv-0.7.2.gem /tmp/resolv-0.7.2.gem
+RUN gem install --local --no-document --install-dir /usr/local/lib/ruby/gems/3.4.0 /tmp/resolv-0.7.2.gem && \
+    rm /tmp/resolv-0.7.2.gem
+
 FROM node:24.18.0-bookworm-slim@sha256:cb4e8f7c443347358b7875e717c29e27bf9befc8f5a26cf18af3c3dec80e58c5 AS node-runtime
 FROM python:3.13.15-slim-bookworm@sha256:ed86c82274b3c69b52fb5820f358f0bd7df0b603332063cb5c6e32bd220c3e6e AS python-runtime
 COPY bin/refresh_python_vendor.py /tmp/refresh_python_vendor.py
@@ -41,8 +45,8 @@ RUN python3 -m pip install --no-cache-dir --break-system-packages --upgrade \
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766
 
 ARG BUNDLER_VERSION=2.6.9
-ARG CHROMIUM_VERSION=151.0.7922.173-1~deb12u1
-ARG DEBIAN_SNAPSHOT=20260831T211327Z
+ARG CHROMIUM_VERSION=153.0.8010.52-1~deb12u1
+ARG DEBIAN_SNAPSHOT=20260922T200000Z
 ARG NODE_VERSION=24.18.0
 ARG NPM_VERSION=11.19.1
 ARG PYTHON_VERSION=3.13.15
@@ -87,6 +91,14 @@ RUN sed -i \
     ! grep -q '^Inst ' /tmp/apt-upgrade-plan && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/*
 
+COPY --from=bundle-builder /usr/local/lib/ruby/gems/3.4.0 /usr/local/lib/ruby/gems/3.4.0
+RUN cp /usr/local/lib/ruby/gems/3.4.0/gems/resolv-0.7.2/lib/resolv.rb \
+        /usr/local/lib/ruby/3.4.0/resolv.rb && \
+    rm /usr/local/lib/ruby/gems/3.4.0/specifications/default/resolv-0.7.1.gemspec && \
+    cmp /usr/local/lib/ruby/3.4.0/resolv.rb \
+        /usr/local/lib/ruby/gems/3.4.0/gems/resolv-0.7.2/lib/resolv.rb && \
+    ruby -rresolv -e 'abort unless Gem::Specification.find_by_name("resolv").version.to_s == "0.7.2"'
+
 ADD --checksum=sha256:9f58bff01604cb1b14008fef14dceb14d836a49225e45c6c2e37de3be3e707f0 https://registry.npmjs.org/npm/-/npm-11.19.1.tgz /tmp/npm.tgz
 RUN rm -rf /usr/local/lib/node_modules/npm && \
     mkdir -p /usr/local/lib/node_modules/npm && \
@@ -129,6 +141,13 @@ COPY gems/jekyll-3rd-party-libraries gems/jekyll-3rd-party-libraries
 COPY --from=bundle-builder /usr/local/bundle /usr/local/bundle
 RUN bundle _${BUNDLER_VERSION}_ check && \
     chown -R jekyll:jekyll /usr/local/bundle /home/jekyll /srv/jekyll
+
+# MRI does not load the JRuby-only JARs bundled by these gems. Keep the final
+# image Java-free so an unrelated Java artifact DB cannot block site releases.
+RUN rm \
+      /usr/local/bundle/ruby/3.4.0/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar \
+      /usr/local/bundle/ruby/3.4.0/gems/concurrent-ruby-1.3.8/lib/concurrent-ruby/concurrent/concurrent_ruby.jar && \
+    test -z "$(find / -xdev -type f -name '*.jar' -print)"
 
 COPY --chmod=0755 bin/entry_point.sh /usr/local/bin/entry_point.sh
 

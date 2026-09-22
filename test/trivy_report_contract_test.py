@@ -471,6 +471,7 @@ class TrivyReportContractTest(unittest.TestCase):
         create_baseline: bool = True,
         create_provenance: bool = True,
         create_databases: bool = True,
+        include_java: bool = True,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory(prefix="trivy-gate-") as directory:
             directory_path = Path(directory)
@@ -501,6 +502,8 @@ class TrivyReportContractTest(unittest.TestCase):
                         provenance_document = {}
                     else:
                         provenance_document = valid_provenance(report_document, report_payload)
+                        if not include_java:
+                            provenance_document["databases"].pop("java")
                 provenance_path.write_text(
                     raw_provenance
                     if raw_provenance is not None
@@ -509,13 +512,15 @@ class TrivyReportContractTest(unittest.TestCase):
                 )
             if create_databases:
                 vulnerability_db_path.write_bytes(FIXTURE_VULNERABILITY_DB)
-                java_db_path.write_bytes(FIXTURE_JAVA_DB)
+                if include_java:
+                    java_db_path.write_bytes(FIXTURE_JAVA_DB)
                 vulnerability_manifest_path.write_text(
                     oci_manifest_payload("vulnerability"), encoding="utf-8"
                 )
-                java_manifest_path.write_text(
-                    oci_manifest_payload("java"), encoding="utf-8"
-                )
+                if include_java:
+                    java_manifest_path.write_text(
+                        oci_manifest_payload("java"), encoding="utf-8"
+                    )
                 if (
                     isinstance(provenance_document, dict)
                     and isinstance(provenance_document.get("databases"), dict)
@@ -529,10 +534,11 @@ class TrivyReportContractTest(unittest.TestCase):
                         ),
                         encoding="utf-8",
                     )
-                    java_metadata_path.write_text(
-                        json.dumps(provenance_metadata_document(provenance_document, "java")),
-                        encoding="utf-8",
-                    )
+                    if include_java:
+                        java_metadata_path.write_text(
+                            json.dumps(provenance_metadata_document(provenance_document, "java")),
+                            encoding="utf-8",
+                        )
             return subprocess.run(
                 [
                     "python3",
@@ -547,14 +553,19 @@ class TrivyReportContractTest(unittest.TestCase):
                     str(vulnerability_db_path),
                     "--vulnerability-db-metadata",
                     str(vulnerability_metadata_path),
-                    "--java-db",
-                    str(java_db_path),
-                    "--java-db-metadata",
-                    str(java_metadata_path),
                     "--vulnerability-db-manifest",
                     str(vulnerability_manifest_path),
-                    "--java-db-manifest",
-                    str(java_manifest_path),
+                    *(
+                        [
+                            "--java-db",
+                            str(java_db_path),
+                            "--java-db-metadata",
+                            str(java_metadata_path),
+                            "--java-db-manifest",
+                            str(java_manifest_path),
+                        ]
+                        if include_java else []
+                    ),
                     "--expected-architecture",
                     "amd64",
                     "--image",
@@ -573,6 +584,14 @@ class TrivyReportContractTest(unittest.TestCase):
 
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("reviewed residual vulnerabilities: 1", result.stdout)
+
+    def test_reviewed_vulnerability_only_scan_passes_without_java_db(self) -> None:
+        finding = vulnerability()
+        reviewed = baseline([baseline_entry(finding)])
+        reviewed["minimum_db_updated_at"].pop("java")
+        result = self.invoke(report([finding]), reviewed, include_java=False)
+
+        self.assertEqual(0, result.returncode, result.stderr)
 
     def test_report_architecture_must_match_the_runtime_architecture(self) -> None:
         finding = vulnerability()
@@ -1423,6 +1442,24 @@ class TrivyProvenanceBuilderContractTest(unittest.TestCase):
             self.assertIn("must not alias an input", alias_result.stderr)
             self.assertEqual(original_version, version_path.read_bytes())
 
+            version_without_java = json.loads(original_version)
+            version_without_java.pop("JavaDB")
+            version_path.write_text(json.dumps(version_without_java), encoding="utf-8")
+            vulnerability_only_command = list(command)
+            for option in ("--java-db", "--java-db-metadata", "--java-db-manifest"):
+                index = vulnerability_only_command.index(option)
+                del vulnerability_only_command[index : index + 2]
+            vulnerability_only_result = subprocess.run(
+                vulnerability_only_command,
+                cwd=ROOT,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, vulnerability_only_result.returncode, vulnerability_only_result.stderr)
+            vulnerability_only_document = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual({"vulnerability"}, set(vulnerability_only_document["databases"]))
+
     def test_builder_rejects_metadata_mismatch_and_duplicate_version_keys(self) -> None:
         with tempfile.TemporaryDirectory(prefix="trivy-provenance-negative-") as directory:
             root = Path(directory)
@@ -1615,7 +1652,9 @@ class TrivyBaselineBuilderContractTest(unittest.TestCase):
             paths[name] = path
         return paths
 
-    def invoke(self, paths: dict[str, Path]) -> subprocess.CompletedProcess[str]:
+    def invoke(
+        self, paths: dict[str, Path], *, include_java: bool = True
+    ) -> subprocess.CompletedProcess[str]:
         today = dt.date.today()
         return subprocess.run(
             [
@@ -1627,14 +1666,19 @@ class TrivyBaselineBuilderContractTest(unittest.TestCase):
                 str(paths["vulnerability_db"]),
                 "--vulnerability-db-metadata",
                 str(paths["vulnerability_metadata"]),
-                "--java-db",
-                str(paths["java_db"]),
-                "--java-db-metadata",
-                str(paths["java_metadata"]),
                 "--vulnerability-db-manifest",
                 str(paths["vulnerability_manifest"]),
-                "--java-db-manifest",
-                str(paths["java_manifest"]),
+                *(
+                    [
+                        "--java-db",
+                        str(paths["java_db"]),
+                        "--java-db-metadata",
+                        str(paths["java_metadata"]),
+                        "--java-db-manifest",
+                        str(paths["java_manifest"]),
+                    ]
+                    if include_java else []
+                ),
                 "--delivery-amd64-report",
                 str(paths["delivery_amd64"]),
                 "--delivery-arm64-report",
@@ -1722,6 +1766,21 @@ class TrivyBaselineBuilderContractTest(unittest.TestCase):
                     "fixable_high_critical_count"
                 ],
             )
+
+    def test_builder_accepts_vulnerability_only_evidence(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="trivy-baseline-") as directory:
+            paths = self.create_inputs(Path(directory))
+            version = json.loads(paths["version"].read_text(encoding="utf-8"))
+            version.pop("JavaDB")
+            paths["version"].write_text(json.dumps(version), encoding="utf-8")
+
+            result = self.invoke(paths, include_java=False)
+
+            self.assertEqual(0, result.returncode, result.stderr)
+            reviewed = json.loads(paths["baseline"].read_text(encoding="utf-8"))
+            manifest = json.loads(paths["manifest"].read_text(encoding="utf-8"))
+            self.assertEqual({"vulnerability"}, set(reviewed["minimum_db_updated_at"]))
+            self.assertEqual({"vulnerability"}, set(manifest["databases"]))
 
     def test_builder_rejects_cross_architecture_drift_and_fixable_findings(self) -> None:
         mutations = {

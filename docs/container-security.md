@@ -5,16 +5,27 @@ for `UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL` OS and library vulnerabilities. The JSON
 reports retain every package (`--list-all-pkgs`) and are uploaded even when the
 policy gate fails.
 
-The images contain JAR files, so Trivy requires both its vulnerability DB and
-Java artifact-identification DB even though the current reports do not contain
-a Java result. Each CI job therefore downloads both DBs exactly once, mounts
-the resulting cache read-only for both scans, and disables DB updates, remote
-dependency lookup, telemetry, version checks, and non-Docker image fallbacks.
+The final images do not contain JAR files: their build steps remove the
+non-runtime JRuby and gettext integration JARs and fail if any other JAR is
+introduced. Trivy therefore needs only its vulnerability DB, not the unrelated
+Java artifact-identification DB. Each CI job downloads that DB exactly once,
+mounts the resulting cache read-only for both scans, and disables DB updates,
+remote dependency lookup, telemetry, version checks, and non-Docker image
+fallbacks. If a future dependency adds a JAR, the image build fails and the
+scanner scope must be reviewed before release.
+
+Trivy analyzes image layers, including layers that originally contained a JAR
+later deleted from the final filesystem. The scan therefore excludes only the
+two reviewed JRuby JAR paths in the delivery image, and the two gettext plus
+two removed RVM/JRuby paths in the development image with exact `--skip-files` flags.
+These paths are recorded in the review manifest and asserted by the release
+contract test. Any other JAR still requires a Java DB and makes this
+vulnerability-only scan fail closed.
 
 ## Evidence and trust boundary
 
-The DB tags are first resolved from the official GHCR namespaces to raw OCI
-manifests. `bin/validate_trivy_oci_manifest.py` rejects malformed manifests,
+The DB tag is first resolved from the official GHCR namespace to a raw OCI
+manifest. `bin/validate_trivy_oci_manifest.py` rejects malformed manifests,
 unexpected artifact/config/layer media types, extra layers, invalid digests,
 and non-positive sizes. Trivy then receives only the resulting manifest-digest
 repository reference, so a tag move cannot change the downloaded bytes and
@@ -22,8 +33,8 @@ there is no mirror or repository fallback.
 
 After both scans, `bin/create_trivy_db_provenance.py` binds:
 
-- both raw OCI manifests and their layer descriptors;
-- both extracted DB files and runtime metadata files;
+- the raw OCI manifest and its layer descriptor;
+- the extracted DB file and runtime metadata file;
 - Trivy's version and DB timestamps;
 - both raw reports, image IDs, architectures, timestamps, severity counts, and
   artifact names.
@@ -59,10 +70,10 @@ The gate applies these rules:
   or manifest evidence blocks release;
 - status values must be one of Trivy v0.70.0's eight canonical lowercase
   values; `not_affected` is rejected if it appears among active findings;
-- DBs older than the reviewed minimum, downloaded after a report, or expired
+- a DB older than the reviewed minimum, downloaded after a report, or expired
   when a report was created cannot satisfy the gate.
 
-Baseline schema v4 stores minimum timestamps for both DBs, the shared unfixed
+Baseline schema v4 stores the minimum timestamp for the vulnerability DB, the shared unfixed
 HIGH/CRITICAL sets, four architecture-specific package inventories, and four
 all-severity finding inventories. A severity downgrade or disappearance is
 therefore a review event, not a silent reduction in risk.
@@ -77,10 +88,10 @@ identity.
 ## Reviewing a baseline update
 
 `.trivy-unfixed-baseline.json` is not an ignore file. Its companion
-`.trivy-baseline-review.json` binds the final baseline SHA-256, both DBs, and
+`.trivy-baseline-review.json` binds the final baseline SHA-256, the vulnerability DB, and
 all four amd64/arm64 reports. `bin/create_trivy_baseline.py` generates both
 files together and refuses output when a report is fixable, malformed, outside
-the frozen DB validity window, assigned to the wrong slot, or has a different
+the frozen vulnerability DB validity window, assigned to the wrong slot, or has a different
 HIGH/CRITICAL set across architectures.
 
 The review manifest's scanner image, scan profile, and OCI `resolved_from`
@@ -91,11 +102,11 @@ does not independently attest the historical command-line arguments.
 Before `review_before`:
 
 1. Build both images for amd64 and arm64.
-2. Resolve, validate, and freeze one fresh vulnerability DB and Java DB.
+2. Resolve, validate, and freeze one fresh vulnerability DB.
 3. Scan all four image/architecture combinations with the documented profile.
 4. Review every addition, removal, package change, and severity/status change
    against an official vendor source.
-5. Run the generator with the two DBs, their metadata/manifests, and all four
+5. Run the generator with the DB, its metadata/manifest, and all four
    reports; never hand-edit generated commitments.
 6. Keep the review window at 30 days or less, then run:
 
@@ -160,6 +171,34 @@ At lower severities, the refresh adds current Perl and gawk `UNKNOWN` records
 and reintroduces curl CVE-2026-9547 as `LOW`. All additions, removals, severity
 changes, and status changes are committed by the architecture-specific counts
 and inventory hashes, so later drift still fails closed.
+
+### 2026-09-23 four-architecture review
+
+The review rebuilt both images for amd64 and arm64 from Debian snapshot
+`20260922T200000Z` and froze the vulnerability DB updated at
+`2026-09-22T19:06:27.093918464Z`. The images contain no JARs; six exact
+non-runtime JAR paths in their earlier layers are excluded from Java artifact
+analysis. The official Java DB had expired before this review, so the current
+scan no longer depends on it. New or unreviewed JAR paths fail the scan.
+
+| Image | Previous counts (C/H/M/L/U) | Current counts (C/H/M/L/U) | Fixable C/H |
+| --- | --- | --- | --- |
+| delivery | 17 / 76 / 265 / 336 / 671 | 17 / 128 / 280 / 349 / 66 | 0 |
+| development | 29 / 446 / 1698 / 1238 / 90 | 29 / 475 / 2107 / 1313 / 74 | 0 |
+
+Each image has the same HIGH/CRITICAL set and all-severity counts on both
+architectures. The new DB adds current [libxml2](https://security-tracker.debian.org/tracker/source-package/libxml2)
+and [util-linux](https://security-tracker.debian.org/tracker/source-package/util-linux)
+findings; the development image also has substantial
+[Linux header](https://security-tracker.debian.org/tracker/source-package/linux)
+inventory churn after `linux-libc-dev` moved from `6.1.180-1` to `6.1.187-1`.
+The Debian snapshot updates `libaom3` to `3.6.0-1+deb12u3` and
+[ImageMagick](https://security-tracker.debian.org/tracker/source-package/imagemagick)
+to `8:6.9.11.60+dfsg-1.6+deb12u13`. The Python lock now includes fixed
+`soupsieve` and `tornado` releases, and the images install Ruby `resolv 0.7.2`.
+The generated baseline retains the exact unfixed findings and hashes the full
+package and all-severity inventories; additions, removals, and status changes
+therefore remain visible and block later unreviewed drift.
 
 ## Known curl build-configuration scanner gap
 
