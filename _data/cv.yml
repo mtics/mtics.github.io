@@ -12,19 +12,19 @@ cv:
 
   sections:
     Professional Summary:
-      - PhD candidate at UTS AAII researching privacy-preserving personalized recommender systems under federated, multimodal, and foundation-model settings.
+      - PhD candidate at UTS AAII working on on-device personal intelligence, recommender systems, and federated learning, with a focus on privacy-preserving personalization under federated, multimodal, and foundation-model settings.
 
     Education:
       - institution: University of Technology Sydney
         location: Sydney, Australia
         url: https://www.uts.edu.au/research/australian-artificial-intelligence-institute
-        area: Analytics (Australian Artificial Intelligence Institute)
+        area: Computer Science (Australian Artificial Intelligence Institute)
         degree: PhD Candidate
         start_date: 2023-11
         end_date: present
         highlights:
           - Advisor — Prof. Guodong Long.
-          - Research focus — privacy-preserving personalized recommender systems under federated, multimodal, and foundation-model settings.
+          - Research focus — on-device personal intelligence and privacy-preserving personalized recommendation under federated, multimodal, and foundation-model settings.
 
       - institution: ShanghaiTech University
         location: Shanghai, China
@@ -32,7 +32,7 @@ cv:
         area: Computer Science and Technology
         degree: M.S.
         start_date: 2020-09
-        end_date: 2023-06
+        end_date: 2023-07
         highlights:
           - Advisor — Prof. Lu Sun.
           - Research focus — multi-view / multi-label learning.
@@ -43,12 +43,19 @@ cv:
         area: Computer Science and Technology
         degree: B.E.
         start_date: 2016-09
-        end_date: 2020-06
+        end_date: 2020-07
         highlights:
           - Member of the ZZU-DROID bipedal-robot team (2017–2020).
           - RoboCup Asia-Pacific / China Open competitions, 2017–2019.
 
     Experience:
+      - company: University of Technology Sydney
+        position: Tutor — Advanced Artificial Intelligence
+        location: Sydney, Australia
+        start_date: 2026-08
+        end_date: 2026-11
+        summary: Instructor — Prof. Jing Jiang (Spring 2026).
+
       - company: ShanghaiTech University
         position: Research Assistant
         location: Shanghai, China
@@ -60,7 +67,7 @@ cv:
         position: Teaching Assistant — Machine Learning
         location: Shanghai, China
         start_date: 2022-09
-        end_date: 2022-12
+        end_date: 2023-01
         summary: Instructor — Prof. Sibei Yang (Fall 2022).
 
       - company: ShanghaiTech University
@@ -87,10 +94,6 @@ cv:
         awarder: ShanghaiTech University
         summary: Awarded for outstanding academic performance during M.S. studies.
 
-      - name: Outstanding Student Cadre
-        date: 2018-12
-        awarder: Zhengzhou University (School of Information Engineering)
-
       - name: 2nd Place
         date: 2019-05
         awarder: RoboCup Asia-Pacific Tianjin Invitational Tournament 2019
@@ -101,6 +104,14 @@ cv:
         awarder: RoboCup China Open 2019, Standard Platform League (NAO)
         summary: With the ZZU-DROID bipedal-robot team.
 
+      - name: Outstanding Student Cadre
+        date: 2018-12
+        awarder: Zhengzhou University (School of Information Engineering)
+
+      - name: Third-Class Scholarship
+        date: 2018-11
+        awarder: Zhengzhou University
+
       - name: 2nd Prize
         date: 2017-12
         awarder: Softbank Robot Cup — 2017 China Robot Skills Competition
@@ -108,11 +119,11 @@ cv:
 
     Service:
       - label: Conference Reviewer / PC Member
-        details: "ICLR, NeurIPS, AAAI, IJCAI, WWW, ECAI, AISTATS"
+        details: "NeurIPS, ICML, ICLR, KDD, WWW, AAAI, IJCAI, AISTATS, ECAI"
         icon: fa-solid fa-pen-to-square
 
       - label: Journal Reviewer
-        details: "IEEE TPAMI, IEEE TNNLS, IEEE TKDE, IEEE TAFFC, IEEE TAI"
+        details: "IEEE TPAMI, IEEE TKDE, IEEE TNNLS, ACM TOIS, IEEE TAFFC, IEEE TAI"
         icon: fa-solid fa-book-open
 
       - label: Tutorial Speaker
@@ -128,4 +139,4 @@ cv:
         details: Native speaker
 
       - label: English
-        details: Fluent
+        details: Professional working proficiency (IELTS 6.5)
