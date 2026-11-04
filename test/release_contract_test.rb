@@ -718,6 +718,9 @@ class ReleaseContractTest < Minitest::Test
         assert_includes stage,
                         "https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}"
         assert_includes stage, 'Acquire::Check-Valid-Until "false";'
+        # snapshot.debian.org intermittently returns 503; retry and never build from a partial index.
+        assert_includes stage, 'Acquire::Retries "8";'
+        assert_includes stage, "apt-get update --error-on=any"
 
         update_index = stage.index("apt-get update")
         upgrade_index = stage.index("apt-get -y --no-install-recommends dist-upgrade")

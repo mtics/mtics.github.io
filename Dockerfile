@@ -16,8 +16,8 @@ RUN sed -i \
         -e "s|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}|g" \
         -e "s|http://deb.debian.org/debian|https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}|g" \
         /etc/apt/sources.list.d/debian.sources && \
-    printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot && \
-    apt-get update && \
+    printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "8";\n' > /etc/apt/apt.conf.d/99snapshot && \
+    apt-get update --error-on=any && \
     apt-get -y --no-install-recommends dist-upgrade && \
     apt-get install -y --no-install-recommends \
         build-essential \
@@ -75,8 +75,8 @@ RUN sed -i \
         -e "s|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}|g" \
         -e "s|http://deb.debian.org/debian|https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}|g" \
         /etc/apt/sources.list.d/debian.sources && \
-    printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot && \
-    apt-get update && \
+    printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "8";\n' > /etc/apt/apt.conf.d/99snapshot && \
+    apt-get update --error-on=any && \
     apt-get -y --no-install-recommends dist-upgrade && \
     apt-get install -y --no-install-recommends \
         chromium="${CHROMIUM_VERSION}" \
