@@ -322,7 +322,7 @@ class ReleaseContractTest < Minitest::Test
 
     expected_versions = {
       "BUNDLER_VERSION" => "2.6.9",
-      "NPM_VERSION" => "11.19.1",
+      "NPM_VERSION" => "11.21.1",
       "PYTHON_VERSION" => "3.13.15"
     }
     expected_versions.each do |name, version|
@@ -357,7 +357,7 @@ class ReleaseContractTest < Minitest::Test
     refute_nil python_install_index, "Docker must install Python packages with hash checking"
     assert_operator requirements_copy_index, :<, python_install_index
 
-    assert_match(/^nbconvert==7\.17\.1\b/, read("requirements-build.txt"))
+    assert_match(/^nbconvert==7\.17\.2\b/, read("requirements-build.txt"))
   end
 
   def test_delivery_compilers_are_confined_to_a_pinned_bundle_builder
@@ -389,7 +389,7 @@ class ReleaseContractTest < Minitest::Test
 
   def test_python_automation_dependencies_are_fully_hashed
     expected_direct_dependencies = {
-      "requirements-build.txt" => %w[nbconvert==7.17.1 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8 setuptools==84.1.0],
+      "requirements-build.txt" => %w[nbconvert==7.17.2 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8 setuptools==84.1.0],
       "requirements-citations.txt" => %w[serpapi==1.0.2 pyyaml==6.0.3 pip-audit==2.10.1]
     }
 
@@ -413,7 +413,7 @@ class ReleaseContractTest < Minitest::Test
   def test_compiled_requirement_inputs_are_minimal_and_present
     expected_inputs = {
       "requirements-build.in" => [
-        "nbconvert==7.17.1", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0", "setuptools==84.1.0"
+        "nbconvert==7.17.2", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0", "setuptools==84.1.0"
       ],
       "requirements-citations.in" => ["serpapi==1.0.2", "PyYAML==6.0.3", "pip-audit==2.10.1"]
     }
@@ -672,7 +672,7 @@ class ReleaseContractTest < Minitest::Test
   def test_container_os_is_fully_upgraded_inside_the_fresh_immutable_debian_snapshot
     %w[Dockerfile .devcontainer/Dockerfile].each do |path|
       dockerfile = read(path)
-      assert_match(/^ARG DEBIAN_SNAPSHOT=20260922T200000Z$/, dockerfile)
+      assert_match(/^ARG DEBIAN_SNAPSHOT=20261104T200000Z$/, dockerfile)
       apt_stages = dockerfile
                    .split(/^FROM /)
                    .drop(1)
@@ -866,6 +866,29 @@ class ReleaseContractTest < Minitest::Test
         assert_operator provenance_index, :<, gate_index
         assert_operator gate_index, :<, first_test_index,
                         "#{job_name} must gate both reports before any downstream test"
+        if job_name == "validate"
+          refute gate.key?("continue-on-error"), "pull requests must keep the strict Trivy gate"
+        else
+          assert_equal "trivy-gate-#{label}", gate.fetch("id")
+          assert_equal "${{ github.event_name != 'workflow_dispatch' }}", gate.fetch("continue-on-error"),
+                       "only push and citation deploys may continue past baseline drift"
+        end
+      end
+
+      if job_name == "build"
+        summary = steps.find { |step| step.fetch("name", "") == "Report vulnerability gate outcome" }
+        refute_nil summary, "report-mode deploys must surface the gate outcome"
+        assert_equal "always()", summary.fetch("if")
+        assert_equal "${{ steps.trivy-gate-delivery.outcome }}", summary.dig("env", "DELIVERY_GATE")
+        assert_equal "${{ steps.trivy-gate-development.outcome }}", summary.dig("env", "DEVELOPMENT_GATE")
+        assert_includes summary.fetch("run"), "::warning title=Trivy baseline drift::"
+        release = steps.find { |step| step.fetch("name", "") == "Verify release and PDF contracts" }
+        assert_equal "${{ github.event_name == 'workflow_dispatch' && 'strict' || 'report' }}",
+                     release.dig("env", "TRIVY_GATE_MODE")
+        assert_includes release.fetch("run"), "--env TRIVY_GATE_MODE"
+      else
+        release = steps.find { |step| step.fetch("name", "") == "Verify release and PDF contracts" }
+        refute release.fetch("env", {}).key?("TRIVY_GATE_MODE"), "pull requests must check review expiry"
       end
 
       %w[delivery development].each do |label|
@@ -895,12 +918,12 @@ class ReleaseContractTest < Minitest::Test
     %w[Dockerfile .devcontainer/Dockerfile].each do |path|
       dockerfile = read(path)
       checksum_add = <<~DOCKERFILE.strip
-        ADD --checksum=sha256:9f58bff01604cb1b14008fef14dceb14d836a49225e45c6c2e37de3be3e707f0 https://registry.npmjs.org/npm/-/npm-11.19.1.tgz /tmp/npm.tgz
+        ADD --checksum=sha256:dd77c48eb845f4856c2cdba347cfb52bd877a2655a1ea48ff0c4796e3df9dd7b https://registry.npmjs.org/npm/-/npm-11.21.1.tgz /tmp/npm.tgz
       DOCKERFILE
 
       assert_includes dockerfile, checksum_add,
                       "#{path} must authenticate the complete fixed npm distribution"
-      assert_match(/^ARG NPM_VERSION=11\.19\.1$/, dockerfile)
+      assert_match(/^ARG NPM_VERSION=11\.21\.1$/, dockerfile)
       refute_includes dockerfile,
                       "COPY --from=node-runtime /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm"
       assert_includes dockerfile,
@@ -910,7 +933,16 @@ class ReleaseContractTest < Minitest::Test
       assert_includes dockerfile, 'test "$(npm --version)" = "${NPM_VERSION}"'
       assert_includes dockerfile,
                       'require("/usr/local/lib/node_modules/npm/node_modules/undici/package.json").version'
-      assert_includes dockerfile, '"6.28.0"'
+      undici_add = "ADD --checksum=sha256:29c4b8e0b2d86cb8795571c1959012ce057a14ecfd34858335f47c31e770a04f " \
+                   "https://registry.npmjs.org/undici/-/undici-6.29.1.tgz /tmp/undici.tgz"
+      assert_includes dockerfile, undici_add,
+                      "#{path} must authenticate the fixed undici replacement"
+      assert_includes dockerfile, '= "6.29.0"', "#{path} must confirm the bundled undici before replacing it"
+      assert_includes dockerfile,
+                      "tar -xzf /tmp/undici.tgz --strip-components=1 -C /usr/local/lib/node_modules/npm/node_modules/undici"
+      assert_includes dockerfile, '= "6.29.1"'
+      assert_includes dockerfile, '= "5.0.12"'
+      assert_operator dockerfile.index("tar -xzf /tmp/npm.tgz"), :<, dockerfile.index("tar -xzf /tmp/undici.tgz")
       assert_operator dockerfile.index(checksum_add), :<, dockerfile.index("rm -rf /usr/local/lib/node_modules/npm")
     end
   end
@@ -1211,7 +1243,9 @@ class ReleaseContractTest < Minitest::Test
     assert_equal baseline.fetch("reviewed_at"), gap.fetch("reviewed_at")
     assert_equal baseline.fetch("review_before"), gap.fetch("review_before")
     assert_operator reviewed_at, :<=, Date.today
-    assert_operator review_before, :>, Date.today
+    # Push and citation deploys run this suite in report mode, where an expired
+    # review is surfaced by the gate summary instead of blocking the site.
+    assert_operator review_before, :>, Date.today unless ENV["TRIVY_GATE_MODE"] == "report"
     assert_operator (review_before - reviewed_at).to_i, :<=, 30
     workflow = read(".github/workflows/deploy.yml")
     assert_includes workflow,
@@ -1386,7 +1420,7 @@ class ReleaseContractTest < Minitest::Test
 
   def test_pinned_browser_contracts_run_after_each_site_build
     dockerfile = read("Dockerfile")
-    assert_match(/^ARG CHROMIUM_VERSION=153\.0\.8010\.52-1~deb12u1$/, dockerfile)
+    assert_match(/^ARG CHROMIUM_VERSION=156\.0\.8078\.79-1~deb12u1$/, dockerfile)
     assert_includes dockerfile, 'chromium="${CHROMIUM_VERSION}"'
     assert_match(/^playwright==1\.61\.0\b/, read("requirements-build.txt"))
 

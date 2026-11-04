@@ -2,9 +2,9 @@ FROM node:24.18.0-bookworm-slim@sha256:cb4e8f7c443347358b7875e717c29e27bf9befc8f
 FROM python:3.13.15-slim-bookworm@sha256:ed86c82274b3c69b52fb5820f358f0bd7df0b603332063cb5c6e32bd220c3e6e AS python-runtime
 COPY bin/refresh_python_vendor.py /tmp/refresh_python_vendor.py
 RUN python3 -m pip install --no-cache-dir --break-system-packages --upgrade \
-        pip==26.2 \
-        setuptools==83.0.0 \
-        msgpack==1.2.1 && \
+        pip==26.3 \
+        setuptools==84.1.0 \
+        msgpack==1.2.4 && \
     python3 /tmp/refresh_python_vendor.py && \
     rm -rf /usr/local/lib/python3.13/ensurepip/_bundled /tmp/refresh_python_vendor.py
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766 AS ruby-runtime
@@ -12,10 +12,10 @@ FROM mcr.microsoft.com/devcontainers/jekyll:3.4-bookworm@sha256:6866df1504c0f345
 
 RUN rm -rf /usr/local/lib/ruby /usr/local/rvm
 
-ARG DEBIAN_SNAPSHOT=20260922T200000Z
+ARG DEBIAN_SNAPSHOT=20261104T200000Z
 ARG BUNDLER_VERSION=2.6.9
 ARG NODE_VERSION=24.18.0
-ARG NPM_VERSION=11.19.1
+ARG NPM_VERSION=11.21.1
 ARG RUBY_VERSION=3.4.10
 
 COPY --from=ruby-runtime /usr/local /usr/local
@@ -69,15 +69,22 @@ RUN gem install --local --no-document --install-dir /usr/local/bundle /tmp/resol
     chown -R vscode:vscode /usr/local/bundle && \
     rm /tmp/resolv-0.7.2.gem
 
-ADD --checksum=sha256:9f58bff01604cb1b14008fef14dceb14d836a49225e45c6c2e37de3be3e707f0 https://registry.npmjs.org/npm/-/npm-11.19.1.tgz /tmp/npm.tgz
+ADD --checksum=sha256:dd77c48eb845f4856c2cdba347cfb52bd877a2655a1ea48ff0c4796e3df9dd7b https://registry.npmjs.org/npm/-/npm-11.21.1.tgz /tmp/npm.tgz
+# npm 11.21.1 still bundles undici 6.29.0; replace it with the fixed 6.29.1 release.
+ADD --checksum=sha256:29c4b8e0b2d86cb8795571c1959012ce057a14ecfd34858335f47c31e770a04f https://registry.npmjs.org/undici/-/undici-6.29.1.tgz /tmp/undici.tgz
 RUN rm -rf /usr/local/lib/node_modules/npm && \
     mkdir -p /usr/local/lib/node_modules/npm && \
     tar -xzf /tmp/npm.tgz --strip-components=1 -C /usr/local/lib/node_modules/npm && \
     ln -sfn ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
     ln -sfn ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx && \
+    test "$(node -p 'require("/usr/local/lib/node_modules/npm/node_modules/undici/package.json").version')" = "6.29.0" && \
+    rm -rf /usr/local/lib/node_modules/npm/node_modules/undici && \
+    mkdir -p /usr/local/lib/node_modules/npm/node_modules/undici && \
+    tar -xzf /tmp/undici.tgz --strip-components=1 -C /usr/local/lib/node_modules/npm/node_modules/undici && \
     test "$(npm --version)" = "${NPM_VERSION}" && \
-    test "$(node -p 'require("/usr/local/lib/node_modules/npm/node_modules/undici/package.json").version')" = "6.28.0" && \
-    rm /tmp/npm.tgz
+    test "$(node -p 'require("/usr/local/lib/node_modules/npm/node_modules/undici/package.json").version')" = "6.29.1" && \
+    test "$(node -p 'require("/usr/local/lib/node_modules/npm/node_modules/brace-expansion/package.json").version')" = "5.0.12" && \
+    rm /tmp/npm.tgz /tmp/undici.tgz
 
 # The MCR base contributes a network-running postCreate hook through this
 # image label. Project-owned devcontainer.json is the sole lifecycle source.

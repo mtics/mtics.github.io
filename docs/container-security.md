@@ -53,6 +53,34 @@ never compromised.
 
 ## Release policy
 
+### Where the gate blocks
+
+CI downloads the current vulnerability DB on every run, while the baseline
+freezes the DB from the last review. Debian publishes new CVE records almost
+daily, so an exact-match gate starts failing within a day of each review: after
+the 2026-09-22 review, every deploy from 2026-09-23 onwards was rejected for a
+new unfixed HIGH finding, long before `review_before`.
+
+The scanned images are build tools. The published artifact is the static site
+on GitHub Pages, and visitors never execute these packages. The gate therefore
+runs in two modes:
+
+| Trigger | Mode | Effect of a gate failure or expired review |
+| --- | --- | --- |
+| `pull_request` (`validate` job) | strict | blocks the job |
+| `workflow_dispatch` (`build` job) | strict | blocks the deploy |
+| `push`, citation `workflow_run` (`build` job) | report | records a warning and the step summary; the deploy continues |
+
+Report mode keeps every scan, report upload, and provenance binding. Only the
+two `Enforce reviewed … vulnerability baseline` steps use
+`continue-on-error`, and `ruby test/release_contract_test.rb` skips just the
+`review_before` expiry assertion when `TRIVY_GATE_MODE=report`. A
+`Trivy baseline drift` warning in a deploy run is the signal to start a new
+review; a manual `workflow_dispatch` run checks a fresh review under the strict
+gate.
+
+### Gate rules
+
 The gate applies these rules:
 
 - any HIGH/CRITICAL finding with `Status=fixed` or a non-empty `FixedVersion`

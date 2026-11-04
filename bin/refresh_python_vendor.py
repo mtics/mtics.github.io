@@ -6,8 +6,12 @@ import shutil
 import sysconfig
 
 
-PINNED_MSGPACK_VERSION = "1.2.1"
-PINNED_SETUPTOOLS_VERSION = "83.0.0"
+# pip 26.3 already vendors msgpack 1.2.4; its pkg_resources metadata still
+# reports setuptools 70.3.0.
+PIP_VENDORED_MSGPACK_VERSION = "1.2.4"
+PIP_VENDORED_SETUPTOOLS_VERSION = "70.3.0"
+PINNED_MSGPACK_VERSION = "1.2.4"
+PINNED_SETUPTOOLS_VERSION = "84.1.0"
 site_packages = Path(sysconfig.get_paths()["purelib"])
 source = site_packages / "msgpack"
 vendor = site_packages / "pip" / "_vendor" / "msgpack"
@@ -24,8 +28,8 @@ shutil.copytree(source, vendor)
 
 manifest = vendor_manifest.read_text()
 for old_entry, new_entry in (
-    ("msgpack==1.1.2", f"msgpack=={PINNED_MSGPACK_VERSION}"),
-    ("setuptools==70.3.0", f"setuptools=={PINNED_SETUPTOOLS_VERSION}"),
+    (f"msgpack=={PIP_VENDORED_MSGPACK_VERSION}", f"msgpack=={PINNED_MSGPACK_VERSION}"),
+    (f"setuptools=={PIP_VENDORED_SETUPTOOLS_VERSION}", f"setuptools=={PINNED_SETUPTOOLS_VERSION}"),
 ):
     if old_entry not in manifest:
         raise SystemExit(f"missing {old_entry!r} in {vendor_manifest}")
@@ -35,8 +39,8 @@ vendor_manifest.write_text(manifest)
 bom_manifest = site_packages / "pip" / "_vendor" / "bom.cdx.json"
 bom = bom_manifest.read_text()
 for old_entry, new_entry in (
-    ("pkg:pypi/msgpack@1.1.2", f"pkg:pypi/msgpack@{PINNED_MSGPACK_VERSION}"),
-    ("pkg:pypi/setuptools@70.3.0", f"pkg:pypi/setuptools@{PINNED_SETUPTOOLS_VERSION}"),
+    (f"pkg:pypi/msgpack@{PIP_VENDORED_MSGPACK_VERSION}", f"pkg:pypi/msgpack@{PINNED_MSGPACK_VERSION}"),
+    (f"pkg:pypi/setuptools@{PIP_VENDORED_SETUPTOOLS_VERSION}", f"pkg:pypi/setuptools@{PINNED_SETUPTOOLS_VERSION}"),
 ):
     if old_entry not in bom:
         raise SystemExit(f"missing {old_entry!r} in {bom_manifest}")
