@@ -389,7 +389,7 @@ class ReleaseContractTest < Minitest::Test
 
   def test_python_automation_dependencies_are_fully_hashed
     expected_direct_dependencies = {
-      "requirements-build.txt" => %w[nbconvert==7.17.1 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8 setuptools==83.0.0],
+      "requirements-build.txt" => %w[nbconvert==7.17.1 pip-audit==2.10.1 playwright==1.61.0 rendercv==2.8 setuptools==84.1.0],
       "requirements-citations.txt" => %w[serpapi==1.0.2 pyyaml==6.0.3 pip-audit==2.10.1]
     }
 
@@ -413,7 +413,7 @@ class ReleaseContractTest < Minitest::Test
   def test_compiled_requirement_inputs_are_minimal_and_present
     expected_inputs = {
       "requirements-build.in" => [
-        "nbconvert==7.17.1", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0", "setuptools==83.0.0"
+        "nbconvert==7.17.1", "pip-audit==2.10.1", "playwright==1.61.0", "rendercv[full]==2.8.0", "setuptools==84.1.0"
       ],
       "requirements-citations.in" => ["serpapi==1.0.2", "PyYAML==6.0.3", "pip-audit==2.10.1"]
     }

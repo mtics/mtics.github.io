@@ -38,8 +38,8 @@ FROM python:3.13.15-slim-bookworm@sha256:ed86c82274b3c69b52fb5820f358f0bd7df0b60
 COPY bin/refresh_python_vendor.py /tmp/refresh_python_vendor.py
 RUN python3 -m pip install --no-cache-dir --break-system-packages --upgrade \
         pip==26.2 \
-        setuptools==83.0.0 \
-        msgpack==1.2.1 && \
+        setuptools==84.1.0 \
+        msgpack==1.2.4 && \
     python3 /tmp/refresh_python_vendor.py && \
     rm -rf /usr/local/lib/python3.13/ensurepip/_bundled /tmp/refresh_python_vendor.py
 FROM ruby:3.4.10-slim-bookworm@sha256:6760b6e46941fb77f8229f52d1745a629a20f148c8685226d76758fcb6e33766
