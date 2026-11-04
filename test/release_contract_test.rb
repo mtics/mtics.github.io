@@ -17,10 +17,12 @@ class ReleaseContractTest < Minitest::Test
     bin/cibuild
     bin/deploy
     test/devcontainer_post_create_smoke.sh
+    bin/trivy_review_scan.sh
   ].freeze
   WORKFLOW_PATHS = %w[
     .github/workflows/deploy.yml
     .github/workflows/update_scholar_citations.yml
+    .github/workflows/trivy_baseline_review.yml
   ].freeze
   # These immutable releases were checked against their official action.yml
   # manifests. Direct actions declare node24. upload-pages-artifact is a
@@ -161,6 +163,28 @@ class ReleaseContractTest < Minitest::Test
       "git", "check-ignore", "--no-index", "-q", ".jekyll-reproducible.yml"
     )
     assert status.success?, "the workflow-generated build config must not enter release snapshots: #{stderr}"
+  end
+
+  def test_baseline_review_scan_matches_the_deploy_scan_profile
+    deploy = read(".github/workflows/deploy.yml")
+    review_scan = read("bin/trivy_review_scan.sh")
+    review_workflow = load_workflow(".github/workflows/trivy_baseline_review.yml")
+    assert_equal({ "contents" => "read" }, review_workflow.fetch("permissions"))
+    assert_equal %w[workflow_dispatch], review_workflow.fetch("on").keys
+    assert_equal load_workflow(".github/workflows/deploy.yml").dig("env", "TRIVY_IMAGE"),
+                 review_workflow.dig("env", "TRIVY_IMAGE")
+    %w[
+      --cache-backend\ memory --skip-db-update --skip-java-db-update --skip-version-check --offline-scan
+      --disable-telemetry --image-src\ docker --no-progress --scanners\ vuln --pkg-types\ os,library
+      --severity\ UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL --list-all-pkgs --exit-code\ 0
+    ].each do |flag|
+      assert_includes deploy, flag
+      assert_includes review_scan, flag
+    end
+    deploy.scan(%r{--skip-files (\S+)}).flatten.uniq.each do |path|
+      assert_includes review_scan, path, "review scan must skip the same reviewed JAR path"
+    end
+    refute_includes review_scan, "--ignore-unfixed"
   end
 
   def test_container_entry_points_are_directly_executable_shell_scripts
@@ -530,7 +554,14 @@ class ReleaseContractTest < Minitest::Test
   def test_ci_and_devcontainer_runtime_labels_are_fixed
     WORKFLOW_PATHS.each do |path|
       load_workflow(path).fetch("jobs").each do |job_name, job|
-        assert_equal "ubuntu-24.04", job.fetch("runs-on"), "#{path}:#{job_name} runner must be fixed"
+        # The baseline review collects native arm64 evidence on GitHub's fixed arm64 label.
+        expected_runner =
+          if path == ".github/workflows/trivy_baseline_review.yml" && job_name == "scan-arm64"
+            "ubuntu-24.04-arm"
+          else
+            "ubuntu-24.04"
+          end
+        assert_equal expected_runner, job.fetch("runs-on"), "#{path}:#{job_name} runner must be fixed"
       end
     end
 

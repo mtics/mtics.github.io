@@ -1,0 +1,230 @@
+name: Trivy baseline review
+
+# Manual evidence collection for a baseline review (docs/container-security.md).
+# Builds both release images on amd64 and arm64, scans all four slots against
+# one frozen vulnerability DB, and runs bin/create_trivy_baseline.py. The
+# generated files are uploaded for review; nothing is committed automatically.
+
+on:
+  workflow_dispatch:
+    inputs:
+      review_days:
+        description: "Days until review_before (1-30)"
+        required: true
+        default: "30"
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_IMAGE: aquasec/trivy@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e # v0.70.0
+
+concurrency:
+  group: trivy-baseline-review
+  cancel-in-progress: false
+
+jobs:
+  database:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Prepare frozen Trivy vulnerability database
+        run: |
+          set -euo pipefail
+          review_dir="$RUNNER_TEMP/trivy-review"
+          mkdir -p "$review_dir/trivy-cache"
+          docker buildx imagetools inspect --raw ghcr.io/aquasecurity/trivy-db:2 \
+            > "$review_dir/trivy-vulnerability-db-manifest.json"
+          vulnerability_db_digest="$(python3 bin/validate_trivy_oci_manifest.py \
+            --database vulnerability --manifest "$review_dir/trivy-vulnerability-db-manifest.json")"
+          docker run --rm \
+            --volume "$review_dir/trivy-cache:/trivy-cache" \
+            "$TRIVY_IMAGE" image \
+              --cache-dir /trivy-cache \
+              --db-repository "ghcr.io/aquasecurity/trivy-db@$vulnerability_db_digest" \
+              --download-db-only \
+              --disable-telemetry \
+              --no-progress \
+              --skip-version-check
+          docker run --rm \
+            --volume "$review_dir/trivy-cache:/trivy-cache:ro" \
+            "$TRIVY_IMAGE" version --cache-dir /trivy-cache --format json \
+            > "$review_dir/trivy-version.json"
+
+      - name: Upload frozen database
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-review-database
+          path: ${{ runner.temp }}/trivy-review
+          if-no-files-found: error
+          retention-days: 7
+
+  scan-amd64:
+    needs: database
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Build pinned delivery container
+        run: docker build --tag mtics-al-folio:ci .
+
+      - name: Build pinned development container
+        run: docker build --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile .
+
+      - name: Download frozen database
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: trivy-review-database
+          path: ${{ runner.temp }}/trivy-review
+
+      - name: Scan amd64 images
+        run: bin/trivy_review_scan.sh amd64 "$RUNNER_TEMP/trivy-review/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+
+      - name: Upload amd64 reports
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-review-reports-amd64
+          path: ${{ runner.temp }}/trivy-reports
+          if-no-files-found: error
+          retention-days: 30
+
+  scan-arm64:
+    needs: database
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Build pinned delivery container
+        run: docker build --tag mtics-al-folio:ci .
+
+      - name: Build pinned development container
+        run: docker build --tag mtics-devcontainer:ci --file .devcontainer/Dockerfile .
+
+      - name: Download frozen database
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: trivy-review-database
+          path: ${{ runner.temp }}/trivy-review
+
+      - name: Scan arm64 images
+        run: bin/trivy_review_scan.sh arm64 "$RUNNER_TEMP/trivy-review/trivy-cache" "$RUNNER_TEMP/trivy-reports"
+
+      - name: Upload arm64 reports
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-review-reports-arm64
+          path: ${{ runner.temp }}/trivy-reports
+          if-no-files-found: error
+          retention-days: 30
+
+  baseline:
+    needs: [scan-amd64, scan-arm64]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Download frozen database
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: trivy-review-database
+          path: ${{ runner.temp }}/trivy-review
+
+      - name: Download amd64 reports
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: trivy-review-reports-amd64
+          path: ${{ runner.temp }}/trivy-reports
+
+      - name: Download arm64 reports
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: trivy-review-reports-arm64
+          path: ${{ runner.temp }}/trivy-reports
+
+      - name: Generate candidate baseline
+        env:
+          REVIEW_DAYS: ${{ inputs.review_days }}
+        run: |
+          set -euo pipefail
+          case "$REVIEW_DAYS" in
+            '' | *[!0-9]*) echo "review_days must be an integer" >&2; exit 2 ;;
+          esac
+          if [ "$REVIEW_DAYS" -lt 1 ] || [ "$REVIEW_DAYS" -gt 30 ]; then
+            echo "review_days must be between 1 and 30" >&2
+            exit 2
+          fi
+          review_dir="$RUNNER_TEMP/trivy-review"
+          reports="$RUNNER_TEMP/trivy-reports"
+          output="$RUNNER_TEMP/trivy-baseline-candidate"
+          mkdir -p "$output"
+          reviewed_at="$(date -u +%F)"
+          review_before="$(date -u -d "+${REVIEW_DAYS} days" +%F)"
+          python3 bin/create_trivy_baseline.py \
+            --trivy-version-json "$review_dir/trivy-version.json" \
+            --vulnerability-db "$review_dir/trivy-cache/db/trivy.db" \
+            --vulnerability-db-metadata "$review_dir/trivy-cache/db/metadata.json" \
+            --vulnerability-db-manifest "$review_dir/trivy-vulnerability-db-manifest.json" \
+            --delivery-amd64-report "$reports/trivy-delivery-amd64.json" \
+            --delivery-arm64-report "$reports/trivy-delivery-arm64.json" \
+            --development-amd64-report "$reports/trivy-development-amd64.json" \
+            --development-arm64-report "$reports/trivy-development-arm64.json" \
+            --reviewed-at "$reviewed_at" \
+            --review-before "$review_before" \
+            --baseline-output "$output/.trivy-unfixed-baseline.json" \
+            --manifest-output "$output/.trivy-baseline-review.json"
+          cp "$review_dir/trivy-vulnerability-db-manifest.json" "$review_dir/trivy-version.json" \
+            "$review_dir/trivy-cache/db/metadata.json" "$output/"
+
+      - name: Summarize changes against the committed baseline
+        if: always()
+        run: |
+          python3 - "$RUNNER_TEMP/trivy-baseline-candidate/.trivy-unfixed-baseline.json" <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          import pathlib
+          import sys
+
+          candidate_path = pathlib.Path(sys.argv[1])
+          if not candidate_path.is_file():
+              print("## Trivy baseline review\n\nNo candidate baseline was generated; see the job log.")
+              raise SystemExit(0)
+          old = json.loads(pathlib.Path(".trivy-unfixed-baseline.json").read_text())
+          new = json.loads(candidate_path.read_text())
+          fields = ("PkgName", "VulnerabilityID", "InstalledVersion", "Severity", "Status")
+          print("## Trivy baseline review\n")
+          print(f"Reviewed {new['reviewed_at']}, review before {new['review_before']}.\n")
+          for image in ("delivery", "development"):
+              before = {tuple(entry[field] for field in fields) for entry in old["images"][image]}
+              after = {tuple(entry[field] for field in fields) for entry in new["images"][image]}
+              print(f"### {image}: {len(before)} -> {len(after)} unfixed HIGH/CRITICAL rows\n")
+              for label, rows in (("Added", after - before), ("Removed", before - after)):
+                  print(f"<details><summary>{label}: {len(rows)}</summary>\n")
+                  for row in sorted(rows):
+                      print(f"- `{' '.join(row)}`")
+                  print("\n</details>\n")
+          PY
+
+      - name: Upload candidate baseline
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-baseline-candidate
+          path: ${{ runner.temp }}/trivy-baseline-candidate
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

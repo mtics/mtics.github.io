@@ -127,6 +127,16 @@ fields record the required reviewed configuration. They are enforced by the CI
 workflow and supported by the retained evidence, but the report JSON format
 does not independently attest the historical command-line arguments.
 
+The manual **Trivy baseline review** workflow
+(`.github/workflows/trivy_baseline_review.yml`) collects the evidence on
+GitHub-hosted runners: it freezes one vulnerability DB, builds both images
+natively on `ubuntu-24.04` and `ubuntu-24.04-arm`, scans the four slots with
+`bin/trivy_review_scan.sh` (the deploy scan profile), runs the generator, and
+uploads `trivy-baseline-candidate` with a step summary of added and removed
+HIGH/CRITICAL rows. It never commits; the reviewer checks the changes, copies
+the two generated files into the repository, updates the curl scanner gap, and
+records the review below.
+
 Before `review_before`:
 
 1. Build both images for amd64 and arm64.
