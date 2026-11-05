@@ -11,7 +11,7 @@ PhD candidate at UTS AAII working on on-device personal intelligence, recommende
 
 Education
 2023 - present Sydney, Australia PhD Candidate University of Technology Sydney Computer Science (Australian Artificial Intelligence Institute)
-Advisor — Prof. Guodong Long.
+Advisors — Prof. Guodong Long , Prof. Chengqi Zhang , and A/Prof. Jing Jiang .
 Research focus — on-device personal intelligence and privacy-preserving personalized recommendation under federated, multimodal, and foundation-model settings.
 2020 - 2023 Shanghai, China M.S. ShanghaiTech University Computer Science and Technology
 Advisor — Prof. Lu Sun.

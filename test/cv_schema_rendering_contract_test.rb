@@ -830,6 +830,9 @@ class CvSchemaRenderingContractTest < Minitest::Test
     expected_links = [
       "mailto:lizhw.cs@outlook.com",
       "https://aistats.org/aistats2025/awards.html",
+      "https://chengqi-zhang.github.io/",
+      "https://guodonglong.github.io/",
+      "https://profiles.uts.edu.au/Jing.Jiang",
       "https://en.wikipedia.org/wiki/Zhengzhou_University",
       "https://github.com/mtics",
       "https://linkedin.com/in/lizhiwi",
