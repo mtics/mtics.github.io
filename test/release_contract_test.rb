@@ -1137,6 +1137,10 @@ class ReleaseContractTest < Minitest::Test
         "offline_scan" => true,
         "skip_db_update" => true,
         "skip_java_db_update" => true,
+        "ignore_file" => {
+          "path" => ".trivyignore.yaml",
+          "sha256" => Digest::SHA256.file(File.join(ROOT, ".trivyignore.yaml")).hexdigest
+        },
         "skip_files" => {
           "delivery" => %w[
             /usr/local/bundle/ruby/3.4.0/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar

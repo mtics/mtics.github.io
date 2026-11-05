@@ -261,6 +261,50 @@ The generated baseline retains the exact unfixed findings and hashes the full
 package and all-severity inventories; additions, removals, and status changes
 therefore remain visible and block later unreviewed drift.
 
+### 2026-11-05 UTC four-architecture review
+
+Evidence came from the **Trivy baseline review** workflow (run 41977057944):
+both images were built natively on amd64 and arm64 from Debian snapshot
+`20261104T200000Z` and scanned against one vulnerability DB updated at
+`2026-11-05T01:19:45.907162652Z`, with `.trivyignore.yaml` (SHA256
+`0ad92109…645d2`) suppressing only the accepted activesupport advisory. The
+generator found no fixable HIGH/CRITICAL finding in any of the four reports, and
+each image has identical HIGH/CRITICAL sets and all-severity counts on both
+architectures.
+
+| Image | Previous counts (C/H/M/L/U) | Current counts (C/H/M/L/U) | Fixable C/H |
+| --- | --- | --- | --- |
+| delivery | 17 / 128 / 280 / 349 / 66 | 5 / 148 / 301 / 367 / 473 | 0 |
+| development | 29 / 475 / 2107 / 1313 / 74 | 19 / 478 / 2009 / 1551 / 67 | 0 |
+
+Before this review the 2026-11-04 deploy scan reported 1,181 fixable
+HIGH/CRITICAL rows in the delivery image. They were removed by the snapshot
+upgrade (chromium `156.0.8078.79-1~deb12u1`, ImageMagick `…deb12u15`, perl
+`5.36.0-7+deb12u4`, expat `2.5.0-1+deb12u5`, OpenSSL `3.0.22-1~deb12u2`,
+python3.11 `3.11.2-6+deb12u9`, `linux-libc-dev 6.1.190-1`), npm 11.21.1 with
+undici 6.29.1, pip 26.3 in both images and both Python locks (its vendored
+certifi, urllib3, and msgpack are fixed), and nbconvert 7.17.2.
+
+Baseline changes, spot-checked against the Debian security tracker:
+
+- removed: the perl CRITICAL/HIGH set fixed in `5.36.0-7+deb12u4`
+  (e.g. CVE-2026-42496, DLA-4821-1), the expat, util-linux, python3.11, and
+  ImageMagick CVEs fixed by the upgraded versions;
+- re-keyed: unchanged CVE sets that moved to the upgraded installed versions
+  (linux-libc-dev, perl, expat, python3.11, ImageMagick);
+- status only: libxml2 and libtiff rows moved from `affected` to Debian's
+  `fix_deferred` without a fixed version;
+- added, all `vulnerable` in Bookworm without a fixed version: chromium 156
+  (16 HIGH), libheif (10), MariaDB client libraries (7, development only),
+  util-linux CVE-2026-53615, ImageMagick CVE-2026-119123, sqlite3
+  CVE-2026-119373, and smaller cups, libxi, X11, python3-jwt, oauthlib,
+  openssh-client, and sudo sets.
+
+The UNKNOWN increase in the delivery image is 424 chromium and
+chromium-common rows for CVEs that Debian has not yet assigned a severity. The
+curl scanner gap below is unchanged (same installed version and package rows)
+and was re-reviewed with this DB.
+
 ## Known curl build-configuration scanner gap
 
 Trivy reports CVE-2026-9547 for one delivery package row and four development
