@@ -22,6 +22,27 @@ These paths are recorded in the review manifest and asserted by the release
 contract test. Any other JAR still requires a Java DB and makes this
 vulnerability-only scan fail closed.
 
+## Debian package sources
+
+Every APT stage resolves packages from the pinned `DEBIAN_SNAPSHOT` through
+`mirror+file:` lists:
+
+- index files (`InRelease`, `Packages`) are fetched only from
+  `snapshot.debian.org/archive/{debian,debian-security}/${DEBIAN_SNAPSHOT}`; the
+  live-mirror entries carry `type:deb`, so APT never reads an index from them,
+  and the build fails if `debian.sources` still names `deb.debian.org`;
+- a `.deb` is downloaded from the snapshot first and falls back to
+  `deb.debian.org` only when the snapshot cannot serve it. APT verifies every
+  file against the SHA256 in the snapshot index, so a fallback download is
+  byte-identical to the snapshot copy and the pinned package set is unchanged;
+- `Acquire::Retries "8"` and `apt-get update --error-on=any` make a failed
+  index download stop the build instead of continuing with a partial index.
+
+On 2026-11-05 the snapshot returned persistent HTTP 504 for
+`libsm6_1.2.3-1_arm64.deb` while serving neighbouring files, which blocked every
+arm64 build until the verified fallback was added. A package version that has
+already left `deb.debian.org` still depends on the snapshot alone.
+
 ## Evidence and trust boundary
 
 The DB tag is first resolved from the official GHCR namespace to a raw OCI
@@ -260,3 +281,22 @@ evidence, affected package rows, and verification conditions are recorded in
 window as the generated baseline. The record expires within 14 days and must be
 removed if Trivy stops reporting it or if the package build configuration
 changes.
+
+## Accepted dependency advisories
+
+`bin/dependency_audit` fails on every locked Ruby, Python, and npm advisory
+except the single exception below. The release contract test pins the ignore
+list to exactly this ID and fails once activesupport leaves the 7.2 line, so the
+exception has to be removed as soon as a fixed version can be locked.
+
+| Advisory | Package | Reviewed | Review before |
+| --- | --- | --- | --- |
+| [GHSA-8474-xrp6-wh69](https://github.com/rails/rails/security/advisories/GHSA-8474-xrp6-wh69) | activesupport 7.2.3.1 | 2026-11-05 | 2027-02-03 |
+
+The advisory is a denial of service in `ActiveSupport::Inflector#safe_constantize`.
+It is fixed only in activesupport 8.0.5.2 and 8.1.4.1; the 7.2 line has no fix.
+The latest `al_citations` (1.0.1) requires `activesupport (>= 6.0, < 8.0)` and
+uses only `ActiveSupport::NumberHelper`. No other gem in the bundle calls
+`safe_constantize`, and the build runs on repository-controlled input only, so
+the vulnerable code path is not reachable from the published static site. After
+the review date the audit fails with an explicit expiry message.

@@ -485,6 +485,16 @@ class ReleaseContractTest < Minitest::Test
     assert_includes audit, "pip-audit --strict --requirement requirements-citations.txt --no-deps --disable-pip"
     assert_includes audit, "npm audit --audit-level=moderate"
 
+    # The only accepted Ruby advisory is tied to the activesupport 7.2 line that al_citations pins.
+    ignored = audit.scan(/--ignore\s+(\S+)/).flatten
+    assert_equal %w[GHSA-8474-xrp6-wh69], ignored
+    assert_match(/^\s{4}activesupport \(7\.2\./, read("Gemfile.lock"),
+                 "remove the GHSA-8474-xrp6-wh69 exception once activesupport leaves the 7.2 line")
+    review_before = audit[/^activesupport_exception_review_before="(\d{4}-\d{2}-\d{2})"$/, 1]
+    refute_nil review_before
+    assert_operator Date.iso8601(review_before), :<=, Date.iso8601("2027-02-03"),
+                    "the activesupport exception must not be extended without a new review"
+
     jobs = load_workflow(".github/workflows/deploy.yml").fetch("jobs")
     %w[validate build].each do |job_name|
       steps = jobs.fetch(job_name).fetch("steps")
@@ -721,6 +731,14 @@ class ReleaseContractTest < Minitest::Test
         # snapshot.debian.org intermittently returns 503; retry and never build from a partial index.
         assert_includes stage, 'Acquire::Retries "8";'
         assert_includes stage, "apt-get update --error-on=any"
+        # Indexes come only from the snapshot; a .deb that the snapshot cannot serve falls back to
+        # the live mirror and is still verified against the snapshot index SHA256.
+        assert_includes stage, "mirror+file:/etc/apt/mirrors/debian.list"
+        assert_includes stage, "mirror+file:/etc/apt/mirrors/debian-security.list"
+        assert_includes stage, "http://deb.debian.org/debian\\tpriority:2\\ttype:deb"
+        assert_includes stage, "http://deb.debian.org/debian-security\\tpriority:2\\ttype:deb"
+        assert_includes stage, '! grep -q "deb.debian.org" /etc/apt/sources.list.d/debian.sources'
+        assert_operator stage.index("mirror+file:"), :<, stage.index("apt-get update")
 
         update_index = stage.index("apt-get update")
         upgrade_index = stage.index("apt-get -y --no-install-recommends dist-upgrade")

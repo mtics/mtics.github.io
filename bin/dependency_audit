@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-bundle exec bundler-audit check --update
+# Accepted Ruby advisory (see docs/container-security.md, "Accepted dependency advisories"):
+# GHSA-8474-xrp6-wh69, activesupport safe_constantize DoS. Fixed only in 8.0.5.2 / 8.1.4.1,
+# but al_citations 1.0.1 (latest) requires activesupport < 8.0 and uses only NumberHelper;
+# nothing in the bundle calls safe_constantize. Remove the exception once activesupport >= 8.0.5.2
+# can be locked, and re-review it before the date below.
+activesupport_exception_review_before="2027-02-03"
+if [[ ! "$(date -u +%F)" < "${activesupport_exception_review_before}" ]]; then
+  echo "GHSA-8474-xrp6-wh69 exception expired on ${activesupport_exception_review_before}; re-review it." >&2
+  exit 1
+fi
+bundle exec bundler-audit check --update --ignore GHSA-8474-xrp6-wh69
 pip-audit --strict --requirement requirements-build.txt --no-deps --disable-pip
 pip-audit --strict --requirement requirements-citations.txt --no-deps --disable-pip
 npm audit --audit-level=moderate
