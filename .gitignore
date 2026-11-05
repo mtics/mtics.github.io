@@ -20,3 +20,16 @@ assets/rendercv/rendercv_output/*.typ
 node_modules/
 vendor
 al-folio-upgrade-report.md
+
+# Local leftovers from the pre-v1 al-folio layout; v1 serves these from the al_folio gems.
+/_includes/repository/
+/_sass/font-awesome/
+/_scripts/
+/assets/css/
+/assets/fonts/
+/assets/js/distillpub/
+/assets/js/search/
+/assets/webfonts/
+
+# Playwright MCP page snapshots
+.playwright-mcp/
