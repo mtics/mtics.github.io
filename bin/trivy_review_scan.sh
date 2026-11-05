@@ -11,6 +11,7 @@ architecture="${1:?architecture (amd64 or arm64) is required}"
 cache_dir="${2:?Trivy cache directory is required}"
 report_dir="${3:?report directory is required}"
 trivy_image="${TRIVY_IMAGE:?TRIVY_IMAGE must name the digest-pinned scanner}"
+repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 case "${architecture}" in
   amd64 | arm64) ;;
@@ -36,8 +37,10 @@ scan() {
     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
     --volume "${cache_dir}:/trivy-cache:ro" \
     --volume "${report_dir}:/trivy-reports" \
+    --volume "${repository_root}/.trivyignore.yaml:/trivy-ignore.yaml:ro" \
     "${trivy_image}" image \
       --cache-dir /trivy-cache \
+      --ignorefile /trivy-ignore.yaml \
       --cache-backend memory \
       --skip-db-update \
       --skip-java-db-update \

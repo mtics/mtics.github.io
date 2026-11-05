@@ -28,6 +28,8 @@ REPORT_SPECS = {
     ("development", "amd64"): "mtics-devcontainer:ci",
     ("development", "arm64"): "mtics-devcontainer:release-arm64",
 }
+# Suppressions passed to every scan with --ignorefile; bound into the review manifest.
+TRIVY_IGNORE_FILE = Path(__file__).resolve().parents[1] / ".trivyignore.yaml"
 SKIPPED_NONRUNTIME_JARS = {
     "delivery": [
         "/usr/local/bundle/ruby/3.4.0/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar",
@@ -406,6 +408,10 @@ def main() -> int:
                 "skip_db_update": True,
                 "skip_java_db_update": True,
                 "skip_files": SKIPPED_NONRUNTIME_JARS,
+                "ignore_file": {
+                    "path": TRIVY_IGNORE_FILE.name,
+                    "sha256": hashlib.sha256(TRIVY_IGNORE_FILE.read_bytes()).hexdigest(),
+                },
             },
         },
         "trivy_version_json_sha256": hashlib.sha256(version_payload).hexdigest(),

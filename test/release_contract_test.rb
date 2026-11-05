@@ -185,6 +185,22 @@ class ReleaseContractTest < Minitest::Test
       assert_includes review_scan, path, "review scan must skip the same reviewed JAR path"
     end
     refute_includes review_scan, "--ignore-unfixed"
+    assert_includes review_scan, "--ignorefile /trivy-ignore.yaml"
+    assert_includes review_scan, '"${repository_root}/.trivyignore.yaml:/trivy-ignore.yaml:ro"'
+  end
+
+  def test_trivy_suppressions_match_the_accepted_dependency_advisories
+    ignore = YAML.safe_load(read(".trivyignore.yaml"), permitted_classes: [Date])
+    entries = ignore.fetch("vulnerabilities")
+    assert_equal %w[vulnerabilities], ignore.keys
+    assert_equal 1, entries.length, "every Trivy suppression needs its own documented review"
+    entry = entries.first
+    assert_equal "GHSA-8474-xrp6-wh69", entry.fetch("id")
+    assert_equal %w[pkg:gem/activesupport@7.2.3.1], entry.fetch("purls"),
+                 "the suppression must stay scoped to the reviewed package version"
+    audit_review_before = read("bin/dependency_audit")[/^activesupport_exception_review_before="([^"]+)"$/, 1]
+    assert_equal Date.iso8601(audit_review_before), entry.fetch("expired_at").then { |d| d.is_a?(Date) ? d : Date.iso8601(d.to_s) }
+    assert_includes read("docs/container-security.md"), "GHSA-8474-xrp6-wh69"
   end
 
   def test_container_entry_points_are_directly_executable_shell_scripts
@@ -872,6 +888,8 @@ class ReleaseContractTest < Minitest::Test
         assert_includes scan_command, "--output /trivy-reports/trivy-#{label}.json"
         assert_includes scan_command, image_ref
         refute_includes scan_command, "--ignore-unfixed"
+        assert_includes scan_command, '--volume "$PWD/.trivyignore.yaml:/trivy-ignore.yaml:ro"'
+        assert_includes scan_command, "--ignorefile /trivy-ignore.yaml"
         assert_operator prepare_index, :<, scan_index
         assert_operator scan_index, :<, provenance_index
       end

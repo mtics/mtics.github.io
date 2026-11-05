@@ -300,3 +300,10 @@ uses only `ActiveSupport::NumberHelper`. No other gem in the bundle calls
 `safe_constantize`, and the build runs on repository-controlled input only, so
 the vulnerable code path is not reachable from the published static site. After
 the review date the audit fails with an explicit expiry message.
+
+Trivy applies the same exception through `.trivyignore.yaml`, which every deploy
+and review scan mounts with `--ignorefile`. The entry is scoped to
+`pkg:gem/activesupport@7.2.3.1` and carries `expired_at: 2027-02-03`, so Trivy
+reports the finding again after that date; the release contract test keeps the
+file to this single entry and ties its expiry to `bin/dependency_audit`. The
+generated review manifest records the ignore file's SHA256 in its scan profile.

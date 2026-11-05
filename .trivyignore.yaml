@@ -1,0 +1,12 @@
+# Trivy suppressions. Each entry must match an accepted advisory in
+# docs/container-security.md ("Accepted dependency advisories") and expire on
+# its review date, after which Trivy reports the finding again.
+vulnerabilities:
+  - id: GHSA-8474-xrp6-wh69
+    purls:
+      - pkg:gem/activesupport@7.2.3.1
+    expired_at: 2027-02-03
+    statement: >-
+      activesupport 7.2 has no fix and al_citations 1.0.1 requires
+      activesupport < 8.0; only NumberHelper is used and nothing calls
+      safe_constantize. Same exception as bin/dependency_audit.

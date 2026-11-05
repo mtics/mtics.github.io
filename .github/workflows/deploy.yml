@@ -82,8 +82,10 @@ jobs:
             --volume /var/run/docker.sock:/var/run/docker.sock:ro \
             --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            --volume "$PWD/.trivyignore.yaml:/trivy-ignore.yaml:ro" \
             "$TRIVY_IMAGE" image \
               --cache-dir /trivy-cache \
+              --ignorefile /trivy-ignore.yaml \
               --cache-backend memory \
               --skip-db-update \
               --skip-java-db-update \
@@ -110,8 +112,10 @@ jobs:
             --volume /var/run/docker.sock:/var/run/docker.sock:ro \
             --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            --volume "$PWD/.trivyignore.yaml:/trivy-ignore.yaml:ro" \
             "$TRIVY_IMAGE" image \
               --cache-dir /trivy-cache \
+              --ignorefile /trivy-ignore.yaml \
               --cache-backend memory \
               --skip-db-update \
               --skip-java-db-update \
@@ -410,8 +414,10 @@ jobs:
             --volume /var/run/docker.sock:/var/run/docker.sock:ro \
             --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            --volume "$PWD/.trivyignore.yaml:/trivy-ignore.yaml:ro" \
             "$TRIVY_IMAGE" image \
               --cache-dir /trivy-cache \
+              --ignorefile /trivy-ignore.yaml \
               --cache-backend memory \
               --skip-db-update \
               --skip-java-db-update \
@@ -438,8 +444,10 @@ jobs:
             --volume /var/run/docker.sock:/var/run/docker.sock:ro \
             --volume "$RUNNER_TEMP/trivy-cache:/trivy-cache:ro" \
             --volume "$RUNNER_TEMP/trivy-reports:/trivy-reports" \
+            --volume "$PWD/.trivyignore.yaml:/trivy-ignore.yaml:ro" \
             "$TRIVY_IMAGE" image \
               --cache-dir /trivy-cache \
+              --ignorefile /trivy-ignore.yaml \
               --cache-backend memory \
               --skip-db-update \
               --skip-java-db-update \
