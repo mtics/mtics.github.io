@@ -1648,6 +1648,10 @@ class ReleaseContractTest < Minitest::Test
     end
 
     deploy_jobs = load_workflow(".github/workflows/deploy.yml").fetch("jobs")
+    %w[validate build].each do |job_name|
+      assert_equal 90, deploy_jobs.fetch(job_name).fetch("timeout-minutes"),
+                   "#{job_name} must not hang for hours on a stalled Debian snapshot download"
+    end
     build_guard = deploy_jobs.fetch("build").fetch("if")
     assert_includes build_guard, "github.event_name != 'workflow_dispatch'"
     assert_includes build_guard, default_branch_guard,
