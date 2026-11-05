@@ -23,10 +23,22 @@ esac
 
 mkdir -p "${report_dir}"
 
+# bin/create_trivy_baseline.py binds each report slot to an artifact name:
+# amd64 reports name the CI tags, arm64 reports the release-arm64 tags.
+if [[ "${architecture}" == "arm64" ]]; then
+  artifact_suffix="release-arm64"
+else
+  artifact_suffix="ci"
+fi
+
 scan() {
   local image="$1"
-  local artifact="$2"
+  local repository="$2"
+  local artifact="${repository}:${artifact_suffix}"
   shift 2
+  if [[ "${artifact_suffix}" != "ci" ]]; then
+    docker tag "${repository}:ci" "${artifact}"
+  fi
   local skip_arguments=()
   local path
   for path in "$@"; do
@@ -60,11 +72,11 @@ scan() {
       "${artifact}"
 }
 
-scan delivery mtics-al-folio:ci \
+scan delivery mtics-al-folio \
   /usr/local/bundle/ruby/3.4.0/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar \
   /usr/local/bundle/ruby/3.4.0/gems/concurrent-ruby-1.3.8/lib/concurrent-ruby/concurrent/concurrent_ruby.jar
 
-scan development mtics-devcontainer:ci \
+scan development mtics-devcontainer \
   /usr/share/java/libintl-0.21.jar \
   /usr/share/java/gettext.jar \
   /usr/local/rvm/gems/default/gems/http_parser.rb-0.8.1/ext/ruby_http_parser/vendor/http-parser-java/ext/primitives.jar \

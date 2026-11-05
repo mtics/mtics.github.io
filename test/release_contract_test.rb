@@ -186,6 +186,12 @@ class ReleaseContractTest < Minitest::Test
     end
     refute_includes review_scan, "--ignore-unfixed"
     assert_includes review_scan, "--ignorefile /trivy-ignore.yaml"
+    generator = read("bin/create_trivy_baseline.py")
+    %w[mtics-al-folio:ci mtics-al-folio:release-arm64 mtics-devcontainer:ci mtics-devcontainer:release-arm64].each do |artifact|
+      assert_includes generator, %("#{artifact}")
+    end
+    assert_includes review_scan, 'artifact_suffix="release-arm64"'
+    assert_includes review_scan, 'docker tag "${repository}:ci" "${artifact}"'
     assert_includes review_scan, '"${repository_root}/.trivyignore.yaml:/trivy-ignore.yaml:ro"'
   end
 
