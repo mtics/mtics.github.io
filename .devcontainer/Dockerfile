@@ -33,10 +33,16 @@ ENV BUNDLER_VERSION=${BUNDLER_VERSION} \
     RUBY_DOWNLOAD_SHA256=6f32ad662baafc228d12030dbcd284f83b034dd4337b300dc84ac74d11a1eb68
 
 RUN rm -f /etc/apt/sources.list.d/yarn.list && \
+    mkdir -p /etc/apt/mirrors && \
+    printf "https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}\tpriority:1\nhttp://deb.debian.org/debian\tpriority:2\ttype:deb\n" \
+        > /etc/apt/mirrors/debian.list && \
+    printf "https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}\tpriority:1\nhttp://deb.debian.org/debian-security\tpriority:2\ttype:deb\n" \
+        > /etc/apt/mirrors/debian-security.list && \
     sed -i \
-        -e "s|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}|g" \
-        -e "s|http://deb.debian.org/debian|https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}|g" \
+        -e "s|http://deb.debian.org/debian-security|mirror+file:/etc/apt/mirrors/debian-security.list|g" \
+        -e "s|http://deb.debian.org/debian|mirror+file:/etc/apt/mirrors/debian.list|g" \
         /etc/apt/sources.list.d/debian.sources && \
+    ! grep -q "deb.debian.org" /etc/apt/sources.list.d/debian.sources && \
     printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "8";\n' > /etc/apt/apt.conf.d/99snapshot && \
     apt-get update --error-on=any && \
     apt-get -y --no-install-recommends dist-upgrade && \

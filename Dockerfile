@@ -12,10 +12,16 @@ WORKDIR /srv/jekyll
 COPY Gemfile Gemfile.lock ./
 COPY gems/jekyll-3rd-party-libraries gems/jekyll-3rd-party-libraries
 
-RUN sed -i \
-        -e "s|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}|g" \
-        -e "s|http://deb.debian.org/debian|https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}|g" \
+RUN mkdir -p /etc/apt/mirrors && \
+    printf "https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}\tpriority:1\nhttp://deb.debian.org/debian\tpriority:2\ttype:deb\n" \
+        > /etc/apt/mirrors/debian.list && \
+    printf "https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}\tpriority:1\nhttp://deb.debian.org/debian-security\tpriority:2\ttype:deb\n" \
+        > /etc/apt/mirrors/debian-security.list && \
+    sed -i \
+        -e "s|http://deb.debian.org/debian-security|mirror+file:/etc/apt/mirrors/debian-security.list|g" \
+        -e "s|http://deb.debian.org/debian|mirror+file:/etc/apt/mirrors/debian.list|g" \
         /etc/apt/sources.list.d/debian.sources && \
+    ! grep -q "deb.debian.org" /etc/apt/sources.list.d/debian.sources && \
     printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "8";\n' > /etc/apt/apt.conf.d/99snapshot && \
     apt-get update --error-on=any && \
     apt-get -y --no-install-recommends dist-upgrade && \
@@ -71,10 +77,16 @@ LABEL authors="Amir Pourmand,George Araújo" \
 COPY --from=node-runtime /usr/local/bin/node /usr/local/bin/node
 COPY --from=python-runtime /usr/local /usr/local
 
-RUN sed -i \
-        -e "s|http://deb.debian.org/debian-security|https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}|g" \
-        -e "s|http://deb.debian.org/debian|https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}|g" \
+RUN mkdir -p /etc/apt/mirrors && \
+    printf "https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}\tpriority:1\nhttp://deb.debian.org/debian\tpriority:2\ttype:deb\n" \
+        > /etc/apt/mirrors/debian.list && \
+    printf "https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}\tpriority:1\nhttp://deb.debian.org/debian-security\tpriority:2\ttype:deb\n" \
+        > /etc/apt/mirrors/debian-security.list && \
+    sed -i \
+        -e "s|http://deb.debian.org/debian-security|mirror+file:/etc/apt/mirrors/debian-security.list|g" \
+        -e "s|http://deb.debian.org/debian|mirror+file:/etc/apt/mirrors/debian.list|g" \
         /etc/apt/sources.list.d/debian.sources && \
+    ! grep -q "deb.debian.org" /etc/apt/sources.list.d/debian.sources && \
     printf 'Acquire::Check-Valid-Until "false";\nAcquire::Retries "8";\n' > /etc/apt/apt.conf.d/99snapshot && \
     apt-get update --error-on=any && \
     apt-get -y --no-install-recommends dist-upgrade && \
