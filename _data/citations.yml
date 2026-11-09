@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-11-07'
+  last_updated: '2026-11-09'
 papers:
   b3glA2AAAAAJ:0EnyYjriUFMC:
     citations: 0
@@ -38,7 +38,7 @@ papers:
     title: 'Personalized recommendation models in federated settings: A survey'
     year: '2025'
   b3glA2AAAAAJ:YsMSGLbcyi4C:
-    citations: 13
+    citations: 14
     title: 'AI ethics in smart homes: Progress, user requirements and challenges'
     year: '2024'
   b3glA2AAAAAJ:_FxGoFyzp5QC:
