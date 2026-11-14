@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-11-10'
+  last_updated: '2026-11-14'
 papers:
   b3glA2AAAAAJ:0EnyYjriUFMC:
     citations: 0
@@ -14,7 +14,7 @@ papers:
     title: Federated Semantic Residuals for Multimodal Recommendation
     year: '2026'
   b3glA2AAAAAJ:IjCSPb-OGe4C:
-    citations: 20
+    citations: 21
     title: Federated Vision-Language-Recommendation with Personalized Fusion
     year: '2026'
   b3glA2AAAAAJ:LkGwnXOMwfcC:
@@ -42,7 +42,7 @@ papers:
     title: 'AI ethics in smart homes: Progress, user requirements and challenges'
     year: '2024'
   b3glA2AAAAAJ:_FxGoFyzp5QC:
-    citations: 36
+    citations: 37
     title: 'TransFR: Transferable Federated Recommendation with Adapter Tuning on Pre-trained Language Models'
     year: '2026'
   b3glA2AAAAAJ:d1gkVwhDpl0C:
@@ -58,7 +58,7 @@ papers:
     title: 'AlignFedRec: Dual structural alignment for item representation learning in federated recommendation'
     year: '2026'
   b3glA2AAAAAJ:u-x6o8ySG0sC:
-    citations: 119
+    citations: 120
     title: Federated recommendation with additive personalization
     year: '2024'
   b3glA2AAAAAJ:ufrVoPGSRksC:
